@@ -15,8 +15,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
-                android:typeface="serif"
-                android:textStyle="bold"
                 android:paddingBottom="10dp"
                 android:text="@string/actual"/>
 
