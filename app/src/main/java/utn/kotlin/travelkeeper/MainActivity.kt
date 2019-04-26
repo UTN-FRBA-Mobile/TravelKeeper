@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_my_trips -> {
-                supportFragmentManager.beginTransaction().add(R.id.main_content, MyTripsFragmet.newInstance()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, MyTripsFragmet.newInstance()).commit()
             }
         }
 
