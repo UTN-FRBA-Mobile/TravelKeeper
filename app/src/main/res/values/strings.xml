@@ -10,6 +10,17 @@
     <string name="mis_viajes">Mis Viajes</string>
     <string name="actual">Actual</string>
     <string name="proximos">Próximos</string>
+    <string name="title_activity_login">Acceder a Travel Keeper</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Iniciar sesión</string>
+    <string name="action_sign_in_short">Iniciar sesión</string>
+    <string name="action_register">Registrarse</string>
+    <string name="welcome">"Bienvenido!"</string>
+    <string name="invalid_username">No es un usuario válido</string>
+    <string name="invalid_password">La contraseña debe ser mayor a 5 caracteres</string>
+    <string name="login_failed">"Falló el inicio de sesión"</string>
+    <string name="register_failed">"Falló el registro de usuario"</string>
 
 
 </resources>

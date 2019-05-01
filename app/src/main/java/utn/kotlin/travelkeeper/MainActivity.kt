@@ -1,5 +1,6 @@
 package utn.kotlin.travelkeeper
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -7,14 +8,28 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import utn.kotlin.travelkeeper.fragments.MyTripsFragmet
+import utn.kotlin.travelkeeper.ui.login.LoginActivity
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var firebaseAuth: FirebaseAuth
+    //private lateinit var googleSignInOptions: GoogleSignInOptions
+    //private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize Firebase Auth
+        firebaseAuth = FirebaseAuth.getInstance()
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
@@ -63,5 +78,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onStart() {
+        super.onStart()
+            val firebaseCurrentUser = firebaseAuth.currentUser
+            if(firebaseCurrentUser == null) {
+                val loginIntent = Intent(this, LoginActivity::class.java)
+                startActivity(loginIntent)
+            }
     }
 }
