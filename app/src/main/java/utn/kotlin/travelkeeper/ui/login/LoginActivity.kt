@@ -47,13 +47,13 @@ class LoginActivity : AppCompatActivity() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
 
-        val username = findViewById<EditText>(R.id.username)
-        val password = findViewById<EditText>(R.id.password)
-        val signIn = findViewById<Button>(R.id.login)
-        val register = findViewById<Button>(R.id.register)
-        val googleButton = findViewById<SignInButton>(R.id.google_sign_in_button)
+        val username = username
+        val password = password
+        val signIn = login
+        val register = register
+        val googleButton = google_sign_in_button
         googleButton.setSize(SignInButton.SIZE_STANDARD)
-        val loading = findViewById<ProgressBar>(R.id.loading)
+        val loading = loading
 
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)

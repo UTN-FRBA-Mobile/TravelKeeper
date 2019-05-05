@@ -17,8 +17,6 @@ import utn.kotlin.travelkeeper.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var firebaseAuth: FirebaseAuth
-    //private lateinit var googleSignInOptions: GoogleSignInOptions
-    //private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
