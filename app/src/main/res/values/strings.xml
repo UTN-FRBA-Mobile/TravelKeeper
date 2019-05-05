@@ -22,5 +22,10 @@
     <string name="login_failed">"Falló el inicio de sesión"</string>
     <string name="register_failed">"Falló el registro de usuario"</string>
 
+    <string name="new_trip_title">"Nuevo viaje"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
