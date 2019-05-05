@@ -1,14 +1,17 @@
 package utn.kotlin.travelkeeper.fragments
 
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import utn.kotlin.travelkeeper.R
-import kotlinx.android.synthetic.main.fragment_my_trips.*
 import kotlinx.android.synthetic.main.fragment_my_trips.view.*
+import utn.kotlin.travelkeeper.NewTripActivity
+import utn.kotlin.travelkeeper.R
+
+
+
 
 class MyTripsFragment : Fragment() {
 
@@ -17,9 +20,8 @@ class MyTripsFragment : Fragment() {
 
         val fab = view.fab_add_trip
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .show()
+            val newTripIntent = Intent(activity, NewTripActivity::class.java)
+            startActivity(newTripIntent)
         }
 
         return view
