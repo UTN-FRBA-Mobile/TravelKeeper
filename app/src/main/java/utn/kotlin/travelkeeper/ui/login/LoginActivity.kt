@@ -108,6 +108,7 @@ class LoginActivity : AppCompatActivity() {
         if (firebaseCurrentUser != null) {
             val loginIntent = Intent(this, MainActivity::class.java)
             startActivity(loginIntent)
+            finish()
         }
     }
 
