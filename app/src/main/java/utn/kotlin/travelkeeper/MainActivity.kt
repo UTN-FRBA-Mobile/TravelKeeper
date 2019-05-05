@@ -8,16 +8,11 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import utn.kotlin.travelkeeper.fragments.MyTripsFragmet
+import utn.kotlin.travelkeeper.fragments.MyTripsFragment
 import utn.kotlin.travelkeeper.ui.login.LoginActivity
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -72,7 +67,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_my_trips -> {
-                supportFragmentManager.beginTransaction().replace(R.id.main_content, MyTripsFragmet.newInstance()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, MyTripsFragment.newInstance()).commit()
             }
         }
 
