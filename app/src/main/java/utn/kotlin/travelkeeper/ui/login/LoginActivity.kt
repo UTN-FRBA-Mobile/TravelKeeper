@@ -2,29 +2,27 @@ package utn.kotlin.travelkeeper.ui.login
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
-import com.google.android.gms.common.SignInButton
-import com.google.firebase.auth.FirebaseAuth
-import android.content.ContentValues.TAG
-import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import kotlinx.android.synthetic.main.activity_login.*
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.android.synthetic.main.activity_login.*
+import utn.kotlin.travelkeeper.MainActivity
 import utn.kotlin.travelkeeper.R
-import java.lang.Exception
 
 
 class LoginActivity : AppCompatActivity() {
@@ -104,12 +102,22 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val firebaseCurrentUser = firebaseAuth.currentUser
+        if (firebaseCurrentUser != null) {
+            val loginIntent = Intent(this, MainActivity::class.java)
+            startActivity(loginIntent)
+        }
+    }
+
     private fun signIn(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     signInSuccessMessages("signInWithEmail")
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
                     // If sign in fails, display a message to the user.
@@ -122,14 +130,18 @@ class LoginActivity : AppCompatActivity() {
 
     private fun signInSuccessMessages(logMessage: String) {
         Log.d(TAG, logMessage + ":success")
-        Toast.makeText(baseContext, "Inicio de sesión exitoso",
-            Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            baseContext, "Inicio de sesión exitoso",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun signInFailMessages(logMessage: String, exception: Exception?) {
         Log.w(TAG, logMessage + ":failure", exception)
-        Toast.makeText(baseContext, "No se pudo iniciar sesión",
-            Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            baseContext, "No se pudo iniciar sesión",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun registerUser(email: String, password: String) {
@@ -138,14 +150,19 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
-                    Toast.makeText(baseContext, "El usuario se registró exitosamente",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext, "El usuario se registró exitosamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "El usuario no se pudo registrar",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext, "El usuario no se pudo registrar",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 loading.visibility = View.GONE
@@ -171,8 +188,11 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
-                Toast.makeText(baseContext, "El inicio de sesión con Google falló",
-                    Toast.LENGTH_SHORT).show()
+                loading.visibility = View.GONE
+                Toast.makeText(
+                    baseContext, "El inicio de sesión con Google falló",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -186,6 +206,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     signInSuccessMessages("googleSignIn")
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
                     // If sign in fails, display a message to the user.

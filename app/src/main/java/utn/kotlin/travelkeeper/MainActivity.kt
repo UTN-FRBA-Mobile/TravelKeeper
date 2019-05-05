@@ -1,6 +1,5 @@
 package utn.kotlin.travelkeeper
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -8,20 +7,15 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import utn.kotlin.travelkeeper.fragments.MyTripsFragment
-import utn.kotlin.travelkeeper.ui.login.LoginActivity
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize Firebase Auth
-        firebaseAuth = FirebaseAuth.getInstance()
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
@@ -34,7 +28,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        onNavigationItemSelected(nav_view.menu.getItem(0));
+        onNavigationItemSelected(nav_view.menu.getItem(0))
     }
 
     override fun onBackPressed() {
@@ -55,9 +49,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -71,14 +67,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    override fun onStart() {
-        super.onStart()
-            val firebaseCurrentUser = firebaseAuth.currentUser
-            if(firebaseCurrentUser == null) {
-                val loginIntent = Intent(this, LoginActivity::class.java)
-                startActivity(loginIntent)
-            }
     }
 }
