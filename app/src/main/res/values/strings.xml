@@ -7,9 +7,13 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--My trips-->
     <string name="mis_viajes">Mis Viajes</string>
     <string name="actual">Actual</string>
-    <string name="proximos">Próximos</string>
+    <string name="next_trips">Próximos</string>
+    <string name="no_data_available">No hay viajes todavía!</string>
+
+    <!--LOGIN-->
     <string name="title_activity_login">Acceder a Travel Keeper</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Contraseña</string>
