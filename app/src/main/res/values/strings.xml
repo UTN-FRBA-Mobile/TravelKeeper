@@ -7,11 +7,19 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--Menu-->
+    <string name="my_trips_menu_title">Mis Viajes</string>
+    <string name="old_trips_menu_title">Viajes Pasados</string>
+    <string name="log_out_menu_title">Cerrar Sesión</string>
+    <string name="log_out_msg">¿Está seguro de querer cerrar la sesión?</string>
+    <string name="log_out_yes">Si</string>
+    <string name="log_out_no">No</string>
+
     <!--My trips-->
-    <string name="mis_viajes">Mis Viajes</string>
-    <string name="actual">Actual</string>
+    <string name="current">Actual</string>
     <string name="next_trips">Próximos</string>
     <string name="no_data_available">No hay viajes todavía!</string>
+    <string name="my_trips_date_format">dd \'de\' MMMM \'de\' yyyy</string>
 
     <!--LOGIN-->
     <string name="title_activity_login">Acceder a Travel Keeper</string>

@@ -6,6 +6,16 @@
     <item
             android:id="@+id/nav_my_trips"
             android:icon="@android:drawable/ic_menu_compass"
-            android:title="@string/mis_viajes"/>
+            android:title="@string/my_trips_menu_title"/>
+
+    <item
+            android:id="@+id/nav_old_trips"
+            android:icon="@android:drawable/ic_menu_revert"
+            android:title="@string/old_trips_menu_title"/>
+
+    <item
+            android:id="@+id/nav_log_out"
+            android:icon="@android:drawable/ic_lock_power_off"
+            android:title="@string/log_out_menu_title"/>
 
 </menu>
