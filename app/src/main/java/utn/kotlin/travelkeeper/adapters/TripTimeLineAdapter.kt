@@ -26,7 +26,7 @@ class TripTimeLineAdapter(private val myDataset: Array<String>) :
     override fun onBindViewHolder(holder: TripTimeLineViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.view.movie_name.text = myDataset[position]
+        holder.view.trip_name.text = myDataset[position]
     }
 
     // Return the size of your dataset (invoked by the layout manager)
