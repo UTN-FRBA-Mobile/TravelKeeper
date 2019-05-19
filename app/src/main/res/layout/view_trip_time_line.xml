@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+    <com.github.vipulasri.timelineview.TimelineView
+            android:id="@+id/trip_timeline"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            app:markerSize="50dp"
+            app:lineWidth="5dp"
+            app:startLineColor="@color/colorAccent"
+            app:endLineColor="@color/colorAccent"
+            android:layout_marginRight="10dp"/>
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+        <TextView
+                android:id="@+id/movie_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                android:text="Placeholder"/>
+    </LinearLayout>
+</LinearLayout>
