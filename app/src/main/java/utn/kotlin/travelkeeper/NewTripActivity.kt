@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_new_trip.*
+import utn.kotlin.travelkeeper.view.DestinationView
 
 class NewTripActivity : AppCompatActivity() {
 
@@ -15,8 +17,14 @@ class NewTripActivity : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.button_id)
         button.setOnClickListener {
+
+            val destinationView = DestinationView(this)
+            root_new_trip.addView(destinationView) //agregar vistas con constraint layout
             Toast.makeText(this@NewTripActivity, "Agregar nuevo destino", Toast.LENGTH_SHORT).show()
         }
+
+
+
     }
 }
 
