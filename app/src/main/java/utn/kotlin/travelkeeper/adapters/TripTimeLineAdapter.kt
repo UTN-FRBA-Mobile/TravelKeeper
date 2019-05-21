@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import utn.kotlin.travelkeeper.R
 import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.view_trip_time_line.view.*
+import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 
-class TripTimeLineAdapter(private val myDataset: Array<String>) :
+class TripTimeLineAdapter(private val myDataset: Array<TripTimeLineInfo>) :
     RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
 
     // Create new views (invoked by the layout manager)
@@ -26,7 +27,8 @@ class TripTimeLineAdapter(private val myDataset: Array<String>) :
     override fun onBindViewHolder(holder: TripTimeLineViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.view.trip_name.text = myDataset[position]
+        holder.view.trip_info_date.text = myDataset[position].date.toString()
+        holder.view.trip_info_detail.text = myDataset[position].detail
     }
 
     // Return the size of your dataset (invoked by the layout manager)

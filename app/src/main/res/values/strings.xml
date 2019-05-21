@@ -25,12 +25,8 @@
     <string name="invalid_password">La contraseña debe ser mayor a 5 caracteres</string>
     <string name="login_failed">"Falló el inicio de sesión"</string>
     <string name="register_failed">"Falló el registro de usuario"</string>
-
     <string name="new_trip_title">"Nuevo viaje"</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_trip_time_line">TripTimeLineActivity</string>
+    <string name="title_activity_trip_time_line">Viaje multidestino</string>
 
 
 </resources>

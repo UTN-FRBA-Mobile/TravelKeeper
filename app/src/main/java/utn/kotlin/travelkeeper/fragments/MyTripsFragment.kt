@@ -22,7 +22,7 @@ class MyTripsFragment : Fragment() {
 
         val fab = view.fab_add_trip
         fab.setOnClickListener {
-            val newTripIntent = Intent(activity, TripTimeLineActivity::class.java)
+            val newTripIntent = Intent(activity, NewTripActivity::class.java)
             startActivity(newTripIntent)
         }
 
