@@ -13,6 +13,11 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
+                android:name=".TripTimeLineActivity"
+                android:label="@string/title_activity_trip_time_line"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
                 android:name=".ui.login.LoginActivity"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

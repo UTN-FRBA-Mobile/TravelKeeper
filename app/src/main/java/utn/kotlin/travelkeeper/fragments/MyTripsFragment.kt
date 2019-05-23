@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_my_trips.*
 import kotlinx.android.synthetic.main.fragment_my_trips.view.*
 import utn.kotlin.travelkeeper.NewTripActivity
 import utn.kotlin.travelkeeper.R
+import utn.kotlin.travelkeeper.TripTimeLineActivity
 import utn.kotlin.travelkeeper.adapters.MyTripsAdapter
 import utn.kotlin.travelkeeper.apis.MyTripsApi
 
