@@ -1,5 +1,6 @@
 package utn.kotlin.travelkeeper
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -28,8 +29,8 @@ class TripTimeLineActivity : AppCompatActivity() {
         setContentView(R.layout.activity_trip_time_line)
         setSupportActionBar(trip_timeline_toolbar)
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true);
-        supportActionBar!!.setDisplayShowHomeEnabled(true);
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         var myDataset = arrayOf(
             TripTimeLineInfo(LocalDate.parse("2019-08-20", DateTimeFormatter.ISO_DATE),"Barcelona"),
@@ -63,8 +64,8 @@ class TripTimeLineActivity : AppCompatActivity() {
             adapter = viewAdapter
 
             fab.setOnClickListener { view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+                val newDestinationIntent = Intent(context, NewDestinationActivity::class.java)
+                startActivity(newDestinationIntent)
             }
         }
     }
@@ -72,7 +73,7 @@ class TripTimeLineActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // handle arrow click here
         if (item.getItemId() === android.R.id.home) {
-            finish() // close this activity and return to preview activity (if there is any)
+            finish()
         }
 
         return super.onOptionsItemSelected(item)
