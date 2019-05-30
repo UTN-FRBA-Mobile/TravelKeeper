@@ -14,6 +14,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
+import java.time.Instant
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -32,22 +33,18 @@ class TripTimeLineActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        var myDataset = arrayOf(
-            TripTimeLineInfo(LocalDate.parse("2019-08-20", DateTimeFormatter.ISO_DATE),"Barcelona"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-27", DateTimeFormatter.ISO_DATE),"Paris"),
-            TripTimeLineInfo(LocalDate.parse("2019-08-31", DateTimeFormatter.ISO_DATE),"Brujas")
+        var myDataset = mutableListOf<TripTimeLineInfo>(
+            TripTimeLineInfo(Date.from(Instant.now()),"Barcelona", "Lugar"),
+            TripTimeLineInfo(Date.from(Instant.now()),"Barcelona - Paris", "Vuelo"),
+            TripTimeLineInfo(Date.from(Instant.now()),"Paris", "Lugar")
         )
+
+        if(intent.extras != null && intent.extras.size() > 0) {
+            val newDest = intent.extras["EXTRA_NEW_DEST"] as TripTimeLineInfo
+            if (newDest != null) {
+                myDataset.add(newDest)
+            }
+        }
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = TripTimeLineAdapter(myDataset)

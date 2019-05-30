@@ -9,7 +9,7 @@ import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.view_trip_time_line.view.*
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 
-class TripTimeLineAdapter(private val myDataset: Array<TripTimeLineInfo>) :
+class TripTimeLineAdapter(private val myDataset: MutableList<TripTimeLineInfo>) :
     RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
 
     // Create new views (invoked by the layout manager)
