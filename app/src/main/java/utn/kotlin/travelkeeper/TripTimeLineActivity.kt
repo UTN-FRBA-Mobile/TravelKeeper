@@ -1,28 +1,27 @@
 package utn.kotlin.travelkeeper
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
-import android.widget.TextView
 
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.time.Instant
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TripTimeLineActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var destinations: MutableList<TripTimeLineInfo>
+    val NEW_DESTINATION_REQUEST = 1
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,21 +32,14 @@ class TripTimeLineActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        var myDataset = mutableListOf<TripTimeLineInfo>(
+        destinations = mutableListOf<TripTimeLineInfo>(
             TripTimeLineInfo(Date.from(Instant.now()),"Barcelona", "Lugar"),
             TripTimeLineInfo(Date.from(Instant.now()),"Barcelona - Paris", "Vuelo"),
             TripTimeLineInfo(Date.from(Instant.now()),"Paris", "Lugar")
         )
 
-        if(intent.extras != null && intent.extras.size() > 0) {
-            val newDest = intent.extras["EXTRA_NEW_DEST"] as TripTimeLineInfo
-            if (newDest != null) {
-                myDataset.add(newDest)
-            }
-        }
-
         viewManager = LinearLayoutManager(this)
-        viewAdapter = TripTimeLineAdapter(myDataset)
+        viewAdapter = TripTimeLineAdapter(destinations)
 
         recyclerView = findViewById<RecyclerView>(R.id.trip_timeline_recycler_view).apply {
             // use this setting to improve performance if you know that changes
@@ -62,7 +54,22 @@ class TripTimeLineActivity : AppCompatActivity() {
 
             fab.setOnClickListener { view ->
                 val newDestinationIntent = Intent(context, NewDestinationActivity::class.java)
-                startActivity(newDestinationIntent)
+                startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // Check which request we're responding to
+        if (requestCode == NEW_DESTINATION_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == Activity.RESULT_OK) {
+                if(data!!.extras != null && data!!.extras.size() > 0) {
+                    val newDest = data!!.extras["EXTRA_NEW_DEST"] as TripTimeLineInfo
+                    if (newDest != null) {
+                        destinations.add(newDest)
+                    }
+                }
             }
         }
     }

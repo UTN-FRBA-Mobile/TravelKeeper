@@ -1,5 +1,6 @@
 package utn.kotlin.travelkeeper
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
@@ -84,7 +85,8 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
             val intent = Intent(this@NewDestinationActivity, TripTimeLineActivity::class.java)
             intent.putExtra("EXTRA_NEW_DEST", newDest)
-            startActivity(intent)
+            setResult(Activity.RESULT_OK, intent)
+            finish()
         }
     }
 
