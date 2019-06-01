@@ -6,5 +6,7 @@
 
     <color name="subtitle_color">#504F4F</color>
 
+    <color name="transparent_dark">#6F000000</color>
+
 
 </resources>

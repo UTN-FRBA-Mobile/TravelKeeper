@@ -2,7 +2,6 @@ package utn.kotlin.travelkeeper.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +13,12 @@ import utn.kotlin.travelkeeper.models.Trip
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MyTripsAdapter(private val myDataset: MutableList<Trip>) :
+class MyTripsAdapter(private val myDataset: List<Trip>) :
     RecyclerView.Adapter<MyTripsAdapter.TripsViewHolder>() {
     private lateinit var context: Context
 
-    var firstTitleUsed = false
-    var secondTitleUsed = false
+    private var firstTitleUsed = false
+    private var secondTitleUsed = false
 
     class TripsViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
@@ -32,7 +31,7 @@ class MyTripsAdapter(private val myDataset: MutableList<Trip>) :
     }
 
     override fun onBindViewHolder(holder: TripsViewHolder, position: Int) {
-        holder.view.setOnClickListener{
+        holder.view.setOnClickListener {
             val tripTimeLine = Intent(context, TripTimeLineActivity::class.java)
             context.startActivity(tripTimeLine)
         }
@@ -52,15 +51,15 @@ class MyTripsAdapter(private val myDataset: MutableList<Trip>) :
         if (myDataset[position].isTripNow()) {
             if (!firstTitleUsed) {
                 holder.view.findViewById<TextView>(R.id.section_title).text =
-                    holder.view.context.getString(R.string.current);
-                holder.view.findViewById<TextView>(R.id.section_title).visibility = View.VISIBLE;
+                    holder.view.context.getString(R.string.current)
+                holder.view.findViewById<TextView>(R.id.section_title).visibility = View.VISIBLE
                 firstTitleUsed = true
             }
         } else {
             if (!secondTitleUsed) {
                 holder.view.findViewById<TextView>(R.id.section_title).text =
-                    holder.view.context.getString(R.string.next_trips);
-                holder.view.findViewById<TextView>(R.id.section_title).visibility = View.VISIBLE;
+                    holder.view.context.getString(R.string.next_trips)
+                holder.view.findViewById<TextView>(R.id.section_title).visibility = View.VISIBLE
                 secondTitleUsed = true
             }
         }

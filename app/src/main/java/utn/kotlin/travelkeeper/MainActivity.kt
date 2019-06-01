@@ -1,6 +1,5 @@
 package utn.kotlin.travelkeeper
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -11,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -67,13 +65,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.nav_old_trips -> {
-                Toast.makeText(this, "TBD", Toast.LENGTH_SHORT).show()
+                val fragment = MyTripsFragment.newInstance()
+                fragment.setIsOldTrips(true);
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, fragment).commit()
             }
 
             R.id.nav_log_out -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage(R.string.log_out_msg)
-                builder.setPositiveButton(R.string.log_out_yes
+                builder.setPositiveButton(
+                    R.string.log_out_yes
                 ) { dialog, _ ->
                     dialog.dismiss()
                     FirebaseAuth.getInstance().signOut()
@@ -82,7 +83,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     startActivity(loginIntent)
                     finish()
                 }
-                builder.setNegativeButton(R.string.log_out_no
+                builder.setNegativeButton(
+                    R.string.log_out_no
                 ) { dialog, _ -> dialog.dismiss() }
 
                 builder.create().show()

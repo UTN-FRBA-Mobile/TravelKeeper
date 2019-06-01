@@ -13,10 +13,8 @@
             android:paddingTop="5dp"
             android:paddingBottom="15dp"
             android:visibility="gone"
-            android:textSize="@dimen/subtitle_size"
-            android:textStyle="bold"
+            style="@style/subtitles"
             android:typeface="serif"
-            android:textColor="@color/subtitle_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
