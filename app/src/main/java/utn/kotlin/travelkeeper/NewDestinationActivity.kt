@@ -58,7 +58,7 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
 
         destination_date_selected!!.setOnClickListener { view ->
-            DatePickerDialog(this@NewDestinationActivity,
+            DatePickerDialog(this,
                 dateSetListener,
                 // set DatePickerDialog to point to today's date when it loads up
                 cal.get(Calendar.YEAR),
