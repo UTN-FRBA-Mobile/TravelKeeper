@@ -32,11 +32,7 @@ class TripTimeLineActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        destinations = mutableListOf<TripTimeLineInfo>(
-            TripTimeLineInfo("Barcelona", "Lugar"        ,Date.from(Instant.now()),Date.from(Instant.now())),
-            TripTimeLineInfo("Barcelona - Paris", "Vuelo",Date.from(Instant.now()),Date.from(Instant.now())),
-            TripTimeLineInfo("Paris", "Lugar"            ,Date.from(Instant.now()),Date.from(Instant.now()))
-        )
+        destinations = mutableListOf<TripTimeLineInfo>()
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = TripTimeLineAdapter(destinations)
