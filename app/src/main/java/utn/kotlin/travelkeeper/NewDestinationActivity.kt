@@ -81,7 +81,7 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
     private fun setNewDestinationButton() {
         destination_button_id.setOnClickListener { view ->
-            val newDest = TripTimeLineInfo(cal.time, enter_destination_name.text.toString(), selectedDestType)
+            val newDest = TripTimeLineInfo(enter_destination_name.text.toString(), selectedDestType, cal.time, cal.time)
 
             val intent = Intent(this@NewDestinationActivity, TripTimeLineActivity::class.java)
             intent.putExtra("EXTRA_NEW_DEST", newDest)

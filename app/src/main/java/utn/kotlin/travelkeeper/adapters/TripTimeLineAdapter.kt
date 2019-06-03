@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import utn.kotlin.travelkeeper.R
 import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.view_trip_time_line.view.*
 import utn.kotlin.travelkeeper.R.*
@@ -14,7 +13,7 @@ import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TripTimeLineAdapter(private val myDataset: MutableList<TripTimeLineInfo>) :
+class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo>) :
     RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
 
     private lateinit var context: Context
@@ -35,10 +34,10 @@ class TripTimeLineAdapter(private val myDataset: MutableList<TripTimeLineInfo>) 
     override fun onBindViewHolder(holder: TripTimeLineViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.view.trip_info_date.text = getDate(myDataset[position].date)
-        holder.view.trip_info_detail.text = myDataset[position].detail
+        holder.view.trip_info_date.text = getDate(destinations[position].start_date) + " - " + getDate(destinations[position].end_date)
+        holder.view.trip_info_detail.text = destinations[position].detail
 
-        if(myDataset[position].type == "Vuelo") {
+        if(destinations[position].type == "Vuelo") {
             holder.view.trip_timeline.marker = ContextCompat.getDrawable(context, drawable.ic_airplane)
         }
     }
@@ -51,7 +50,7 @@ class TripTimeLineAdapter(private val myDataset: MutableList<TripTimeLineInfo>) 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = myDataset.size
+    override fun getItemCount() = destinations.size
 
     override fun getItemViewType(position: Int): Int {
         return TimelineView.getTimeLineViewType(position, itemCount)

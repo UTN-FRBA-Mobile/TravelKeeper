@@ -6,7 +6,8 @@ import java.util.*
 
 
 class TripTimeLineInfo(
-    var date: Date,
     var detail: String,
-    var type: String
+    var type: String,
+    var start_date: Date,
+    var end_date: Date
 ): Serializable
