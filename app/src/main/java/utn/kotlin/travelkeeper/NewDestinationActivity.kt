@@ -12,8 +12,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_new_destination.*
+import kotlinx.android.synthetic.main.fragment_dialog_create_trip.*
+import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -23,12 +28,15 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private var destTypes = arrayOf("Lugar","Vuelo")
     private var selectedDestType = "Lugar"
     private var cal = Calendar.getInstance()
+    private lateinit var tripId : String
     private var startDate : Date? = null
     private var endDate : Date? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_destination)
+
+        tripId = intent.extras["TRIP_ID"] as String
 
         setBackArrow()
         setDestTypeSpinner()
@@ -110,9 +118,22 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             intent.putExtra("EXTRA_NEW_DEST", newDest)
             setResult(Activity.RESULT_OK, intent)
 
-            //ViajesService().addDestinationToTrip()
-            finish()
+            addDestinationToFirebase(newDest)
         }
+    }
+
+    private fun addDestinationToFirebase(dest: TripTimeLineInfo) {
+        ViajesService().addDestinationToTrip(tripId, dest.detail, dest.type, dest.start_date, dest.end_date,
+            object : ViajesService.CreateTripServiceListener {
+                override fun onSuccess(idCreated: String) {
+                    Toast.makeText(this@NewDestinationActivity, "Destino agregado", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+
+                override fun onError(exception: Exception) {
+                    Toast.makeText(this@NewDestinationActivity, exception.message, Toast.LENGTH_LONG).show()
+                }
+            })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -41,13 +41,14 @@ class ViajesService {
             }
     }
 
-    fun addDestinationToTrip(tripId: String, destName: String, destDateStart: Date, destDateEnd: Date,
+    fun addDestinationToTrip(tripId: String, destName: String, destType: String ,destDateStart: Date, destDateEnd: Date,
                              listener: CreateTripServiceListener) {
 
         val dateFormatter = SimpleDateFormat(TIMESTAMP, Locale.getDefault())
 
         val newDestToAdd = HashMap<String, String>()
         newDestToAdd["name"] = destName
+        newDestToAdd["type"] = destType
         newDestToAdd["date_start"] = dateFormatter.format(destDateStart)
         newDestToAdd["date_end"] = dateFormatter.format(destDateEnd)
 

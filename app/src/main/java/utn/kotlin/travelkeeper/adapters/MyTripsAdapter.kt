@@ -32,8 +32,9 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
 
     override fun onBindViewHolder(holder: TripsViewHolder, position: Int) {
         holder.view.setOnClickListener {
-            val tripTimeLine = Intent(context, TripTimeLineActivity::class.java)
-            context.startActivity(tripTimeLine)
+            val tripTimeLineIntent = Intent(context, TripTimeLineActivity::class.java)
+            tripTimeLineIntent.putExtra("TRIP", myDataset[position])
+            context.startActivity(tripTimeLineIntent)
         }
 
         holder.view.findViewById<TextView>(R.id.trip_title).text = myDataset[position].title

@@ -14,6 +14,7 @@ import android.view.View
 
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
+import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.time.Instant
 import java.util.*
@@ -23,6 +24,7 @@ class TripTimeLineActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var destinations: MutableList<TripTimeLineInfo>
+    private lateinit var trip: Trip
     val NEW_DESTINATION_REQUEST = 1
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -33,6 +35,8 @@ class TripTimeLineActivity : AppCompatActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
+
+        trip = intent.extras["TRIP"] as Trip
 
         destinations = mutableListOf<TripTimeLineInfo>()
 
@@ -56,6 +60,7 @@ class TripTimeLineActivity : AppCompatActivity() {
 
             fab.setOnClickListener { view ->
                 val newDestinationIntent = Intent(context, NewDestinationActivity::class.java)
+                newDestinationIntent.putExtra("TRIP_ID", trip.id)
                 startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
             }
         }
