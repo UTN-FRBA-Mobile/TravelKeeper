@@ -11,8 +11,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
+import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
@@ -27,7 +29,6 @@ class TripTimeLineActivity : AppCompatActivity() {
     private lateinit var trip: Trip
     val NEW_DESTINATION_REQUEST = 1
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trip_time_line)
@@ -38,32 +39,37 @@ class TripTimeLineActivity : AppCompatActivity() {
 
         trip = intent.extras["TRIP"] as Trip
 
-        destinations = mutableListOf<TripTimeLineInfo>()
+        ViajesService().getDestinationsFromTrip(trip.id!!,
+            object : ViajesService.GetDestinationsViajeServiceListener {
+            override fun onSuccess(dests: MutableList<TripTimeLineInfo>) {
+                destinations = dests
 
-        if(destinations != null && destinations.size > 0) {
-            no_destinations.visibility = View.GONE
-        }
+                if(destinations != null && destinations.size > 0) {
+                    no_destinations.visibility = View.GONE
+                }
 
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = TripTimeLineAdapter(destinations)
+                viewManager = LinearLayoutManager(this@TripTimeLineActivity)
+                viewAdapter = TripTimeLineAdapter(destinations)
 
-        recyclerView = findViewById<RecyclerView>(R.id.trip_timeline_recycler_view).apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(true)
+                recyclerView = findViewById<RecyclerView>(R.id.trip_timeline_recycler_view).apply {
+                    setHasFixedSize(true)
+                    layoutManager = viewManager
+                    adapter = viewAdapter
 
-            // use a linear layout manager
-            layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
-
-            fab.setOnClickListener { view ->
-                val newDestinationIntent = Intent(context, NewDestinationActivity::class.java)
-                newDestinationIntent.putExtra("TRIP_ID", trip.id)
-                startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
+                    fab.setOnClickListener { view ->
+                        val newDestinationIntent = Intent(context, NewDestinationActivity::class.java)
+                        newDestinationIntent.putExtra("TRIP", trip)
+                        startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
+                    }
+                }
             }
-        }
+
+            override fun onError(exception: Exception) {
+                Toast.makeText(this@TripTimeLineActivity, exception.message, Toast.LENGTH_LONG).show()
+            }
+        })
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

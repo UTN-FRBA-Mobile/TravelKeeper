@@ -1,6 +1,7 @@
 package utn.kotlin.travelkeeper.DBServices
 
 import com.google.firebase.firestore.FirebaseFirestore
+import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -35,6 +36,38 @@ class ViajesService {
             .add(newTripToAdd)
             .addOnSuccessListener { documentRefference ->
                 listener.onSuccess(documentRefference.id)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    interface GetDestinationsViajeServiceListener {
+        fun onSuccess(destinations: MutableList<TripTimeLineInfo>)
+        fun onError(exception: Exception)
+    }
+
+    fun getDestinationsFromTrip(tripId: String, listener: GetDestinationsViajeServiceListener) {
+        val db = FirebaseFirestore.getInstance()
+
+        val reference = db.collection(TABLA_VIAJES).document(tripId)
+        reference.collection(SUBTABLA_DESTINOS)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val destsList = mutableListOf<TripTimeLineInfo>()
+                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                querySnapshot.documents.forEach {
+                    val destInfo = TripTimeLineInfo(
+                        it.getString("name")!!,
+                        it.getString("type")!!,
+                        dateParser.parse(it.getString("date_start")),
+                        dateParser.parse(it.getString("date_end"))
+                    )
+
+                    destsList.add(destInfo)
+                }
+
+                listener.onSuccess(destsList)
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)
