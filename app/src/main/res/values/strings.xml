@@ -37,5 +37,9 @@
     <string name="new_destination_title">"Nuevo destino"</string>
     <string name="title_activity_trip_time_line">Viaje multidestino</string>
 
+    <!--DESTINATIONS-->
+    <string name="no_dest_available">¡No hay destinos todavia!</string>
+    <string name="dest_start_date">Fecha Inicio</string>
+    <string name="dest_end_date">Fecha Fin</string>
 
 </resources>

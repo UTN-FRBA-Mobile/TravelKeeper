@@ -2,6 +2,7 @@ package utn.kotlin.travelkeeper
 
 import android.app.Activity
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
+import android.view.View
 
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
@@ -33,6 +35,10 @@ class TripTimeLineActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         destinations = mutableListOf<TripTimeLineInfo>()
+
+        if(destinations != null && destinations.size > 0) {
+            no_destinations.visibility = View.GONE
+        }
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = TripTimeLineAdapter(destinations)
@@ -63,11 +69,19 @@ class TripTimeLineActivity : AppCompatActivity() {
                 if(data!!.extras != null && data!!.extras.size() > 0) {
                     val newDest = data!!.extras["EXTRA_NEW_DEST"] as TripTimeLineInfo
                     if (newDest != null) {
+                        no_destinations.visibility = View.GONE
                         destinations.add(newDest)
+                        resetAdapter()
                     }
                 }
             }
         }
+    }
+
+    private fun resetAdapter() {
+        var preAdapter = recyclerView.adapter
+        recyclerView.adapter = null
+        recyclerView.adapter = preAdapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
