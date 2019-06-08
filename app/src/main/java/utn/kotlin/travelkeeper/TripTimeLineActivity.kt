@@ -82,6 +82,7 @@ class TripTimeLineActivity : AppCompatActivity() {
                     if (newDest != null) {
                         no_destinations.visibility = View.GONE
                         destinations.add(newDest)
+                        destinations.sortBy { d1 -> d1.start_date }
                         resetAdapter()
                     }
                 }
