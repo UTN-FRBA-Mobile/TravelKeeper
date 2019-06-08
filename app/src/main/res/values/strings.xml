@@ -34,10 +34,11 @@
     <string name="login_failed">"Falló el inicio de sesión"</string>
     <string name="register_failed">"Falló el registro de usuario"</string>
     <string name="new_trip_title">"Nuevo viaje"</string>
-    <string name="new_destination_title">"Nuevo destino"</string>
-    <string name="title_activity_trip_time_line">Viaje multidestino</string>
 
     <!--DESTINATIONS-->
+    <string name="new_destination_title">"Nuevo destino"</string>
+    <string name="title_activity_trip_time_line">Viaje multidestino</string>
+    <string name="edit_destination_title">"Editar destino"</string>
     <string name="no_dest_available">¡No hay destinos todavia!</string>
     <string name="dest_start_date">Fecha Inicio</string>
     <string name="dest_end_date">Fecha Fin</string>
