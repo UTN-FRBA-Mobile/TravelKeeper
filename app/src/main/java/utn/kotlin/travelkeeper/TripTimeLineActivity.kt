@@ -49,7 +49,7 @@ class TripTimeLineActivity : AppCompatActivity() {
                 }
 
                 viewManager = LinearLayoutManager(this@TripTimeLineActivity)
-                viewAdapter = TripTimeLineAdapter(destinations)
+                viewAdapter = TripTimeLineAdapter(destinations, trip)
 
                 recyclerView = findViewById<RecyclerView>(R.id.trip_timeline_recycler_view).apply {
                     setHasFixedSize(true)

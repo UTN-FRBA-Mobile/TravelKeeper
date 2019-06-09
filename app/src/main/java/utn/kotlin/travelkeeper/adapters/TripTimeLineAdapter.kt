@@ -12,11 +12,12 @@ import kotlinx.android.synthetic.main.view_trip_time_line.view.*
 import utn.kotlin.travelkeeper.EditDestinationActivity
 import utn.kotlin.travelkeeper.R.*
 import utn.kotlin.travelkeeper.TripTimeLineActivity
+import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo>) :
+class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo>, private val trip: Trip) :
     RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
 
     private lateinit var context: Context
@@ -38,7 +39,7 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.view.trip_info_date.text = getDate(destinations[position].start_date) + " - " + getDate(destinations[position].end_date)
-        holder.view.trip_info_detail.text = destinations[position].detail
+        holder.view.trip_info_detail.text = destinations[position].name
 
         if(destinations[position].type == "Vuelo") {
             holder.view.trip_timeline.marker = ContextCompat.getDrawable(context, drawable.ic_airplane)
@@ -47,6 +48,7 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
         holder.view.setOnClickListener {
             val editDestIntent = Intent(context, EditDestinationActivity::class.java)
             editDestIntent.putExtra("DEST_EDIT", destinations[position])
+            editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
             context.startActivity(editDestIntent)
         }
     }

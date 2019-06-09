@@ -53,17 +53,18 @@ class ViajesService {
 
         val reference = db.collection(TABLA_VIAJES).document(tripId)
         reference.collection(SUBTABLA_DESTINOS)
-            .orderBy("date_start", Query.Direction.ASCENDING)
+            .orderBy("start_date", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val destsList = mutableListOf<TripTimeLineInfo>()
                 val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
                 querySnapshot.documents.forEach {
                     val destInfo = TripTimeLineInfo(
+                        it.id,
                         it.getString("name")!!,
                         it.getString("type")!!,
-                        dateParser.parse(it.getString("date_start")),
-                        dateParser.parse(it.getString("date_end"))
+                        dateParser.parse(it.getString("start_date")),
+                        dateParser.parse(it.getString("end_date"))
                     )
 
                     destsList.add(destInfo)
@@ -76,22 +77,45 @@ class ViajesService {
             }
     }
 
-    fun addDestinationToTrip(tripId: String, destName: String, destType: String ,destDateStart: Date, destDateEnd: Date,
+    fun addDestinationToTrip(dest: TripTimeLineInfo,
                              listener: CreateTripServiceListener) {
 
-        val dateFormatter = SimpleDateFormat(TIMESTAMP, Locale.getDefault())
+        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
         val newDestToAdd = HashMap<String, String>()
-        newDestToAdd["name"] = destName
-        newDestToAdd["type"] = destType
-        newDestToAdd["date_start"] = dateFormatter.format(destDateStart)
-        newDestToAdd["date_end"] = dateFormatter.format(destDateEnd)
+        newDestToAdd["id"] = "id"
+        newDestToAdd["name"] = dest.name
+        newDestToAdd["type"] = dest.type
+        newDestToAdd["start_date"] = dateFormatter.format(dest.start_date)
+        newDestToAdd["end_date"] = dateFormatter.format(dest.end_date)
 
         val db = FirebaseFirestore.getInstance()
-        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS)
+        db.collection(TABLA_VIAJES).document(dest.id!!).collection(SUBTABLA_DESTINOS)
             .add(newDestToAdd)
-            .addOnSuccessListener { documentRefference ->
-                listener.onSuccess(documentRefference.id)
+            .addOnSuccessListener { documentReference ->
+                listener.onSuccess(documentReference.id)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    fun editDestinationInTrip(tripId: String, dest: TripTimeLineInfo,
+                              listener: CreateTripServiceListener) {
+        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+
+        val destToEdit = HashMap<String, String>()
+        destToEdit["id"] = dest.id!!
+        destToEdit["name"] = dest.name
+        destToEdit["type"] = dest.type
+        destToEdit["start_date"] = dateFormatter.format(dest.start_date)
+        destToEdit["end_date"] = dateFormatter.format(dest.end_date)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(dest.id!!)
+            .set(destToEdit)
+            .addOnSuccessListener { _ ->
+                listener.onSuccess("Documento editado")
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)

@@ -5,7 +5,8 @@ import java.util.*
 
 
 class TripTimeLineInfo(
-    var detail: String,
+    var id: String? = null,
+    var name: String,
     var type: String,
     var start_date: Date,
     var end_date: Date

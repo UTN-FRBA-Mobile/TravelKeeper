@@ -1,13 +1,18 @@
 package utn.kotlin.travelkeeper
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_edit_destination.*
+import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,16 +25,19 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
     private var cal = Calendar.getInstance()
     private var startDate : Date? = null
     private var endDate : Date? = null
+    private lateinit var trip: Trip
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_destination)
 
         destination = intent.extras["DEST_EDIT"] as TripTimeLineInfo
+        trip = intent.extras["TRIP_DEST_EDIT"] as Trip
 
         setBackArrow()
         setDestTypeSpinner()
         setView()
+        setEditDestinationButton()
     }
 
     private fun setBackArrow() {
@@ -47,10 +55,12 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
     }
 
     private fun setView() {
-        enter_destination_name.setText(destination.detail)
+        enter_destination_name.setText(destination.name)
         selectedDestType = destination.type
         spinner_destination_type.setSelection(destTypesArrayAdapter.getPosition(destination.type))
         cal.time = destination.start_date
+        startDate = destination.start_date
+        endDate = destination.end_date
         destination_start_date_selected!!.text = getDate(destination.start_date)
         destination_end_date_selected!!.text = getDate(destination.end_date)
         setStartDatePicker()
@@ -107,6 +117,32 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
         val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
 
         return sdf.format(date)
+    }
+
+    private fun setEditDestinationButton() {
+        destination_button_id.setOnClickListener { view ->
+            val editDest = TripTimeLineInfo(destination.id, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
+
+            val intent = Intent(this@EditDestinationActivity, TripTimeLineActivity::class.java)
+            intent.putExtra("EXTRA_EDIT_DEST", editDest)
+            setResult(Activity.RESULT_OK, intent)
+
+            editDestinationInFirebase(editDest)
+        }
+    }
+
+    private fun editDestinationInFirebase(dest: TripTimeLineInfo) {
+        ViajesService().editDestinationInTrip(trip.id!!, dest,
+            object : ViajesService.CreateTripServiceListener {
+                override fun onSuccess(idCreated: String) {
+                    Toast.makeText(this@EditDestinationActivity, "Destino editado", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+
+                override fun onError(exception: Exception) {
+                    Toast.makeText(this@EditDestinationActivity, exception.message, Toast.LENGTH_LONG).show()
+                }
+            })
     }
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {

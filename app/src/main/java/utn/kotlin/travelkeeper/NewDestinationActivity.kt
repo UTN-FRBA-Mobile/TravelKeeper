@@ -112,7 +112,7 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
     private fun setNewDestinationButton() {
         destination_button_id.setOnClickListener { view ->
-            val newDest = TripTimeLineInfo(enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
+            val newDest = TripTimeLineInfo(null, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
 
             val intent = Intent(this@NewDestinationActivity, TripTimeLineActivity::class.java)
             intent.putExtra("EXTRA_NEW_DEST", newDest)
@@ -123,10 +123,12 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     private fun addDestinationToFirebase(dest: TripTimeLineInfo) {
-        ViajesService().addDestinationToTrip(trip.id!!, dest.detail, dest.type, dest.start_date, dest.end_date,
+        dest.id = trip.id
+        ViajesService().addDestinationToTrip(dest,
             object : ViajesService.CreateTripServiceListener {
                 override fun onSuccess(idCreated: String) {
                     Toast.makeText(this@NewDestinationActivity, "Destino agregado", Toast.LENGTH_LONG).show()
+                    dest.id = idCreated
                     finish()
                 }
 
