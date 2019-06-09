@@ -88,7 +88,7 @@
             android:id="@+id/destination_button_id"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Agregar nuevo destino"
+            android:text="@string/btn_new_dest"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/destination_end_date_selected"

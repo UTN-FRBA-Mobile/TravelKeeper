@@ -42,5 +42,7 @@
     <string name="no_dest_available">¡No hay destinos todavia!</string>
     <string name="dest_start_date">Fecha Inicio</string>
     <string name="dest_end_date">Fecha Fin</string>
+    <string name="btn_new_dest">Agregar nuevo destino</string>
+    <string name="btn_edit_dest">Editar destino</string>
 
 </resources>

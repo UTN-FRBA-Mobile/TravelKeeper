@@ -1,6 +1,7 @@
 package utn.kotlin.travelkeeper.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.view_trip_time_line.view.*
+import utn.kotlin.travelkeeper.EditDestinationActivity
 import utn.kotlin.travelkeeper.R.*
+import utn.kotlin.travelkeeper.TripTimeLineActivity
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +42,12 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
 
         if(destinations[position].type == "Vuelo") {
             holder.view.trip_timeline.marker = ContextCompat.getDrawable(context, drawable.ic_airplane)
+        }
+
+        holder.view.setOnClickListener {
+            val editDestIntent = Intent(context, EditDestinationActivity::class.java)
+            editDestIntent.putExtra("DEST_EDIT", destinations[position])
+            context.startActivity(editDestIntent)
         }
     }
 

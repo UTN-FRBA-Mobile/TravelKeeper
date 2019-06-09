@@ -1,6 +1,7 @@
 package utn.kotlin.travelkeeper.DBServices
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,6 +53,7 @@ class ViajesService {
 
         val reference = db.collection(TABLA_VIAJES).document(tripId)
         reference.collection(SUBTABLA_DESTINOS)
+            .orderBy("date_start", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val destsList = mutableListOf<TripTimeLineInfo>()
