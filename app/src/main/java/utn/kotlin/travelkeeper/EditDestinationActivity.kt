@@ -26,6 +26,7 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
     private var startDate : Date? = null
     private var endDate : Date? = null
     private lateinit var trip: Trip
+    private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,7 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
 
         destination = intent.extras["DEST_EDIT"] as TripTimeLineInfo
         trip = intent.extras["TRIP_DEST_EDIT"] as Trip
+        position = intent.extras["EDIT_DEST_POSITION"] as Int
 
         setBackArrow()
         setDestTypeSpinner()
@@ -136,6 +138,10 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
             object : ViajesService.CreateTripServiceListener {
                 override fun onSuccess(idCreated: String) {
                     Toast.makeText(this@EditDestinationActivity, "Destino editado", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this@EditDestinationActivity, TripTimeLineActivity::class.java)
+                    intent.putExtra("DEST_EDIT", dest)
+                    intent.putExtra("EDIT_DEST_POSITION", position)
+                    setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
 

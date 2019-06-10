@@ -28,6 +28,7 @@ class TripTimeLineActivity : AppCompatActivity() {
     private lateinit var destinations: MutableList<TripTimeLineInfo>
     private lateinit var trip: Trip
     val NEW_DESTINATION_REQUEST = 1
+    val EDIT_DESTINATION_REQUEST = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +83,20 @@ class TripTimeLineActivity : AppCompatActivity() {
                     if (newDest != null) {
                         no_destinations.visibility = View.GONE
                         destinations.add(newDest)
+                        destinations.sortBy { d1 -> d1.start_date }
+                        resetAdapter()
+                    }
+                }
+            }
+        }
+        else if (requestCode == EDIT_DESTINATION_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                if(data!!.extras != null && data!!.extras.size() > 0) {
+                    val editDest = data!!.extras["DEST_EDIT"] as TripTimeLineInfo
+                    val position = data!!.extras["EDIT_DEST_POSITION"] as Int
+                    if (editDest != null) {
+                        no_destinations.visibility = View.GONE
+                        destinations[position] = editDest
                         destinations.sortBy { d1 -> d1.start_date }
                         resetAdapter()
                     }

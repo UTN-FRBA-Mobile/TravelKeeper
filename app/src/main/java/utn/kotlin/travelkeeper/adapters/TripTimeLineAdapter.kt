@@ -1,7 +1,9 @@
 package utn.kotlin.travelkeeper.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -19,8 +21,8 @@ import java.util.*
 
 class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo>, private val trip: Trip) :
     RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
-
     private lateinit var context: Context
+    val EDIT_DESTINATION_INTENT = 2
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -49,7 +51,9 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
             val editDestIntent = Intent(context, EditDestinationActivity::class.java)
             editDestIntent.putExtra("DEST_EDIT", destinations[position])
             editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
-            context.startActivity(editDestIntent)
+            editDestIntent.putExtra("EDIT_DEST_POSITION", position)
+            val activity = context as Activity
+            activity.startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
         }
     }
 
