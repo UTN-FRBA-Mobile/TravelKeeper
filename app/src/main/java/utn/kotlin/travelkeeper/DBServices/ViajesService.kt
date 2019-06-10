@@ -59,13 +59,7 @@ class ViajesService {
                 val destsList = mutableListOf<TripTimeLineInfo>()
                 val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
                 querySnapshot.documents.forEach {
-                    val destInfo = TripTimeLineInfo(
-                        it.id,
-                        it.getString("name")!!,
-                        it.getString("type")!!,
-                        dateParser.parse(it.getString("start_date")),
-                        dateParser.parse(it.getString("end_date"))
-                    )
+                    val destInfo = TripTimeLineInfo.createObjectFromSnapshot(it, dateParser, it.id)
 
                     destsList.add(destInfo)
                 }
@@ -77,20 +71,13 @@ class ViajesService {
             }
     }
 
-    fun addDestinationToTrip(dest: TripTimeLineInfo,
-                             listener: CreateTripServiceListener) {
-
+    fun addDestinationToTrip(tripId: String, dest: TripTimeLineInfo, listener: CreateTripServiceListener) {
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
-        val newDestToAdd = HashMap<String, String>()
-        newDestToAdd["id"] = "id"
-        newDestToAdd["name"] = dest.name
-        newDestToAdd["type"] = dest.type
-        newDestToAdd["start_date"] = dateFormatter.format(dest.start_date)
-        newDestToAdd["end_date"] = dateFormatter.format(dest.end_date)
+        val newDestToAdd = dest.createMapFromObject(dateFormatter)
 
         val db = FirebaseFirestore.getInstance()
-        db.collection(TABLA_VIAJES).document(dest.id!!).collection(SUBTABLA_DESTINOS)
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS)
             .add(newDestToAdd)
             .addOnSuccessListener { documentReference ->
                 listener.onSuccess(documentReference.id)
@@ -100,21 +87,16 @@ class ViajesService {
             }
     }
 
-    fun editDestinationInTrip(tripId: String, dest: TripTimeLineInfo,
-                              listener: CreateTripServiceListener) {
+    fun editDestinationInTrip(tripId: String, dest: TripTimeLineInfo, listener: CreateTripServiceListener) {
+
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
-        val destToEdit = HashMap<String, String>()
-        destToEdit["id"] = dest.id!!
-        destToEdit["name"] = dest.name
-        destToEdit["type"] = dest.type
-        destToEdit["start_date"] = dateFormatter.format(dest.start_date)
-        destToEdit["end_date"] = dateFormatter.format(dest.end_date)
+        val destToEdit = dest.createMapFromObject(dateFormatter)
 
         val db = FirebaseFirestore.getInstance()
         db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(dest.id!!)
             .set(destToEdit)
-            .addOnSuccessListener { _ ->
+            .addOnSuccessListener {
                 listener.onSuccess("Documento editado")
             }
             .addOnFailureListener { exception ->

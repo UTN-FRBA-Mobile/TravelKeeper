@@ -101,8 +101,10 @@ class UsuariosService {
         fun onError(exception: Exception)
     }
 
-    fun addTripToUser(username: String, tripId: String, tripName: String, dateStart: Date, dateEnd: Date,
-                      listener: SimpleServiceListener) {
+    fun addTripToUser(
+        username: String, tripId: String, tripName: String, dateStart: Date, dateEnd: Date,
+        listener: SimpleServiceListener
+    ) {
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
         val newTripToAdd = HashMap<String, String>()
@@ -114,6 +116,18 @@ class UsuariosService {
         db.collection(TABLA_USUARIOS).document(username).collection(SUBTABLA_VIAJES).document(tripId)
             .set(newTripToAdd)
             .addOnSuccessListener { querySnapshot ->
+                listener.onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    fun removeTripFromUser(username: String, tripId: String, listener: SimpleServiceListener) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_USUARIOS).document(username).collection(SUBTABLA_VIAJES).document(tripId)
+            .delete()
+            .addOnSuccessListener {
                 listener.onSuccess()
             }
             .addOnFailureListener { exception ->
