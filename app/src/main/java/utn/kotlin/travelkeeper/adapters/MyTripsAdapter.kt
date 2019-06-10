@@ -16,6 +16,7 @@ import java.util.*
 class MyTripsAdapter(private val myDataset: List<Trip>) :
     RecyclerView.Adapter<MyTripsAdapter.TripsViewHolder>() {
     private lateinit var context: Context
+    var isPast = false
 
     private var firstTitleUsed = false
     private var secondTitleUsed = false
@@ -58,8 +59,13 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
             }
         } else {
             if (!secondTitleUsed) {
-                holder.view.findViewById<TextView>(R.id.section_title).text =
-                    holder.view.context.getString(R.string.next_trips)
+                if (isPast) {
+                    holder.view.findViewById<TextView>(R.id.section_title).text =
+                        holder.view.context.getString(R.string.old_trips_menu_title)
+                } else {
+                    holder.view.findViewById<TextView>(R.id.section_title).text =
+                        holder.view.context.getString(R.string.next_trips)
+                }
                 holder.view.findViewById<TextView>(R.id.section_title).visibility = View.VISIBLE
                 secondTitleUsed = true
             }

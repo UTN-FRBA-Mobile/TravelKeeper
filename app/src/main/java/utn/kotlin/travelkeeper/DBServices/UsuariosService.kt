@@ -14,7 +14,7 @@ class UsuariosService {
     private val DATE_ONLY = "yyyy-MM-dd"
 
     interface GOCUsuarioServiceListener {
-        fun onSuccess(trips: List<Trip>)
+        fun onSuccess(trips: ArrayList<Trip>)
         fun onError(exception: Exception)
     }
 

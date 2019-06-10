@@ -1,5 +1,6 @@
 package utn.kotlin.travelkeeper.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +15,9 @@ import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.adapters.MyTripsAdapter
 import utn.kotlin.travelkeeper.models.Trip
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.ArrayList
 
 
 class MyTripsFragment : Fragment() {
@@ -37,24 +41,45 @@ class MyTripsFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(isOldTrips){
+        loading.visibility = View.VISIBLE
+        if (isOldTrips) {
             UsuariosService().getOldTrips(
                 FirebaseAuth.getInstance().currentUser!!.email!!,
                 object : UsuariosService.GOCUsuarioServiceListener {
-                    override fun onSuccess(trips: List<Trip>) {
+                    override fun onSuccess(trips: ArrayList<Trip>) {
+                        loading.visibility = View.GONE
                         if (trips.isNotEmpty()) {
                             val viewManager = LinearLayoutManager(activity)
 
+                            Collections.sort(trips, object : Comparator<Trip> {
+                                override fun compare(o1: Trip, o2: Trip): Int {
+                                    if (o1.startDate.before(o2.startDate)) {
+                                        return 1
+                                    } else if (o1.startDate.after(o2.startDate)) {
+                                        return -1
+                                    }
+
+                                    if (o1.endDate.before(o2.endDate)) {
+                                        return 1
+                                    } else if (o1.endDate.after(o2.endDate)) {
+                                        return -1
+                                    }
+
+                                    return 0
+                                }
+                            })
+
                             val viewAdapter = MyTripsAdapter(trips)
+                            viewAdapter.isPast = true
                             my_trips_recycler.apply {
                                 layoutManager = viewManager
                                 adapter = viewAdapter
                             }
 
                             my_trips_recycler.visibility = View.VISIBLE
-                            empty_view.visibility = View.GONE
                         } else {
                             my_trips_recycler.visibility = View.GONE
                             empty_view.visibility = View.VISIBLE
@@ -62,18 +87,39 @@ class MyTripsFragment : Fragment() {
                     }
 
                     override fun onError(exception: Exception) {
+                        loading.visibility = View.GONE
                         Toast.makeText(activity, exception.message, Toast.LENGTH_SHORT).show()
                         my_trips_recycler.visibility = View.GONE
                         empty_view.visibility = View.VISIBLE
                     }
                 })
-        }else{
+            fab_add_trip.visibility = View.GONE
+        } else {
             UsuariosService().getOrCreateUser(
                 FirebaseAuth.getInstance().currentUser!!.email!!,
                 object : UsuariosService.GOCUsuarioServiceListener {
-                    override fun onSuccess(trips: List<Trip>) {
+                    override fun onSuccess(trips: ArrayList<Trip>) {
+                        loading.visibility = View.GONE
                         if (trips.isNotEmpty()) {
                             val viewManager = LinearLayoutManager(activity)
+
+                            Collections.sort(trips, object : Comparator<Trip> {
+                                override fun compare(o1: Trip, o2: Trip): Int {
+                                    if (o1.startDate.before(o2.startDate)) {
+                                        return -1
+                                    } else if (o1.startDate.after(o2.startDate)) {
+                                        return 1
+                                    }
+
+                                    if (o1.endDate.before(o2.endDate)) {
+                                        return -1
+                                    } else if (o1.endDate.after(o2.endDate)) {
+                                        return 1
+                                    }
+
+                                    return 0
+                                }
+                            })
 
                             val viewAdapter = MyTripsAdapter(trips)
                             my_trips_recycler.apply {
@@ -90,6 +136,7 @@ class MyTripsFragment : Fragment() {
                     }
 
                     override fun onError(exception: Exception) {
+                        loading.visibility = View.GONE
                         Toast.makeText(activity, exception.message, Toast.LENGTH_SHORT).show()
                         my_trips_recycler.visibility = View.GONE
                         empty_view.visibility = View.VISIBLE
