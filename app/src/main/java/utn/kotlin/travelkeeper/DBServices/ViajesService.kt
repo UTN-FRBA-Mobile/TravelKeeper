@@ -2,6 +2,7 @@ package utn.kotlin.travelkeeper.DBServices
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import utn.kotlin.travelkeeper.models.Hotel
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
@@ -88,7 +89,6 @@ class ViajesService {
     }
 
     fun editDestinationInTrip(tripId: String, dest: TripTimeLineInfo, listener: CreateTripServiceListener) {
-
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
         val destToEdit = dest.createMapFromObject(dateFormatter)
@@ -97,7 +97,75 @@ class ViajesService {
         db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(dest.id!!)
             .set(destToEdit)
             .addOnSuccessListener {
-                listener.onSuccess("Documento editado")
+                listener.onSuccess("Destino editado")
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    fun deleteDestinationInTrip(tripId: String, destId: String, listener: UsuariosService.SimpleServiceListener) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId)
+            .delete()
+            .addOnSuccessListener {
+                listener.onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+
+    fun addHotelToDestination(tripId: String, destId: String, hotel: Hotel, listener: CreateTripServiceListener) {
+        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+
+        val newHotelToAdd = hotel.createMapFromObject(dateFormatter)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId)
+            .collection(SUBTABLA_ALOJAMIENTOS)
+            .add(newHotelToAdd)
+            .addOnSuccessListener { documentReference ->
+                listener.onSuccess(documentReference.id)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+
+    fun editHotelToDestination(tripId: String, destId: String, hotel: Hotel, listener: CreateTripServiceListener) {
+        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+
+        val destToEdit = hotel.createMapFromObject(dateFormatter)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId)
+            .collection(SUBTABLA_ALOJAMIENTOS).document(hotel.id!!)
+            .set(destToEdit)
+            .addOnSuccessListener {
+                listener.onSuccess("Hotel editado")
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+
+    fun deleteHotelToDestination(
+        tripId: String,
+        destId: String,
+        hotelId: String,
+        listener: UsuariosService.SimpleServiceListener
+    ) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId)
+            .collection(SUBTABLA_ALOJAMIENTOS).document(hotelId)
+            .delete()
+            .addOnSuccessListener {
+                listener.onSuccess()
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)

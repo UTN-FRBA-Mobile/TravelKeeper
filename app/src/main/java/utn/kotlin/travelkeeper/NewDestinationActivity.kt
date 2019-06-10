@@ -3,10 +3,8 @@ package utn.kotlin.travelkeeper
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.RequiresApi
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
@@ -19,17 +17,16 @@ import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
 
 class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    private var destTypes = arrayOf("Lugar","Vuelo")
+    private var destTypes = arrayOf("Lugar", "Vuelo")
     private var selectedDestType = "Lugar"
     private var cal = Calendar.getInstance()
-    private lateinit var trip : Trip
-    private lateinit var tripDate : LocalDate
-    private var startDate : Date? = null
-    private var endDate : Date? = null
+    private lateinit var trip: Trip
+    private lateinit var tripDate: LocalDate
+    private var startDate: Date? = null
+    private var endDate: Date? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,12 +68,14 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
 
         destination_start_date_selected!!.setOnClickListener { view ->
-            DatePickerDialog(this,
+            DatePickerDialog(
+                this,
                 dateSetListener,
                 // set DatePickerDialog to point to today's date when it loads up
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
     }
@@ -93,12 +92,14 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
 
         destination_end_date_selected!!.setOnClickListener { view ->
-            DatePickerDialog(this,
+            DatePickerDialog(
+                this,
                 dateSetListener,
                 // set DatePickerDialog to point to today's date when it loads up
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
     }
@@ -112,15 +113,15 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
     private fun setNewDestinationButton() {
         destination_button_id.setOnClickListener { view ->
-            val newDest = TripTimeLineInfo(null, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
+            val newDest =
+                TripTimeLineInfo(null, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
 
             addDestinationToFirebase(newDest)
         }
     }
 
     private fun addDestinationToFirebase(dest: TripTimeLineInfo) {
-        dest.id = trip.id
-        ViajesService().addDestinationToTrip(dest.id!!, dest,
+        ViajesService().addDestinationToTrip(trip.id!!, dest,
             object : ViajesService.CreateTripServiceListener {
                 override fun onSuccess(idCreated: String) {
                     Toast.makeText(this@NewDestinationActivity, "Destino agregado", Toast.LENGTH_LONG).show()
@@ -153,6 +154,5 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>) {
-
     }
 }
