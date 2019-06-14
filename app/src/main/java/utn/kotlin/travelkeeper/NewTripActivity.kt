@@ -19,8 +19,7 @@ class NewTripActivity : AppCompatActivity() {
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         val button = findViewById<Button>(R.id.button_id)
-        button.setOnClickListener {
-
+        button.setOnClickListener { //agregar con reglas - ver de crear una lista
             val destinationView = DestinationView(this)
             root_new_trip.addView(destinationView) //agregar vistas con constraint layout
             Toast.makeText(this@NewTripActivity, "Agregar nuevo destino", Toast.LENGTH_SHORT).show()

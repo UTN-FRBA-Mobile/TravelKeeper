@@ -1,5 +1,6 @@
 package utn.kotlin.travelkeeper.fragments
 
+import android.content.Intent
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_my_trips.*
 import kotlinx.android.synthetic.main.fragment_my_trips.view.*
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
+import utn.kotlin.travelkeeper.NewTripActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.adapters.MyTripsAdapter
 import utn.kotlin.travelkeeper.models.Trip
@@ -30,12 +32,12 @@ class MyTripsFragment : Fragment() {
         val fab = view.fab_add_trip
         fab.setOnClickListener {
             //TODO DESCOMENTAR PARA VOLVER AL OTRO COMPORTAMIENTO, Y COMENTAR A PARTIR DE ********
-//            val newTripIntent = Intent(activity, NewTripActivity::class.java)
-//            startActivity(newTripIntent)
+            val newTripIntent = Intent(activity, NewTripActivity::class.java)
+            startActivity(newTripIntent)
 
             //*************//
-            val newFragment = CreateTripDialogFragment()
-            newFragment.show(fragmentManager, "dialog")
+            //val newFragment = CreateTripDialogFragment()
+            //newFragment.show(fragmentManager, "dialog")
         }
 
         return view

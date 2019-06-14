@@ -8,9 +8,58 @@
 
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_compass"
-            android:id="@+id/icon" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_compass"
+            android:id="@+id/icon"
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.071" app:layout_constraintVertical_bias="0.21"
+            app:layout_constraintEnd_toStartOf="@+id/guideline" app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+    <TextView
+            android:text="Destino"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/destination" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/arrow_down_float"
+            android:id="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline" android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/destination"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            tools:layout_editor_absoluteY="51dp"
+            android:id="@+id/destination_edit" android:text="Destino" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/from_date"
+            android:text="Desde" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/to_edit" android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/destination_edit"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/to_edit"
+            android:text="Hasta" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/from_date" android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.5" android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/destination_edit"/>
+    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                          android:id="@+id/guideline"
+                                          android:orientation="vertical" app:layout_constraintGuide_percent="0.20"/>
 </android.support.constraint.ConstraintLayout>
