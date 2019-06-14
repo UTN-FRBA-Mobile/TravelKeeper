@@ -46,6 +46,33 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingEnd="10dp"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:paddingBottom="10dp"
+                android:orientation="horizontal">
+
+            <ImageView
+                    android:id="@+id/share_btn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/sharethis"
+                    android:scaleType="centerInside"
+                    android:layout_marginEnd="20dp"
+                    android:background="@android:color/transparent"/>
+
+            <ImageView
+                    android:id="@+id/delete_btn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/delete"
+                    android:scaleType="centerInside"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

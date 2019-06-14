@@ -1,11 +1,14 @@
 package utn.kotlin.travelkeeper.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.ShareCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.TripTimeLineActivity
@@ -36,6 +39,15 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
             val tripTimeLineIntent = Intent(context, TripTimeLineActivity::class.java)
             tripTimeLineIntent.putExtra("TRIP", myDataset[position])
             context.startActivity(tripTimeLineIntent)
+        }
+
+        holder.view.findViewById<ImageView>(R.id.share_btn).setOnClickListener {
+//            val tripTimeLineIntent = Intent(context, TripTimeLineActivity::class.java)
+            ShareCompat.IntentBuilder.from(context as Activity?)
+                .setText("Te invito a que viajemos juntos! Planifiquemos este viaje a través de TravelKeeper. http://travelkeeper.share/" + myDataset[position].id)
+                .setType("text/plain")
+                .setChooserTitle("Compartir el viaje en...")
+                .startChooser();
         }
 
         holder.view.findViewById<TextView>(R.id.trip_title).text = myDataset[position].title
