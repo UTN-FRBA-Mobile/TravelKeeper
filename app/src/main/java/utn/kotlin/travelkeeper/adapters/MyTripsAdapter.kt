@@ -4,15 +4,22 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.ShareCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
+import utn.kotlin.travelkeeper.DBServices.UsuariosService
+import utn.kotlin.travelkeeper.MainActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.TripTimeLineActivity
 import utn.kotlin.travelkeeper.models.Trip
+import utn.kotlin.travelkeeper.ui.login.LoginActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,12 +49,43 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
         }
 
         holder.view.findViewById<ImageView>(R.id.share_btn).setOnClickListener {
-//            val tripTimeLineIntent = Intent(context, TripTimeLineActivity::class.java)
             ShareCompat.IntentBuilder.from(context as Activity?)
                 .setText("Te invito a que viajemos juntos! Planifiquemos este viaje a través de TravelKeeper. http://travelkeeper.share/" + myDataset[position].id)
                 .setType("text/plain")
                 .setChooserTitle("Compartir el viaje en...")
                 .startChooser();
+        }
+
+        holder.view.findViewById<ImageView>(R.id.delete_btn).setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setMessage(R.string.remove_trip_from_library)
+            builder.setPositiveButton(
+                R.string.log_out_yes
+            ) { dialog, _ ->
+                UsuariosService().removeTripFromUser(
+                    FirebaseAuth.getInstance().currentUser!!.email!!,
+                    myDataset[position].id!!,
+                    object : UsuariosService.SimpleServiceListener {
+                        override fun onSuccess() {
+                            Toast.makeText(context, R.string.trip_removed_from_library, Toast.LENGTH_SHORT).show()
+                            (context as MainActivity).onNavigationItemSelected(
+                                (context as MainActivity).nav_view.menu.getItem(
+                                    0
+                                )
+                            )
+                        }
+
+                        override fun onError(exception: Exception) {
+                            Toast.makeText(context, R.string.trip_not_removed_from_library, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                )
+            }
+            builder.setNegativeButton(
+                R.string.log_out_no
+            ) { dialog, _ -> dialog.dismiss() }
+
+            builder.create().show()
         }
 
         holder.view.findViewById<TextView>(R.id.trip_title).text = myDataset[position].title
