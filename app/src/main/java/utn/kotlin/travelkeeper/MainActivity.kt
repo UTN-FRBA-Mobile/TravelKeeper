@@ -17,7 +17,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import utn.kotlin.travelkeeper.DBServices.UsuariosService
+import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.fragments.MyTripsFragment
+import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.ui.login.LoginActivity
 
 
@@ -39,14 +42,60 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         onNavigationItemSelected(nav_view.menu.getItem(0))
 
-        val headerView = nav_view.getHeaderView(0);
+        val headerView = nav_view.getHeaderView(0)
         headerView.findViewById<TextView>(R.id.user_name).text = FirebaseAuth.getInstance().currentUser!!.displayName
         headerView.findViewById<TextView>(R.id.user_email).text = FirebaseAuth.getInstance().currentUser!!.email
         val imageView = headerView.findViewById<ImageView>(R.id.user_image)
 
         val data: Uri? = intent?.data
         if (data != null) {
-            Toast.makeText(this, "created from link " + data.toString(), Toast.LENGTH_SHORT).show()
+            ViajesService().getTripDetails(data.pathSegments[0],
+                object : ViajesService.GetTripServiceListener {
+                    override fun onSuccess(trip: Trip) {
+                        val builder = AlertDialog.Builder(this@MainActivity)
+                        builder.setMessage(R.string.add_trip_to_library)
+                        builder.setPositiveButton(
+                            R.string.log_out_yes
+                        ) { dialog, _ ->
+                            dialog.dismiss()
+                            UsuariosService().addTripToUser(
+                                FirebaseAuth.getInstance().currentUser!!.email!!,
+                                trip.id!!,
+                                trip.title,
+                                trip.startDate,
+                                trip.endDate,
+                                object : UsuariosService.SimpleServiceListener {
+                                    override fun onSuccess() {
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            R.string.trip_added_to_library,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        onNavigationItemSelected(nav_view.menu.getItem(0))
+                                    }
+
+                                    override fun onError(exception: Exception) {
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            R.string.trip_not_added_to_library,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            )
+                        }
+                        builder.setNegativeButton(
+                            R.string.log_out_no
+                        ) { dialog, _ -> dialog.dismiss() }
+
+                        builder.create().show()
+                    }
+
+                    override fun onError(exception: Exception) {
+                        Toast.makeText(this@MainActivity, R.string.error_fetching_trip, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
         }
 
         Glide.with(this).load(FirebaseAuth.getInstance().currentUser!!.photoUrl)
@@ -73,7 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_old_trips -> {
                 val fragment = MyTripsFragment.newInstance()
-                fragment.setIsOldTrips(true);
+                fragment.setIsOldTrips(true)
                 supportFragmentManager.beginTransaction().replace(R.id.main_content, fragment).commit()
             }
 

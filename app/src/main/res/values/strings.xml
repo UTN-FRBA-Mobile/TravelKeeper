@@ -21,6 +21,10 @@
     <string name="no_data_available">No hay viajes todavía!</string>
     <string name="my_trips_date_format">dd \'de\' MMMM \'de\' yyyy</string>
     <string name="my_trips_intent_filter_label">Agregar viaje a TravelKeeper</string>
+    <string name="add_trip_to_library">¿Está seguro de querer agregar este viaje a sus viajes?</string>
+    <string name="error_fetching_trip">No se encontró el viaje</string>
+    <string name="trip_added_to_library">El viaje se agregó a sus viajes</string>
+    <string name="trip_not_added_to_library">El viaje no se pudo agregar a sus viajes</string>
 
     <!--LOGIN-->
     <string name="title_activity_login">Acceder a Travel Keeper</string>

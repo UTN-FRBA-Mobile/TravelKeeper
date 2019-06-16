@@ -3,6 +3,7 @@ package utn.kotlin.travelkeeper.DBServices
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.models.Hotel
+import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,6 +39,32 @@ class ViajesService {
             .add(newTripToAdd)
             .addOnSuccessListener { documentRefference ->
                 listener.onSuccess(documentRefference.id)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    interface GetTripServiceListener {
+        fun onSuccess(trip: Trip)
+        fun onError(exception: Exception)
+    }
+
+    fun getTripDetails(tripId: String, listener: GetTripServiceListener) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId)
+            .get()
+            .addOnSuccessListener {
+                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+
+                val trip = Trip(
+                    it.id,
+                    it.getString("name")!!,
+                    dateParser.parse(it.getString("date_start")),
+                    dateParser.parse(it.getString("date_end"))
+                )
+
+                listener.onSuccess(trip)
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)
