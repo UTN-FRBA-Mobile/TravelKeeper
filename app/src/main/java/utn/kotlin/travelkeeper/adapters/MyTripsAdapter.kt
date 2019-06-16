@@ -3,9 +3,9 @@ package utn.kotlin.travelkeeper.adapters
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.ShareCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.RecyclerView
+import androidx.core.app.ShareCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,14 +24,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MyTripsAdapter(private val myDataset: List<Trip>) :
-    RecyclerView.Adapter<MyTripsAdapter.TripsViewHolder>() {
+    androidx.recyclerview.widget.RecyclerView.Adapter<MyTripsAdapter.TripsViewHolder>() {
     private lateinit var context: Context
     var isPast = false
 
     private var firstTitleUsed = false
     private var secondTitleUsed = false
 
-    class TripsViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+    class TripsViewHolder(val view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripsViewHolder {
         context = parent.context

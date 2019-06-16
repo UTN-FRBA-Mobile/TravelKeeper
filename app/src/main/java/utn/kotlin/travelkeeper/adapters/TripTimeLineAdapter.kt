@@ -3,9 +3,9 @@ package utn.kotlin.travelkeeper.adapters
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo>, private val trip: Trip) :
-    RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
+    androidx.recyclerview.widget.RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
     private lateinit var context: Context
     val EDIT_DESTINATION_INTENT = 2
 
@@ -75,7 +75,7 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class TripTimeLineViewHolder(val view: View, viewType: Int) : RecyclerView.ViewHolder(view){
+    class TripTimeLineViewHolder(val view: View, viewType: Int) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view){
         val timeline = view.trip_timeline
 
         init {

@@ -2,7 +2,7 @@ package utn.kotlin.travelkeeper.fragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class CreateTripDialogFragment : DialogFragment() {
+class CreateTripDialogFragment : androidx.fragment.app.DialogFragment() {
 
     private var startDate: Date? = null
     private var endDate: Date? = null

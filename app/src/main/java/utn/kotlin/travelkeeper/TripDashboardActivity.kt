@@ -1,8 +1,8 @@
 package utn.kotlin.travelkeeper
 
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
 
@@ -24,7 +24,7 @@ class TripDashboardActivity : AppCompatActivity(), EditTripNameDialog.EditTitleD
 
     }
 
-    override fun onDialogNegativeClick(dialog: DialogFragment) {
+    override fun onDialogNegativeClick(dialog: androidx.fragment.app.DialogFragment) {
         // User touched the dialog's negative button
     }
 

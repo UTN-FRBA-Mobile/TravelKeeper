@@ -5,20 +5,20 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.widget.EditText
 import kotlinx.android.synthetic.main.edit_trip_name_dialog.*
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.TripDashboardActivity
 
-class EditTripNameDialog : DialogFragment() {
+class EditTripNameDialog : androidx.fragment.app.DialogFragment() {
 
 
     internal lateinit var listener: EditTitleDialogListener
 
     interface EditTitleDialogListener {
         fun onDialogPositiveClick(title: String)
-        fun onDialogNegativeClick(dialog: DialogFragment)
+        fun onDialogNegativeClick(dialog: androidx.fragment.app.DialogFragment)
     }
 
     override fun onAttach(context: Context) {

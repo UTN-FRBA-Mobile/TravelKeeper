@@ -3,8 +3,8 @@ package utn.kotlin.travelkeeper.fragments
 import android.content.Intent
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +22,7 @@ import kotlin.Comparator
 import kotlin.collections.ArrayList
 
 
-class MyTripsFragment : Fragment() {
+class MyTripsFragment : androidx.fragment.app.Fragment() {
 
     private var isOldTrips = false
 
@@ -54,7 +54,7 @@ class MyTripsFragment : Fragment() {
                     override fun onSuccess(trips: ArrayList<Trip>) {
                         loading.visibility = View.GONE
                         if (trips.isNotEmpty()) {
-                            val viewManager = LinearLayoutManager(activity)
+                            val viewManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
 
                             Collections.sort(trips, object : Comparator<Trip> {
                                 override fun compare(o1: Trip, o2: Trip): Int {
@@ -103,7 +103,7 @@ class MyTripsFragment : Fragment() {
                     override fun onSuccess(trips: ArrayList<Trip>) {
                         loading.visibility = View.GONE
                         if (trips.isNotEmpty()) {
-                            val viewManager = LinearLayoutManager(activity)
+                            val viewManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
 
                             Collections.sort(trips, object : Comparator<Trip> {
                                 override fun compare(o1: Trip, o2: Trip): Int {

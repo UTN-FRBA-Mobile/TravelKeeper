@@ -5,10 +5,10 @@ import android.content.Intent
 import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -22,9 +22,9 @@ import java.time.Instant
 import java.util.*
 
 class TripTimeLineActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var viewAdapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>
+    private lateinit var viewManager: androidx.recyclerview.widget.RecyclerView.LayoutManager
     private lateinit var destinations: MutableList<TripTimeLineInfo>
     private lateinit var trip: Trip
     val NEW_DESTINATION_REQUEST = 1
@@ -49,10 +49,10 @@ class TripTimeLineActivity : AppCompatActivity() {
                     no_destinations.visibility = View.GONE
                 }
 
-                viewManager = LinearLayoutManager(this@TripTimeLineActivity)
+                viewManager = androidx.recyclerview.widget.LinearLayoutManager(this@TripTimeLineActivity)
                 viewAdapter = TripTimeLineAdapter(destinations, trip)
 
-                recyclerView = findViewById<RecyclerView>(R.id.trip_timeline_recycler_view).apply {
+                recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.trip_timeline_recycler_view).apply {
                     setHasFixedSize(true)
                     layoutManager = viewManager
                     adapter = viewAdapter
