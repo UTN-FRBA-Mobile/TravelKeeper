@@ -198,4 +198,8 @@ class ViajesService {
                 listener.onError(exception)
             }
     }
+
+    fun getAccomodationFromDestination(destinationId: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

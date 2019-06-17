@@ -57,7 +57,13 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
     }
 
     private fun showDashboard(position: Int) {
-        val intent = Intent(context, TripDashboardActivity::class.java)
+        val intent = Intent(context, TripDashboardActivity::class.java).apply {
+            putExtra(
+                "DESTINATION_ID",
+                destinations[position].id
+            )
+        }
+
         context.startActivity(intent)
     }
 
