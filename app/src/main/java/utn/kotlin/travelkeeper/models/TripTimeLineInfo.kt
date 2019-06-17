@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-class TripTimeLineInfo(
+class TripTimeLineInfo( //Destination //destinos_en_viaje en la bd
     var id: String? = null,
     var name: String,
     var type: String,
