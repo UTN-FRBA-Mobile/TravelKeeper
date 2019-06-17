@@ -26,10 +26,6 @@ class NewTripActivity : AppCompatActivity() {
         button.setOnClickListener {
             newDestinationAdapter.data.add(NewDestination())
             newDestinationAdapter.notifyDataSetChanged()
-            //agregar con reglas - ver de crear una lista
-//            val destinationView = NewDestinationView(this)
-//            root_new_trip.addView(destinationView)
-            Toast.makeText(this@NewTripActivity, "Agregar nuevo destino", Toast.LENGTH_SHORT).show()
         }
     }
 }

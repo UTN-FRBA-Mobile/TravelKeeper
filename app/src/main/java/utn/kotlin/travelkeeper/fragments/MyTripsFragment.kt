@@ -31,13 +31,13 @@ class MyTripsFragment : androidx.fragment.app.Fragment() {
 
         val fab = view.fab_add_trip
         fab.setOnClickListener {
-            //TODO DESCOMENTAR PARA VOLVER AL OTRO COMPORTAMIENTO, Y COMENTAR A PARTIR DE ********
-//            val newTripIntent = Intent(activity, NewTripActivity::class.java)
-//            startActivity(newTripIntent)
+//            TODO DESCOMENTAR PARA VOLVER AL OTRO COMPORTAMIENTO, Y COMENTAR A PARTIR DE ********
+            val newTripIntent = Intent(activity, NewTripActivity::class.java)
+            startActivity(newTripIntent)
 
             //*************//
-            val newFragment = CreateTripDialogFragment()
-            newFragment.show(fragmentManager, "dialog")
+//            val newFragment = CreateTripDialogFragment()
+//            newFragment.show(fragmentManager, "dialog")
         }
 
         return view
