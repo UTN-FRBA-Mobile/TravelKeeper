@@ -113,11 +113,42 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
     private fun setNewDestinationButton() {
         destination_button_id.setOnClickListener { view ->
-            val newDest =
-                TripTimeLineInfo(null, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
+            val newDest = TripTimeLineInfo(null, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
 
-            addDestinationToFirebase(newDest)
+            if(isValid(newDest)) {
+                enter_name_error.visibility = View.GONE
+                start_date_error.visibility = View.GONE
+                end_date_error.visibility = View.GONE
+                addDestinationToFirebase(newDest)
+            }
         }
+    }
+
+    private fun isValid(dest: TripTimeLineInfo): Boolean {
+        var valid = true
+
+        if (enter_destination_name.text == null || enter_destination_name.text.toString() == "") {
+            enter_name_error.visibility = View.VISIBLE
+            valid = false
+        }
+
+        if(destination_start_date_selected == null || destination_start_date_selected.text.toString() == "" || destination_start_date_selected.text.toString() == "Selecciona una fecha") {
+            start_date_error.visibility = View.VISIBLE
+            valid = false
+        }
+
+        if(destination_end_date_selected == null || destination_end_date_selected.text.toString() == "" || destination_end_date_selected.text.toString() == "Selecciona una fecha") {
+            end_date_error.visibility = View.VISIBLE
+            valid = false
+        }
+
+        if(startDate != null && endDate != null && endDate!! < startDate!!) {
+            end_date_error.setText(R.string.end_date_before_start_date)
+            end_date_error.visibility = View.VISIBLE
+            valid = false
+        }
+
+        return valid
     }
 
     private fun addDestinationToFirebase(dest: TripTimeLineInfo) {

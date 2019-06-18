@@ -53,4 +53,7 @@
     <string name="btn_new_dest">Agregar nuevo destino</string>
     <string name="btn_edit_dest">Editar destino</string>
 
+    <!--VALIDATION-->
+    <string name="error_message">Este campo es requerido</string>
+    <string name="end_date_before_start_date">La fecha fin no puede ser menor a la fecha de inicio</string>
 </resources>
