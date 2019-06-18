@@ -5,6 +5,8 @@ import android.content.Intent
 import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
+import android.view.ContextMenu
+import android.view.MenuInflater
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import android.view.View
 import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
+import kotlinx.android.synthetic.main.view_trip_time_line.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
 import utn.kotlin.travelkeeper.models.Trip
@@ -63,6 +66,7 @@ class TripTimeLineActivity : AppCompatActivity() {
                         startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
                     }
                 }
+
             }
 
             override fun onError(exception: Exception) {
@@ -73,6 +77,29 @@ class TripTimeLineActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+
+        menuInflater.inflate(R.menu.options_floating_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.edit_option -> {
+                Toast.makeText(this, "Editar seleccionado", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.delete_option -> {
+                Toast.makeText(this, "WASTED", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> {
+                return super.onContextItemSelected(item)
+            }
+        }
+    }
+
+   
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Check which request we're responding to
         if (requestCode == NEW_DESTINATION_REQUEST) {

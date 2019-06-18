@@ -14,6 +14,8 @@
     <string name="log_out_msg">¿Está seguro de querer cerrar la sesión?</string>
     <string name="log_out_yes">Si</string>
     <string name="log_out_no">No</string>
+    <string name="edit_option">Editar</string>
+    <string name="delete_option">Eliminar</string>
 
     <!--My trips-->
     <string name="current">Actual</string>

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.vipulasri.timelineview.TimelineView
+import kotlinx.android.synthetic.main.view_trip_time_line.*
 import kotlinx.android.synthetic.main.view_trip_time_line.view.*
 import utn.kotlin.travelkeeper.EditDestinationActivity
 import utn.kotlin.travelkeeper.R.*
@@ -54,7 +55,13 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
 
 //            showEditDestinationActivity(position) comportamiento viejo
         }
+
+       var activity = context as Activity
+
+        activity.registerForContextMenu(holder.view)
     }
+
+
 
     private fun showDashboard(position: Int) {
         val intent = Intent(context, TripDashboardActivity::class.java).apply {
