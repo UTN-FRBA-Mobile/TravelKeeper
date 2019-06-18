@@ -2,6 +2,7 @@ package utn.kotlin.travelkeeper
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,18 @@ class NewTripActivity : AppCompatActivity() {
         button.setOnClickListener {
             newDestinationAdapter.data.add(NewDestination())
             newDestinationAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                // API 5+ solution
+                onBackPressed()
+                return true
+            }
+
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 }
