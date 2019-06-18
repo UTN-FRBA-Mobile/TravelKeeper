@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.accommodation_item_view.view.*
 import kotlinx.android.synthetic.main.borrar_text_view.view.*
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.models.Accommodation
@@ -15,7 +16,7 @@ class AccommodationAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccommodationViewHolder {
         val accommodationItem = LayoutInflater.from(parent.context)
-            .inflate(R.layout.borrar_text_view, parent, false)
+            .inflate(R.layout.accommodation_item_view, parent, false)
         return AccommodationViewHolder(accommodationItem)
     }
 
@@ -23,7 +24,8 @@ class AccommodationAdapter (
 
     override fun onBindViewHolder(holder: AccommodationViewHolder, position: Int) {
     val accommodation = accommodationList[position]
-        holder.view.text_view_placeholder.text = accommodation.name
+        holder.view.accommodation_desc_text.text = accommodation.name
+        holder.view.accommodation_date_text.text = accommodation.startDate.toString()
     }
 
 }
