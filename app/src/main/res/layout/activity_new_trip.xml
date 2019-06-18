@@ -31,13 +31,13 @@
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/new_destination_recycler_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/add_destination_button"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

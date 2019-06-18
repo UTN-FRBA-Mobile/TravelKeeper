@@ -1,10 +1,9 @@
 package utn.kotlin.travelkeeper
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 
 class NewTripActivity : AppCompatActivity() {
@@ -30,15 +29,14 @@ class NewTripActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean { //para back button
+        return when (item.itemId) {
             android.R.id.home -> {
-                // API 5+ solution
                 onBackPressed()
-                return true
+                true
             }
 
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
