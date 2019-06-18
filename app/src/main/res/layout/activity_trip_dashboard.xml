@@ -76,6 +76,7 @@
                     android:text="Transporte"/>
 
             <Button
+                    android:id="@+id/accommodation_button"
                     android:layout_weight="1"
                     style="@style/categoryButton"
                     android:drawableTop="@drawable/plus"

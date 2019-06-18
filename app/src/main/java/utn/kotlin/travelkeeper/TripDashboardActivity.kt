@@ -1,30 +1,39 @@
 package utn.kotlin.travelkeeper
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
-import utn.kotlin.travelkeeper.DBServices.ViajesService
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import utn.kotlin.travelkeeper.DBServices.AccommodationService
+import utn.kotlin.travelkeeper.models.Accommodation
 
 class TripDashboardActivity : AppCompatActivity(), EditTripNameDialog.EditTitleDialogListener {
 
-    private lateinit var viajesService: ViajesService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trip_dashboard)
-
-        viajesService = ServiceProvider.viajesService
-
         val destinationId = intent.getStringExtra("DESTINATION_ID")
-        viajesService.getAccomodationFromDestination(destinationId)
-
+        val tripId = intent.getStringExtra("TRIP_ID")
 
         val cityTitle = findViewById<TextView>(R.id.city_title)
         cityTitle.text = (intent.getStringExtra("cityName"))
-        val editButton = findViewById<Button>(R.id.edit_name)
+        val editButton = findViewById<FloatingActionButton>(R.id.edit_name)
         editButton.setOnClickListener {
             val dialog = EditTripNameDialog()
             dialog.show(supportFragmentManager, "DialogTitle")
+        }
+
+        val accommodationButton = findViewById<Button>(R.id.accommodation_button)
+        accommodationButton.setOnClickListener{
+            val intentAccommodation = Intent(this,AccomodationsListActivity::class.java )
+            intentAccommodation.putExtra("DESTINATION_ID", destinationId)
+            intentAccommodation.putExtra("TRIP_ID", tripId)
+            startActivity(intentAccommodation)
         }
     }
 

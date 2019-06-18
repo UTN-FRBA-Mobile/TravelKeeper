@@ -62,6 +62,10 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
                 "DESTINATION_ID",
                 destinations[position].id
             )
+            putExtra(
+                "TRIP_ID",
+                trip.id
+            )
         }
 
         context.startActivity(intent)

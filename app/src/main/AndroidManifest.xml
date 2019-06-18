@@ -54,6 +54,7 @@
                   android:label="Dashboard"
                   android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".AccomodationsListActivity"/>
     </application>
 
 </manifest>
