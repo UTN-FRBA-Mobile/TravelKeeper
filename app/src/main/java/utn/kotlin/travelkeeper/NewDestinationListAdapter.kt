@@ -42,16 +42,14 @@ class NewDestinationListAdapter : RecyclerView.Adapter<NewDestinationViewHolder>
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             selectedDate.setText(dateToString(calendar.time))
         }
+        DatePickerDialog(
+            context,
+            dateSetListener,
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
 
-        selectedDate.setOnClickListener {
-            DatePickerDialog(
-                context,
-                dateSetListener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
     }
 
     private fun dateToString(date: Date): String {
