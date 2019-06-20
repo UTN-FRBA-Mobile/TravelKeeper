@@ -2,7 +2,6 @@ package utn.kotlin.travelkeeper
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +39,7 @@ class NewDestinationListAdapter : RecyclerView.Adapter<NewDestinationViewHolder>
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             selectedDate.setText(dateToString(calendar.time))
         }
+
         DatePickerDialog(
             context,
             dateSetListener,
