@@ -1,15 +1,11 @@
 package utn.kotlin.travelkeeper
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import utn.kotlin.travelkeeper.DBServices.AccommodationService
-import utn.kotlin.travelkeeper.models.Accommodation
 
 class TripDashboardActivity : AppCompatActivity(), EditTripNameDialog.EditTitleDialogListener {
 
@@ -29,8 +25,8 @@ class TripDashboardActivity : AppCompatActivity(), EditTripNameDialog.EditTitleD
         }
 
         val accommodationButton = findViewById<Button>(R.id.accommodation_button)
-        accommodationButton.setOnClickListener{
-            val intentAccommodation = Intent(this,AccomodationsListActivity::class.java )
+        accommodationButton.setOnClickListener {
+            val intentAccommodation = Intent(this, AccomodationsListActivity::class.java)
             intentAccommodation.putExtra("DESTINATION_ID", destinationId)
             intentAccommodation.putExtra("TRIP_ID", tripId)
             startActivity(intentAccommodation)
