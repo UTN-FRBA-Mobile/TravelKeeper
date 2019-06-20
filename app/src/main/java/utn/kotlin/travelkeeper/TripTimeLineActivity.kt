@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
@@ -23,6 +24,9 @@ import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.time.Instant
 import java.util.*
+import android.widget.AdapterView.AdapterContextMenuInfo
+import kotlinx.android.synthetic.main.content_trip_time_line.*
+
 
 class TripTimeLineActivity : AppCompatActivity() {
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
@@ -30,8 +34,10 @@ class TripTimeLineActivity : AppCompatActivity() {
     private lateinit var viewManager: androidx.recyclerview.widget.RecyclerView.LayoutManager
     private lateinit var destinations: MutableList<TripTimeLineInfo>
     private lateinit var trip: Trip
+    private lateinit var destinationSelected: View
     val NEW_DESTINATION_REQUEST = 1
     val EDIT_DESTINATION_REQUEST = 2
+    val EDIT_DESTINATION_INTENT = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +61,7 @@ class TripTimeLineActivity : AppCompatActivity() {
                 viewManager = androidx.recyclerview.widget.LinearLayoutManager(this@TripTimeLineActivity)
                 viewAdapter = TripTimeLineAdapter(destinations, trip)
 
-                recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.trip_timeline_recycler_view).apply {
+                recyclerView = trip_timeline_recycler_view.apply {
                     setHasFixedSize(true)
                     layoutManager = viewManager
                     adapter = viewAdapter
@@ -66,7 +72,6 @@ class TripTimeLineActivity : AppCompatActivity() {
                         startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
                     }
                 }
-
             }
 
             override fun onError(exception: Exception) {
@@ -80,13 +85,15 @@ class TripTimeLineActivity : AppCompatActivity() {
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
 
+        destinationSelected = v!!
         menuInflater.inflate(R.menu.options_floating_menu, menu)
     }
 
     override fun onContextItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.edit_option -> {
-                Toast.makeText(this, "Editar seleccionado", Toast.LENGTH_SHORT).show()
+                val position = destinationSelected.tag as Int
+                this.showEditDestinationActivity(position)
                 return true
             }
             R.id.delete_option -> {
@@ -99,7 +106,14 @@ class TripTimeLineActivity : AppCompatActivity() {
         }
     }
 
-   
+    private fun showEditDestinationActivity(position: Int) {
+        val editDestIntent = Intent(this@TripTimeLineActivity, EditDestinationActivity::class.java)
+        editDestIntent.putExtra("DEST_EDIT", destinations[position])
+        editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
+        editDestIntent.putExtra("EDIT_DEST_POSITION", position)
+        this@TripTimeLineActivity.startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Check which request we're responding to
         if (requestCode == NEW_DESTINATION_REQUEST) {

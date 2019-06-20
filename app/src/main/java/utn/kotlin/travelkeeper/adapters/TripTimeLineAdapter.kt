@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.vipulasri.timelineview.TimelineView
-import kotlinx.android.synthetic.main.view_trip_time_line.*
 import kotlinx.android.synthetic.main.view_trip_time_line.view.*
-import utn.kotlin.travelkeeper.EditDestinationActivity
 import utn.kotlin.travelkeeper.R.*
 import utn.kotlin.travelkeeper.TripDashboardActivity
 import utn.kotlin.travelkeeper.models.Trip
@@ -21,7 +19,6 @@ import java.util.*
 class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo>, private val trip: Trip) :
     androidx.recyclerview.widget.RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
     private lateinit var context: Context
-    val EDIT_DESTINATION_INTENT = 2
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(
@@ -29,12 +26,12 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
         viewType: Int
     ): TripTimeLineAdapter.TripTimeLineViewHolder {
         // create a new view
-        val textView = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(layout.view_trip_time_line, parent, false)
         // set the view's size, margins, paddings and layout parameters
         context = parent.context
 
-        return TripTimeLineViewHolder(textView, viewType)
+        return TripTimeLineViewHolder(view, viewType)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -52,12 +49,11 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
         holder.view.setOnClickListener {
             if (destinations[position].type == "Lugar")
                 showDashboard(position)
-
-//            showEditDestinationActivity(position) comportamiento viejo
         }
 
-       var activity = context as Activity
+        holder.view.tag = position
 
+        var activity = context as Activity
         activity.registerForContextMenu(holder.view)
     }
 
@@ -76,15 +72,6 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
         }
 
         context.startActivity(intent)
-    }
-
-    private fun showEditDestinationActivity(position: Int) {
-        val editDestIntent = Intent(context, EditDestinationActivity::class.java)
-        editDestIntent.putExtra("DEST_EDIT", destinations[position])
-        editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
-        editDestIntent.putExtra("EDIT_DEST_POSITION", position)
-        val activity = context as Activity
-        activity.startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
     }
 
     private fun getDate(date: Date): String {
