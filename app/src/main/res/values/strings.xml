@@ -57,8 +57,10 @@
     <string name="remove_destination">¿Está seguro de eliminar el destino?</string>
     <string name="destination_removed">El destino fue removido exitosamente</string>
     <string name="destination_not_removed">No se pudo eliminar el destino. Intente nuevamente más tarde</string>
+    <string name="pick_a_date">"Seleccione una fecha"</string>
 
     <!--VALIDATION-->
     <string name="error_message">Este campo es requerido</string>
     <string name="end_date_before_start_date">La fecha fin no puede ser menor a la fecha de inicio</string>
+    <string name="title_activity_documentation">DocumentationActivity</string>
 </resources>

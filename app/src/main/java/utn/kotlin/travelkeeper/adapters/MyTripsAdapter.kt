@@ -14,7 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.my_trips_list_item.view.*
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
+import utn.kotlin.travelkeeper.DocumentationActivity
 import utn.kotlin.travelkeeper.MainActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.TripTimeLineActivity
@@ -46,6 +48,12 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
             val tripTimeLineIntent = Intent(context, TripTimeLineActivity::class.java)
             tripTimeLineIntent.putExtra("TRIP", myDataset[position])
             context.startActivity(tripTimeLineIntent)
+        }
+
+        holder.view.documentation_btn.setOnClickListener {
+            val documentationIntent = Intent(context, DocumentationActivity::class.java)
+//            tripTimeLineIntent.putExtra("TRIP", myDataset[position])
+            context.startActivity(documentationIntent)
         }
 
         holder.view.findViewById<ImageView>(R.id.share_btn).setOnClickListener {

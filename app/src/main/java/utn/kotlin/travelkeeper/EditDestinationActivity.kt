@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_edit_destination.*
+import kotlinx.android.synthetic.main.activity_trip_time_line.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo

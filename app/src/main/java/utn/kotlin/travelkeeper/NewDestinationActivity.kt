@@ -113,9 +113,8 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
     private fun setNewDestinationButton() {
         destination_button_id.setOnClickListener { view ->
-            val newDest = TripTimeLineInfo(null, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
-
-            if(isValid(newDest)) {
+            if(isValid()) {
+                val newDest = TripTimeLineInfo(null, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
                 enter_name_error.visibility = View.GONE
                 start_date_error.visibility = View.GONE
                 end_date_error.visibility = View.GONE
@@ -124,7 +123,7 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
     }
 
-    private fun isValid(dest: TripTimeLineInfo): Boolean {
+    private fun isValid(): Boolean {
         var valid = true
 
         if (enter_destination_name.text == null || enter_destination_name.text.toString() == "") {
@@ -132,12 +131,12 @@ class NewDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             valid = false
         }
 
-        if(destination_start_date_selected == null || destination_start_date_selected.text.toString() == "" || destination_start_date_selected.text.toString() == "Selecciona una fecha") {
+        if(destination_start_date_selected == null || destination_start_date_selected.text.toString() == "" || destination_start_date_selected.text.toString() == "Seleccione una fecha") {
             start_date_error.visibility = View.VISIBLE
             valid = false
         }
 
-        if(destination_end_date_selected == null || destination_end_date_selected.text.toString() == "" || destination_end_date_selected.text.toString() == "Selecciona una fecha") {
+        if(destination_end_date_selected == null || destination_end_date_selected.text.toString() == "" || destination_end_date_selected.text.toString() == "Seleccione una fecha") {
             end_date_error.visibility = View.VISIBLE
             valid = false
         }

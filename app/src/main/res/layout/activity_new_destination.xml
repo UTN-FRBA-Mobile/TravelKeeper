@@ -65,7 +65,7 @@
               android:layout_marginStart="12dp"/>
     <TextView
             android:id="@+id/destination_start_date_selected"
-            android:text="Seleccione una fecha"
+            android:text="@string/pick_a_date"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:background="?attr/editTextBackground"
@@ -96,7 +96,7 @@
               android:layout_marginStart="12dp"/>
     <TextView
             android:id="@+id/destination_end_date_selected"
-            android:text="Seleccione una fecha"
+            android:text="@string/pick_a_date"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:background="?attr/editTextBackground"
