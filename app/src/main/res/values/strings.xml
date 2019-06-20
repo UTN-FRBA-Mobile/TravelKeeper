@@ -59,6 +59,9 @@
     <string name="destination_not_removed">No se pudo eliminar el destino. Intente nuevamente más tarde</string>
     <string name="pick_a_date">"Seleccione una fecha"</string>
 
+    <!--DOCUMENTS-->
+    <string name="documents_title">"Documentos"</string>
+
     <!--VALIDATION-->
     <string name="error_message">Este campo es requerido</string>
     <string name="end_date_before_start_date">La fecha fin no puede ser menor a la fecha de inicio</string>

@@ -17,6 +17,7 @@ class ViajesService {
     private val SUBTABLA_ALOJAMIENTOS = "alojamientos"
     private val SUBTABLA_ACTIVIDADES = "actividades"
     private val SUBTABLA_OTROS = "otros"
+    private val SUBTABLA_DOCUMENTOS_ASCOCIADOS = "documentos_asociados"
 
     private val TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ss*SSSZZZZ"
     private val DATE_ONLY = "yyyy-MM-dd"

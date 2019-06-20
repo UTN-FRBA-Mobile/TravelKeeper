@@ -9,4 +9,12 @@
         tools:showIn="@layout/activity_documentation"
         tools:context=".DocumentationActivity">
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/pick_a_date"
+            android:textSize="18dp"
+            android:gravity="center"
+    />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
