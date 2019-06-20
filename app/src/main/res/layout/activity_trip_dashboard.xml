@@ -71,6 +71,7 @@
 
             <Button
                     android:layout_weight="1"
+                    android:id="@+id/transportation_button"
                     style="@style/categoryButton"
                     android:drawableTop="@drawable/plus"
                     android:text="Transporte"/>
@@ -100,6 +101,7 @@
 
 
             <Button
+                    android:id="@+id/activity_button"
                     style="@style/categoryButton"
                     android:drawableTop="@drawable/plus"
                     android:layout_weight="1"
