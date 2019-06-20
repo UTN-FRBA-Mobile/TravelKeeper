@@ -15,7 +15,7 @@ class DocumentationActivity : AppCompatActivity() {
         setSupportActionBar(doc_toolbar)
         setBackArrow()
 
-        fab.setOnClickListener { view ->
+        attach_fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }

@@ -80,7 +80,8 @@
                     android:layout_weight="1"
                     style="@style/categoryButton"
                     android:drawableTop="@drawable/plus"
-                    android:text="Acomodamiento"/>
+                    android:text="Alojamiento"
+            />
 
 
         </LinearLayout>
