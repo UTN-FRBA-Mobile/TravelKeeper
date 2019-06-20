@@ -38,8 +38,8 @@ class ViajesService {
         val db = FirebaseFirestore.getInstance()
         db.collection(TABLA_VIAJES)
             .add(newTripToAdd)
-            .addOnSuccessListener { documentRefference ->
-                listener.onSuccess(documentRefference.id)
+            .addOnSuccessListener { documentReference ->
+                listener.onSuccess(documentReference.id)
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)
