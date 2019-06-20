@@ -54,6 +54,9 @@
     <string name="dest_end_date">Fecha Fin</string>
     <string name="btn_new_dest">Agregar nuevo destino</string>
     <string name="btn_edit_dest">Editar destino</string>
+    <string name="remove_destination">¿Está seguro de eliminar el destino?</string>
+    <string name="destination_removed">El destino fue removido exitosamente</string>
+    <string name="destination_not_removed">No se pudo eliminar el destino. Intente nuevamente más tarde</string>
 
     <!--VALIDATION-->
     <string name="error_message">Este campo es requerido</string>

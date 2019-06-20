@@ -25,7 +25,11 @@ import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.time.Instant
 import java.util.*
 import android.widget.AdapterView.AdapterContextMenuInfo
+import androidx.appcompat.app.AlertDialog
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_trip_time_line.*
+import utn.kotlin.travelkeeper.DBServices.UsuariosService
 
 
 class TripTimeLineActivity : AppCompatActivity() {
@@ -97,7 +101,8 @@ class TripTimeLineActivity : AppCompatActivity() {
                 return true
             }
             R.id.delete_option -> {
-                Toast.makeText(this, "WASTED", Toast.LENGTH_SHORT).show()
+                val position = destinationSelected.tag as Int
+                this.deleteDestination(position)
                 return true
             }
             else -> {
@@ -112,6 +117,35 @@ class TripTimeLineActivity : AppCompatActivity() {
         editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
         editDestIntent.putExtra("EDIT_DEST_POSITION", position)
         this@TripTimeLineActivity.startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
+    }
+
+    private fun deleteDestination(position: Int) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(R.string.remove_destination)
+        builder.setPositiveButton(
+            R.string.log_out_yes
+        ) { dialog, _ ->
+            ViajesService().deleteDestinationInTrip(
+                trip.id!!,
+                destinations[position].id!!,
+                object : UsuariosService.SimpleServiceListener {
+                    override fun onSuccess() {
+                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_removed, Toast.LENGTH_SHORT).show()
+                        destinations.removeAt(position)
+                        resetAdapter()
+                    }
+
+                    override fun onError(exception: Exception) {
+                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_not_removed, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
+        }
+        builder.setNegativeButton(
+            R.string.log_out_no
+        ) { dialog, _ -> dialog.dismiss() }
+
+        builder.create().show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
