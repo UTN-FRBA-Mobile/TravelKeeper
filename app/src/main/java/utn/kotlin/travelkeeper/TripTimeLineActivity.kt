@@ -2,34 +2,20 @@ package utn.kotlin.travelkeeper
 
 import android.app.Activity
 import android.content.Intent
-import android.opengl.Visibility
-import android.os.Build
 import android.os.Bundle
 import android.view.ContextMenu
-import android.view.MenuInflater
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.Toast
-
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
-import kotlinx.android.synthetic.main.view_trip_time_line.*
+import kotlinx.android.synthetic.main.content_trip_time_line.*
+import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
-import java.time.Instant
-import java.util.*
-import android.widget.AdapterView.AdapterContextMenuInfo
-import androidx.appcompat.app.AlertDialog
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_trip_time_line.*
-import utn.kotlin.travelkeeper.DBServices.UsuariosService
 
 
 class TripTimeLineActivity : AppCompatActivity() {
@@ -42,6 +28,7 @@ class TripTimeLineActivity : AppCompatActivity() {
     val NEW_DESTINATION_REQUEST = 1
     val EDIT_DESTINATION_REQUEST = 2
     val EDIT_DESTINATION_INTENT = 2
+    private lateinit var viajesService: ViajesService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +38,12 @@ class TripTimeLineActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
+        viajesService = ServiceProvider.viajesService
+
         trip = intent.extras["TRIP"] as Trip
 
-        ViajesService().getDestinationsFromTrip(trip.id!!,
+        viajesService.getDestinationsFromTrip(
+            trip.id!!,
             object : ViajesService.GetDestinationsViajeServiceListener {
             override fun onSuccess(dests: MutableList<TripTimeLineInfo>) {
                 destinations = dests
@@ -66,7 +56,7 @@ class TripTimeLineActivity : AppCompatActivity() {
                 viewAdapter = TripTimeLineAdapter(destinations, trip)
 
                 recyclerView = trip_timeline_recycler_view.apply {
-                    setHasFixedSize(true)
+                    //                    setHasFixedSize(true)
                     layoutManager = viewManager
                     adapter = viewAdapter
 
@@ -125,7 +115,7 @@ class TripTimeLineActivity : AppCompatActivity() {
         builder.setPositiveButton(
             R.string.log_out_yes
         ) { dialog, _ ->
-            ViajesService().deleteDestinationInTrip(
+            viajesService.deleteDestinationInTrip(
                 trip.id!!,
                 destinations[position].id!!,
                 object : UsuariosService.SimpleServiceListener {

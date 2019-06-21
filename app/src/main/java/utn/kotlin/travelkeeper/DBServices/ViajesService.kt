@@ -3,6 +3,7 @@ package utn.kotlin.travelkeeper.DBServices
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.models.Hotel
+import utn.kotlin.travelkeeper.models.NewDestination
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
@@ -101,6 +102,22 @@ class ViajesService {
     }
 
     fun addDestinationToTrip(tripId: String, dest: TripTimeLineInfo, listener: CreateTripServiceListener) {
+        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+
+        val newDestToAdd = dest.createMapFromObject(dateFormatter)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS)
+            .add(newDestToAdd)
+            .addOnSuccessListener { documentReference ->
+                listener.onSuccess(documentReference.id)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    fun addDestinationToTrip(tripId: String, dest: NewDestination, listener: CreateTripServiceListener) {
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
         val newDestToAdd = dest.createMapFromObject(dateFormatter)

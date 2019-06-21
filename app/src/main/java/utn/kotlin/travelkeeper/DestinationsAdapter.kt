@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import utn.kotlin.travelkeeper.models.NewDestination
 import java.text.SimpleDateFormat
 import java.util.*
 

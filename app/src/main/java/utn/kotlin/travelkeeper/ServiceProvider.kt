@@ -1,6 +1,7 @@
 package utn.kotlin.travelkeeper
 
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
+import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 
 object ServiceProvider {
@@ -11,5 +12,9 @@ object ServiceProvider {
 
     val accommodationService by lazy {
         AccommodationService()
+    }
+
+    val usuariosService by lazy {
+        UsuariosService()
     }
 }

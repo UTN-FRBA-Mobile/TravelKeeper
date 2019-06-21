@@ -1,7 +1,10 @@
 package utn.kotlin.travelkeeper
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -11,8 +14,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.models.NewDestination
+import utn.kotlin.travelkeeper.models.Trip
 import java.util.*
 
 
@@ -21,6 +30,8 @@ class NewTripActivity : AppCompatActivity() {
     private lateinit var tripName: EditText
     private lateinit var destinationsAdapter: DestinationsAdapter
     private lateinit var viajesService: ViajesService
+    private lateinit var usuariosService: UsuariosService
+    private lateinit var subject: Subject<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +42,8 @@ class NewTripActivity : AppCompatActivity() {
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         viajesService = ServiceProvider.viajesService
+        usuariosService = ServiceProvider.usuariosService
+        subject = PublishSubject.create()
 
         destinationsAdapter = DestinationsAdapter()
 
@@ -53,6 +66,20 @@ class NewTripActivity : AppCompatActivity() {
                 saveNewTrip()
             }
         }
+
+        onAllDestinationsAdded()
+    }
+
+    private lateinit var subscription: Disposable
+
+    override fun onStart() {
+        super.onStart()
+        subscription = onAllDestinationsAdded().subscribe { showToastWhenAllDestinationsAreAdded(it) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        subscription.dispose()
     }
 
     private fun saveNewTrip() {
@@ -62,7 +89,7 @@ class NewTripActivity : AppCompatActivity() {
             getTripEndDate(),
             object : ViajesService.CreateTripServiceListener {
                 override fun onSuccess(idCreated: String) {
-                    UsuariosService().addTripToUser(
+                    usuariosService.addTripToUser(
                         FirebaseAuth.getInstance().currentUser!!.email!!,
                         idCreated,
                         tripName.text.toString(),
@@ -70,10 +97,7 @@ class NewTripActivity : AppCompatActivity() {
                         getTripEndDate(),
                         object : UsuariosService.SimpleServiceListener {
                             override fun onSuccess() {
-                                Toast.makeText(this@NewTripActivity, "Nuevo viaje guardado!", Toast.LENGTH_LONG)
-                                    .show()
-
-                                //TODO volver a la pantalla principal: mis viajes
+                                destinationsAdapter.data.forEach { addDestination(idCreated, it) }
                             }
 
                             override fun onError(exception: Exception) {
@@ -89,6 +113,39 @@ class NewTripActivity : AppCompatActivity() {
             }
 
         )
+
+
+    }
+
+    private fun addDestination(tripId: String, destination: NewDestination) {
+        viajesService.addDestinationToTrip(
+            tripId, destination,
+            object : ViajesService.CreateTripServiceListener {
+                override fun onSuccess(idCreated: String) {
+                    Log.i("[destino-agregado-id]", idCreated)
+                    destination.id = idCreated
+                    subject.onNext(tripId)
+                }
+
+                override fun onError(exception: Exception) {
+                    Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
+                }
+            })
+    }
+
+    private fun onAllDestinationsAdded(): Observable<String> {
+        val destinationsAddedCount = destinationsAdapter.data.size - 1
+        return subject.skip(destinationsAddedCount.toLong())
+            .take(1)
+    }
+
+    private fun showToastWhenAllDestinationsAreAdded(tripId: String) {
+        Toast.makeText(this@NewTripActivity, "Nuevo viaje guardado!", Toast.LENGTH_LONG).show()
+        val intent = Intent(this@NewTripActivity, TripTimeLineActivity::class.java)
+        intent.putExtra("TRIP", Trip(tripId, tripName.text.toString(), getTripStartDate(), getTripEndDate()))
+        setResult(Activity.RESULT_OK, intent)
+
+        finish()
     }
 
     private fun getTripEndDate(): Date {
