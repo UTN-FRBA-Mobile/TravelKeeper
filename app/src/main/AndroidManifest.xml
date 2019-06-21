@@ -12,6 +12,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".NewAccommodationActivity">
+        </activity>
         <activity
                 android:name=".DocumentationActivity"
                 android:label="@string/title_activity_documentation"
@@ -59,7 +61,7 @@
                 android:name=".TripDashboardActivity"
                 android:label="Dashboard"
                 android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".AccomodationsListActivity"/>
+        <activity android:name=".AccommodationsListActivity"/>
     </application>
 
 </manifest>

@@ -7,14 +7,14 @@ import java.time.LocalDate
 import java.util.*
 
 data class Accommodation(
-    val id: String,
-    val name: String,
-    val address: String,
-    val startDate: Date,
-    val endDate: Date,
+    var id: String? = null,
+    var name: String,
+    var address: String,
+    var startDate: Date,
+    var endDate: Date,
     val telephoneNumber: String? = null,
     val reservationCode: String? = null
-) {
+) : Serializable {
     fun createMapFromObject(dateFormatter: SimpleDateFormat): HashMap<String, String> {
         val returnMap = HashMap<String, String>()
         returnMap["name"] = this.name

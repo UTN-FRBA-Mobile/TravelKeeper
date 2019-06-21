@@ -26,7 +26,7 @@ class TripDashboardActivity : AppCompatActivity(), EditTripNameDialog.EditTitleD
 
         val accommodationButton = findViewById<Button>(R.id.accommodation_button)
         accommodationButton.setOnClickListener {
-            val intentAccommodation = Intent(this, AccomodationsListActivity::class.java)
+            val intentAccommodation = Intent(this, AccommodationsListActivity::class.java)
             intentAccommodation.putExtra("DESTINATION_ID", destinationId)
             intentAccommodation.putExtra("TRIP_ID", tripId)
             startActivity(intentAccommodation)

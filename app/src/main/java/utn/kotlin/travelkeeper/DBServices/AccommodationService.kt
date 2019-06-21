@@ -18,6 +18,11 @@ class AccommodationService {
         fun onError(exception: Exception)
     }
 
+    interface CreateAccommodationServiceListener {
+        fun onSuccess(idCreated: String)
+        fun onError(exception: Exception)
+    }
+
     fun getAccomodationFromDestination(tripId: String, destinationId: String, listener: GetAccommodationsViajeServiceListener) {
         val db = FirebaseFirestore.getInstance()
 
@@ -33,6 +38,22 @@ class AccommodationService {
                     accommodationList.add(accommodation)
                 }
                 listener.onSuccess(accommodationList)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    fun addAccommodationToDestination(tripId: String, destId: String, accommodation: Accommodation, listener: CreateAccommodationServiceListener) {
+        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+
+        val newAccommodationToAdd = accommodation.createMapFromObject(dateFormatter)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId).collection(SUBTABLA_ALOJAMIENTOS)
+            .add(newAccommodationToAdd)
+            .addOnSuccessListener { documentReference ->
+                listener.onSuccess(documentReference.id)
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)

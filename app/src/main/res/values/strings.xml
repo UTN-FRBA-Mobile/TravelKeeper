@@ -67,6 +67,14 @@
     <string name="end_date_before_start_date">La fecha fin no puede ser menor a la fecha de inicio</string>
     <string name="title_activity_documentation">DocumentationActivity</string>
 
-    <!--ACCOMODATIONS-->
-    <string name="accomodations_list">"Alojamientos"</string>
+    <!--ACCOMMODATIONS-->
+    <string name="accommodations_list">"Alojamientos"</string>
+    <string name="new_accommodation">"Nuevo alojamiento"</string>
+    <string name="accommodation_name">"Nombre"</string>
+    <string name="accommodation_address">"Direccion"</string>
+    <string name="accommodation_checkin">"Fecha de entrada"</string>
+    <string name="accommodation_checkout">"Fecha de salida"</string>
+    <string name="accommodation_reservation_number">"Nro de reserva (opcional)"</string>
+    <string name="accommodation_telephone_number">"Nro de telefono (opcional)</string>
+    <string name="btn_new_accommodation">"Agregar nuevo alojamiento"</string>
 </resources>
