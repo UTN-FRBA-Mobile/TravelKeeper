@@ -2,6 +2,7 @@ package utn.kotlin.travelkeeper.DBServices
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import utn.kotlin.travelkeeper.models.DocumentationInfo
 import utn.kotlin.travelkeeper.models.Hotel
 import utn.kotlin.travelkeeper.models.NewDestination
 import utn.kotlin.travelkeeper.models.Trip
@@ -67,6 +68,45 @@ class ViajesService {
                 )
 
                 listener.onSuccess(trip)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    interface GetDocumentationListener {
+        fun onSuccess(fileList: MutableList<DocumentationInfo>)
+        fun onError(exception: Exception)
+    }
+
+    fun getDocumentsFromTrip(tripId: String, listener: GetDocumentationListener) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId)
+            .collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS)
+            .get().addOnSuccessListener {
+                var documentation: MutableList<DocumentationInfo> = mutableListOf<DocumentationInfo>()
+                it.forEach {
+                    documentation.add(DocumentationInfo.createObjectFromSnapshot(it.data))
+                }
+                listener.onSuccess(documentation)
+            }
+            .addOnFailureListener {
+                listener.onError(it)
+            }
+    }
+
+    interface AddDocumentationListener {
+        fun onSuccess()
+        fun onError(exception: Exception)
+    }
+
+    fun addDocumentToTrip(tripId: String, documentationInfo: DocumentationInfo, listener: AddDocumentationListener) {
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS)
+            .add(documentationInfo)
+            .addOnSuccessListener {
+                listener.onSuccess()
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)

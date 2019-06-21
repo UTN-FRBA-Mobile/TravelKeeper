@@ -40,10 +40,7 @@ class TripDashboardActivity : AppCompatActivity(), EditTripNameDialog.EditTitleD
 
         val destination = findViewById<Button>(R.id.transportation_button)
         destination.setOnClickListener {
-            val intent = Intent()
-            intent.type = "*/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(Intent.createChooser(intent, "Select file"), PICK_FILE)
+
         }
 
         val activity = findViewById<Button>(R.id.activity_button)
@@ -63,58 +60,7 @@ class TripDashboardActivity : AppCompatActivity(), EditTripNameDialog.EditTitleD
         // User touched the dialog's negative button
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == PICK_FILE) {
-            if (resultCode == Activity.RESULT_OK) {
-                val fileName = getFileName(data!!.data!!)
-                FileStorageService().uploadFile(
-                    data!!.data!!,
-                    "tripId",
-                    fileName
-                ).addOnSuccessListener { FileStorageService().getFile("tripId", fileName) }
-            }
-        }
-        if (requestCode == PICK_DIRECTORY) {
-            if (resultCode == Activity.RESULT_OK) {
-                val task = FileStorageService().getFile(
-                    "tripId",
-                    "aa.jpg"
-                )
-                if (task != null) {
-                    task.addOnSuccessListener {
 
-                    }
-                    task.addOnFailureListener {
-                        it.message
-                    }
-                }
-
-            }
-        }
-    }
-
-
-    private fun getFileName(uri: Uri): String {
-        var result: String? = null
-        if (uri.scheme == "content") {
-            val cursor = contentResolver.query(uri, null, null, null, null)
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                }
-            } finally {
-                cursor!!.close()
-            }
-        }
-        if (result == null) {
-            result = uri.path
-            val cut = result!!.lastIndexOf('/')
-            if (cut != -1) {
-                result = result.substring(cut + 1)
-            }
-        }
-        return result
-    }
 }
 
 

@@ -14,9 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".DocumentationActivity"
-                android:label="@string/title_activity_documentation"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:name=".DocumentationActivity">
         </activity>
         <activity android:name=".EditDestinationActivity">
         </activity>
