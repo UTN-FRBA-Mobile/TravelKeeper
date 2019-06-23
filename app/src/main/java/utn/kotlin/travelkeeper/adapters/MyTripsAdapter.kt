@@ -53,6 +53,7 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
         holder.view.documentation_btn.setOnClickListener {
             val documentationIntent = Intent(context, DocumentationActivity::class.java)
 //            tripTimeLineIntent.putExtra("TRIP", myDataset[position])
+            documentationIntent.putExtra("tripId", myDataset[position].id)
             context.startActivity(documentationIntent)
         }
 

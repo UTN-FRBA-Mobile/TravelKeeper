@@ -2,6 +2,7 @@ package utn.kotlin.travelkeeper.DBServices
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
 import utn.kotlin.travelkeeper.models.Accommodation
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
@@ -20,6 +21,11 @@ class AccommodationService {
 
     interface CreateAccommodationServiceListener {
         fun onSuccess(idCreated: String)
+        fun onError(exception: Exception)
+    }
+
+    interface GetAccommodation{
+        fun onSuccess(accommodations:Accommodation)
         fun onError(exception: Exception)
     }
 
@@ -44,13 +50,31 @@ class AccommodationService {
             }
     }
 
+    fun getAccomodation(tripId: String, destinationId: String, accommodationId: String,listener: GetAccommodation) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destinationId)
+            .collection(SUBTABLA_ALOJAMIENTOS)
+            .document(accommodationId)
+            .get()
+            .addOnSuccessListener { documentSnapshot->
+                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                val accommodation  = Accommodation.createObjectFromSnapshot(documentSnapshot, dateParser, documentSnapshot.id)
+                listener.onSuccess(accommodation)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
     fun addAccommodationToDestination(tripId: String, destId: String, accommodation: Accommodation, listener: CreateAccommodationServiceListener) {
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
         val newAccommodationToAdd = accommodation.createMapFromObject(dateFormatter)
 
         val db = FirebaseFirestore.getInstance()
-        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId).collection(SUBTABLA_ALOJAMIENTOS)
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId)
+            .collection(SUBTABLA_ALOJAMIENTOS)
             .add(newAccommodationToAdd)
             .addOnSuccessListener { documentReference ->
                 listener.onSuccess(documentReference.id)

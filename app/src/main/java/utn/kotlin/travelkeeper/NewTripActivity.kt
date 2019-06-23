@@ -1,19 +1,37 @@
 package utn.kotlin.travelkeeper
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import android.view.inputmethod.InputMethodManager
+import com.google.firebase.auth.FirebaseAuth
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import utn.kotlin.travelkeeper.DBServices.UsuariosService
+import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.models.NewDestination
+import utn.kotlin.travelkeeper.models.Trip
+import java.util.*
 
 
 class NewTripActivity : AppCompatActivity() {
 
     private lateinit var tripName: EditText
+    private lateinit var destinationsAdapter: DestinationsAdapter
+    private lateinit var viajesService: ViajesService
+    private lateinit var usuariosService: UsuariosService
+    private lateinit var subject: Subject<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,21 +41,151 @@ class NewTripActivity : AppCompatActivity() {
         this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        val newDestinationAdapter = NewDestinationListAdapter()
+        viajesService = ServiceProvider.viajesService
+        usuariosService = ServiceProvider.usuariosService
+        subject = PublishSubject.create()
+
+        destinationsAdapter = DestinationsAdapter()
 
         tripName = findViewById(R.id.enter_trip_name_edit)
 
         findViewById<RecyclerView>(R.id.new_destination_recycler_view).apply {
-            adapter = newDestinationAdapter
+            adapter = destinationsAdapter
         }
 
-        val button = findViewById<Button>(R.id.add_destination_button)
-        button.setOnClickListener {
-            newDestinationAdapter.data.add(NewDestination())
-            newDestinationAdapter.notifyDataSetChanged()
+        val addDestinationButton = findViewById<Button>(R.id.add_destination_button)
+        addDestinationButton.setOnClickListener {
+            destinationsAdapter.data.add(NewDestination())
+            destinationsAdapter.notifyDataSetChanged()
             hideKeyboard(it)
         }
+
+        val doneButton = findViewById<Button>(R.id.done_button)
+        doneButton.setOnClickListener {
+            if (isDataComplete()) {
+                saveNewTrip()
+            }
+        }
+
+        onAllDestinationsAdded()
     }
+
+    private lateinit var subscription: Disposable
+
+    override fun onStart() {
+        super.onStart()
+        subscription = onAllDestinationsAdded().subscribe { showToastWhenAllDestinationsAreAdded(it) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        subscription.dispose()
+    }
+
+    private fun saveNewTrip() {
+        viajesService.createTrip(
+            tripName.text.toString(),
+            getTripStartDate(),
+            getTripEndDate(),
+            object : ViajesService.CreateTripServiceListener {
+                override fun onSuccess(idCreated: String) {
+                    usuariosService.addTripToUser(
+                        FirebaseAuth.getInstance().currentUser!!.email!!,
+                        idCreated,
+                        tripName.text.toString(),
+                        getTripStartDate(),
+                        getTripEndDate(),
+                        object : UsuariosService.SimpleServiceListener {
+                            override fun onSuccess() {
+                                destinationsAdapter.data.forEach { addDestination(idCreated, it) }
+                            }
+
+                            override fun onError(exception: Exception) {
+                                Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    )
+                }
+
+                override fun onError(exception: Exception) {
+                    Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
+                }
+            }
+
+        )
+
+
+    }
+
+    private fun addDestination(tripId: String, destination: NewDestination) {
+        viajesService.addDestinationToTrip(
+            tripId, destination,
+            object : ViajesService.CreateTripServiceListener {
+                override fun onSuccess(idCreated: String) {
+                    Log.i("[destino-agregado-id]", idCreated)
+                    destination.id = idCreated
+                    subject.onNext(tripId)
+                }
+
+                override fun onError(exception: Exception) {
+                    Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
+                }
+            })
+    }
+
+    private fun onAllDestinationsAdded(): Observable<String> {
+        val destinationsAddedCount = destinationsAdapter.data.size - 1
+        return subject.skip(destinationsAddedCount.toLong())
+            .take(1)
+    }
+
+    private fun showToastWhenAllDestinationsAreAdded(tripId: String) {
+        Toast.makeText(this@NewTripActivity, "Nuevo viaje guardado!", Toast.LENGTH_LONG).show()
+        val intent = Intent(this@NewTripActivity, TripTimeLineActivity::class.java)
+        intent.putExtra("TRIP", Trip(tripId, tripName.text.toString(), getTripStartDate(), getTripEndDate()))
+        setResult(Activity.RESULT_OK, intent)
+
+        finish()
+    }
+
+    private fun getTripEndDate(): Date {
+        return destinationsAdapter.data.last().endDate!!
+    }
+
+    private fun getTripStartDate(): Date {
+        return destinationsAdapter.data[0].startDate!!
+    }
+
+    private fun isDataComplete(): Boolean {
+        if (!isTripNameComplete()) {
+            Toast.makeText(
+                this,
+                "Falta completar el nombre del viaje",
+                Toast.LENGTH_LONG
+            ).show()
+            return false
+        }
+
+        if (!hasAtLeastOneDestination()) {
+            Toast.makeText(
+                this,
+                "Falta especificar al menos un destino",
+                Toast.LENGTH_LONG
+            ).show()
+            return false
+        }
+
+        return true
+    }
+
+    private fun hasAtLeastOneDestination(): Boolean {
+        if (destinationsAdapter.data.isEmpty()) return false
+        val firstDestination = destinationsAdapter.data[0]
+        return !firstDestination.destination.isNullOrBlank() && firstDestination.endDate != null && firstDestination.startDate != null
+        //todo: pasar la validacion de las fechas a otro lado y validar fchas de inicio y fin
+    }
+
+    private fun isTripNameComplete() = !tripName.text.isNullOrBlank()
 
     private fun hideKeyboard(view: View) {
         try {
