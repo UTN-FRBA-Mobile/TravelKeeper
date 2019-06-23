@@ -32,9 +32,11 @@
             <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/accommodation_date_text" tools:text="2019-05-20"
-                    app:layout_constraintStart_toStartOf="@+id/guideline4" android:layout_marginStart="16dp"
-                    app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"
+                    android:id="@+id/accommodation_date_text"
+                    app:layout_constraintStart_toStartOf="@+id/guideline4"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp"
             />
             <androidx.constraintlayout.widget.Guideline
                     android:orientation="vertical"

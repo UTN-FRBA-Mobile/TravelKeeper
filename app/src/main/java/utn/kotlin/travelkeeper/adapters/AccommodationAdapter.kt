@@ -8,6 +8,8 @@ import kotlinx.android.synthetic.main.accommodation_item_view.view.*
 import kotlinx.android.synthetic.main.borrar_text_view.view.*
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.models.Accommodation
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AccommodationAdapter (
     private val accommodationList: MutableList<Accommodation>,
@@ -25,7 +27,14 @@ class AccommodationAdapter (
     override fun onBindViewHolder(holder: AccommodationViewHolder, position: Int) {
     val accommodation = accommodationList[position]
         holder.view.accommodation_desc_text.text = accommodation.name
-        holder.view.accommodation_date_text.text = accommodation.startDate.toString()
+        holder.view.accommodation_date_text.text = getDate(accommodation.startDate) + " - " + getDate(accommodation.endDate)
+    }
+
+    private fun getDate(date: Date): String {
+        val myFormat = "dd/MM/yyyy" // mention the format you need
+        val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
+
+        return sdf.format(date)
     }
 
 }
