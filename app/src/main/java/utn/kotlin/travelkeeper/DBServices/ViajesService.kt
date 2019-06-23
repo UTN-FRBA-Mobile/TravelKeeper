@@ -1,5 +1,6 @@
 package utn.kotlin.travelkeeper.DBServices
 
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.models.DocumentationInfo
@@ -86,7 +87,7 @@ class ViajesService {
             .get().addOnSuccessListener {
                 var documentation: MutableList<DocumentationInfo> = mutableListOf<DocumentationInfo>()
                 it.forEach {
-                    documentation.add(DocumentationInfo.createObjectFromSnapshot(it.data))
+                    documentation.add(DocumentationInfo.createObjectFromSnapshot(it.data, it.id))
                 }
                 listener.onSuccess(documentation)
             }
@@ -95,22 +96,31 @@ class ViajesService {
             }
     }
 
+
     interface AddDocumentationListener {
-        fun onSuccess()
+        fun onSuccess(id: String)
         fun onError(exception: Exception)
     }
 
     fun addDocumentToTrip(tripId: String, documentationInfo: DocumentationInfo, listener: AddDocumentationListener) {
-
         val db = FirebaseFirestore.getInstance()
+        val newDocument = HashMap<String, String>()
+        newDocument.put("fileName", documentationInfo.fileName)
+        newDocument.put("type", documentationInfo.type)
         db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS)
             .add(documentationInfo)
             .addOnSuccessListener {
-                listener.onSuccess()
+                listener.onSuccess(it.id)
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)
             }
+    }
+
+    fun deleteDocumentFromTrip(tripId: String, documentationInfo: DocumentationInfo): Task<Void>{
+        val db = FirebaseFirestore.getInstance()
+        return db.collection(TABLA_VIAJES).document(tripId)
+            .collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS).document(documentationInfo.id).delete()
     }
 
     interface GetDestinationsViajeServiceListener {

@@ -7,7 +7,6 @@ import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import java.io.File
-import java.net.URI
 
 
 class FileStorageService {
@@ -31,4 +30,38 @@ class FileStorageService {
         }
         return null
     }
+
+    fun deleteFile(tripId: String, fileName: String): Task<Void> {
+        val fileReference = storageReference.child("$tripId/$fileName")
+        return fileReference.delete()
+    }
+
+    fun getFileUri(tripId: String, fileName: String): Uri {
+        return Uri.parse("$basePath/$tripId/$fileName")
+    }
+    fun deleteFileFromLocalStorage(tripId: String, fileName: String){
+        val fileDelete = File(getFileUri(tripId, fileName).path)
+        if(fileDelete.exists()) fileDelete.delete()
+    }
+
+    fun getFileExtension(fileUrl: String): String? {
+        var url = fileUrl
+        if (url.indexOf("?") > -1) {
+            url = url.substring(0, url.indexOf("?"))
+        }
+        if (url.lastIndexOf(".") == -1) {
+            return null
+        } else {
+            var ext = url.substring(url.lastIndexOf(".") + 1)
+            if (ext.indexOf("%") > -1) {
+                ext = ext.substring(0, ext.indexOf("%"))
+            }
+            if (ext.indexOf("/") > -1) {
+                ext = ext.substring(0, ext.indexOf("/"))
+            }
+            return ext.toLowerCase()
+
+        }
+    }
+
 }

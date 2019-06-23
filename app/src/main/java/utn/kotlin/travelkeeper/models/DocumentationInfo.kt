@@ -1,16 +1,16 @@
 package utn.kotlin.travelkeeper.models;
 
-import com.google.firebase.firestore.DocumentSnapshot
-
-data class DocumentationInfo(val fileName: String, val type: String) {
+data class DocumentationInfo(val fileName: String, val type: String, val id: String) {
 
     companion object {
         fun createObjectFromSnapshot(
-            snapshot: MutableMap<String, Any>
+            snapshot: MutableMap<String, Any>,
+            id: String
         ): DocumentationInfo {
             return DocumentationInfo(
                 snapshot["fileName"].toString(),
-                snapshot["type"].toString()
+                snapshot["type"].toString(),
+                id
             )
         }
     }

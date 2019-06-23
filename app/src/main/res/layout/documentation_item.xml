@@ -41,5 +41,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:layout_constraintGuide_begin="48dp"
                 android:id="@+id/guideline4"/>
+
+        <ImageView
+                android:id="@+id/delete_document_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/delete"
+                android:scaleType="centerInside"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/transparent" app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

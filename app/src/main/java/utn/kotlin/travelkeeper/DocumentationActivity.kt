@@ -22,7 +22,7 @@ class DocumentationActivity : AppCompatActivity() {
     val PICK_DIRECTORY = 2
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewAdapter: DocumentationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class DocumentationActivity : AppCompatActivity() {
         tripId = intent.getStringExtra("tripId")
         ViajesService().getDocumentsFromTrip(tripId, object : ViajesService.GetDocumentationListener {
             override fun onSuccess(fileList: MutableList<DocumentationInfo>) {
-                viewAdapter = DocumentationAdapter(fileList)
+                viewAdapter = DocumentationAdapter(fileList, tripId)
                 recyclerView = findViewById<RecyclerView>(R.id.recycler_documentation).apply {
                     adapter = viewAdapter
                     //setHasFixedSize(true)
@@ -56,7 +56,7 @@ class DocumentationActivity : AppCompatActivity() {
     }
 
     private fun setBackArrow() {
-        this.supportActionBar!!.setTitle("alo")
+        this.supportActionBar!!.setTitle("Documentos")
         this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
@@ -75,14 +75,17 @@ class DocumentationActivity : AppCompatActivity() {
         if (requestCode == PICK_FILE) {
             if (resultCode == Activity.RESULT_OK) {
                 val fileName = getFileName(data!!.data!!)
+                val uri = data.data!!
                 FileStorageService().uploadFile(
-                    data.data!!,
+                    uri,
                     tripId,
                     fileName
                 ).addOnSuccessListener {
                     FileStorageService().getFile(tripId, fileName)
-                    ViajesService().addDocumentToTrip(tripId, DocumentationInfo(fileName, "type"), object : ViajesService.AddDocumentationListener{
-                        override fun onSuccess() {
+                    ViajesService().addDocumentToTrip(tripId, DocumentationInfo(fileName, FileStorageService().getFileExtension(fileName)!!, ""), object : ViajesService.AddDocumentationListener{
+                        override fun onSuccess(id: String) {
+                            viewAdapter.documentationList.add(DocumentationInfo(fileName, FileStorageService().getFileExtension(fileName)!!, id))
+                            viewAdapter.notifyDataSetChanged()
                             Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG).show()
                         }
 
