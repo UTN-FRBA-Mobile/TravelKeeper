@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.getbase.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
 import kotlinx.android.synthetic.main.content_trip_time_line.*
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
@@ -73,7 +74,18 @@ class TripTimeLineActivity : AppCompatActivity() {
             }
         })
 
+        fab_action_one.setOnClickListener {
+            showToast("Fab uno")
+        }
 
+        fab_action_two.setOnClickListener {
+            showToast("Fab dos")
+        }
+
+    }
+
+    private fun showToast(id: String) {
+        Toast.makeText(this@TripTimeLineActivity, "Fab $id", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
