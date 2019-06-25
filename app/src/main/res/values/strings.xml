@@ -77,4 +77,7 @@
     <string name="accommodation_reservation_number">"Nro de reserva (opcional)"</string>
     <string name="accommodation_telephone_number">"Nro de telefono (opcional)</string>
     <string name="btn_new_accommodation">"Agregar nuevo alojamiento"</string>
+
+    <!--MAP-->
+    <string name="title_activity_accommodation_maps">Ingrese la dirección</string>
 </resources>

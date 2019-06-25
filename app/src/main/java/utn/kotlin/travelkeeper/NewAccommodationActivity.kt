@@ -33,6 +33,11 @@ class NewAccommodationActivity : AppCompatActivity() {
         setStartDatePicker()
         setEndDatePicker()
         setNewAccommodationButton()
+
+        enter_accommodation_address.setOnClickListener {view ->
+            val intent = Intent(this@NewAccommodationActivity, AccommodationMapsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
