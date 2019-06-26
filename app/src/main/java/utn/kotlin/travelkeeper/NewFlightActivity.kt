@@ -3,6 +3,7 @@ package utn.kotlin.travelkeeper
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,7 @@ class NewFlightActivity : AppCompatActivity() {
         setDoneButton()
         setDatePickerForTakeoffDate()
         setTimePickerForTakeoffTime()
+        setBackArrow()
     }
 
     private fun setTimePickerForTakeoffTime() {
@@ -118,6 +120,22 @@ class NewFlightActivity : AppCompatActivity() {
                     Toast.makeText(this@NewFlightActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
             })
+    }
+
+    private fun setBackArrow() {
+        this.supportActionBar!!.setTitle("Nuevo vuelo")
+        this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        this.supportActionBar!!.setDisplayShowHomeEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

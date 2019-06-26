@@ -51,9 +51,9 @@ class AccommodationMapsActivity : AppCompatActivity(), OnMapReadyCallback, Googl
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        search_fab.setOnClickListener {
-            loadPlacePicker()
-        }
+//        search_fab.setOnClickListener {
+//            loadPlacePicker()
+//        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
