@@ -8,6 +8,7 @@ import utn.kotlin.travelkeeper.models.Hotel
 import utn.kotlin.travelkeeper.models.NewDestination
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
+import utn.kotlin.travelkeeper.storage.FileStorageService
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -87,7 +88,9 @@ class ViajesService {
             .get().addOnSuccessListener {
                 var documentation: MutableList<DocumentationInfo> = mutableListOf<DocumentationInfo>()
                 it.forEach {
-                    documentation.add(DocumentationInfo.createObjectFromSnapshot(it.data, it.id))
+                    val documentInfo = DocumentationInfo.createObjectFromSnapshot(it.data, it.id)
+                    FileStorageService().getFile(tripId, documentInfo.fileName)
+                    documentation.add(documentInfo)
                 }
                 listener.onSuccess(documentation)
             }
