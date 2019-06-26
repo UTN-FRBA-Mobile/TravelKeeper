@@ -8,3 +8,9 @@ fun Date.dateToString(): String {
     val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
     return sdf.format(this)
 }
+
+fun Date.createCalendarFromDate(): Calendar {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = this.time
+    return calendar
+}

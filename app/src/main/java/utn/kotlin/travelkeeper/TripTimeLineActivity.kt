@@ -66,14 +66,6 @@ class TripTimeLineActivity : AppCompatActivity() {
             }
         })
 
-        fab.setOnClickListener {
-            val newDestinationIntent = Intent(this@TripTimeLineActivity, NewDestinationActivity::class.java)
-            newDestinationIntent.putExtra("TRIP", trip)
-            startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
-        }
-
-
-
         add_destination_fab.setOnClickListener {
             floating_actions_menu.collapse()
             val newDestinationIntent = Intent(this@TripTimeLineActivity, NewDestinationActivity::class.java)

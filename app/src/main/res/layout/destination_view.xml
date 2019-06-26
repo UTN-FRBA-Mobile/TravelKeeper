@@ -8,19 +8,18 @@
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             app:srcCompat="@drawable/baseline_calendar_today_24"
             android:id="@+id/calendar_icon"
-            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@+id/from_date_edit"
-            app:layout_constraintBottom_toBottomOf="@+id/from_date_edit" android:layout_marginStart="16dp"/>
+            app:layout_constraintBottom_toBottomOf="@+id/from_date_edit"/>
     <ImageView
             app:srcCompat="@drawable/baseline_location_on_24"
             android:id="@+id/location_icon"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline" android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintBottom_toBottomOf="@+id/destination_edit"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="@+id/guideline3" android:layout_marginTop="16dp"/>
+            app:layout_constraintTop_toTopOf="@+id/guideline3"/>
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -29,11 +28,11 @@
             android:id="@+id/destination_edit"
             android:maxLines="1"
             android:inputType="text"
-            android:hint="Destino" android:layout_marginStart="8dp"
+            android:hint="Destino"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3" android:layout_marginTop="16dp"/>
+            app:layout_constraintTop_toTopOf="@+id/guideline3"/>
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,7 +42,7 @@
             android:maxLines="1"
             android:ems="10"
             android:id="@+id/from_date_edit"
-            android:hint="Desde" android:layout_marginStart="8dp"
+            android:hint="Desde"
             app:layout_constraintStart_toStartOf="@+id/guideline" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/to_date_edit"
             android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/destination_edit"
@@ -65,10 +64,11 @@
     <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
                                                 android:id="@+id/guideline"
                                                 android:orientation="vertical"
-                                                app:layout_constraintGuide_percent="0.20"/>
+                                                app:layout_constraintGuide_percent="0.2"/>
 
     <androidx.constraintlayout.widget.Guideline
             android:orientation="horizontal"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" android:id="@+id/guideline3" app:layout_constraintGuide_end="153dp"/>
+            android:layout_height="wrap_content" android:id="@+id/guideline3"
+            app:layout_constraintGuide_percent="0.05"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
