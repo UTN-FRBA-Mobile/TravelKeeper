@@ -6,16 +6,21 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_new_flight.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
-import utn.kotlin.travelkeeper.utils.createCalendarFromDate
+import utn.kotlin.travelkeeper.utils.addHourAndMinutes
+import utn.kotlin.travelkeeper.utils.createCalendar
 import utn.kotlin.travelkeeper.utils.dateToString
 import java.util.*
 
 class NewFlightActivity : AppCompatActivity() {
     private var startDate: Date? = null
+    private var hourOfFlight: Int? = null
+    private var minuteOfFlight: Int? = null
     private lateinit var trip: Trip
     private lateinit var viajesService: ViajesService
 
@@ -32,14 +37,34 @@ class NewFlightActivity : AppCompatActivity() {
     }
 
     private fun setTimePickerForTakeoffTime() {
+        flight_takeoff_hour.setOnClickListener {
+            val timePickerDialog = TimePickerDialog.newInstance({ view, hourOfDay, minute, second ->
+                val minutoFormateado = if (minute < 10) "0$minute" else "$minute"
+                val horaFormateada = "$hourOfDay:$minutoFormateado"
+                (it as EditText).setText(horaFormateada)
+
+                //set time in view
+                //set time here
+                hourOfFlight = hourOfDay
+                minuteOfFlight = minute
+            }, true)
+
+
+            timePickerDialog.enableMinutes(true)
+            timePickerDialog.enableSeconds(false)
+            timePickerDialog.setInitialSelection(hourOfFlight ?: 12, minuteOfFlight ?: 0)
+
+            timePickerDialog.show(this.supportFragmentManager, "Hora de salida")
+        }
+
     }
 
     private fun setDatePickerForTakeoffDate() {
-        val calendar = Calendar.getInstance() //todo: ver el tema de Locale-Instance al pedir la instancia
 
         flight_takeoff_date.setOnClickListener {
+            val calendar = Calendar.getInstance() //todo: ver el tema de Locale-Instance al pedir la instancia
 
-            val datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(
+            val datePickerDialog = DatePickerDialog.newInstance(
                 { view, year, monthOfYear, dayOfMonth ->
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, monthOfYear)
@@ -49,15 +74,16 @@ class NewFlightActivity : AppCompatActivity() {
                     startDate = calendar.time
                 },
 
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
+                startDate?.createCalendar()?.get(Calendar.YEAR) ?: trip.startDate.createCalendar().get(Calendar.YEAR),
+                startDate?.createCalendar()?.get(Calendar.MONTH) ?: trip.startDate.createCalendar().get(Calendar.MONTH),
+                startDate?.createCalendar()?.get(Calendar.DAY_OF_MONTH)
+                    ?: trip.startDate.createCalendar().get(Calendar.DAY_OF_MONTH)
             )
 
-            datePickerDialog.minDate = trip.startDate.createCalendarFromDate()
-            datePickerDialog.maxDate = trip.endDate.createCalendarFromDate()
+            datePickerDialog.minDate = trip.startDate.createCalendar()
+            datePickerDialog.maxDate = trip.endDate.createCalendar()
 
-            datePickerDialog.show(this.supportFragmentManager, null)
+            datePickerDialog.show(this.supportFragmentManager, "Fecha de salida")
         }
     }
 
@@ -68,9 +94,10 @@ class NewFlightActivity : AppCompatActivity() {
             val flight = TripTimeLineInfo(
                 name = flight_airline_edit.text.toString(),
                 type = "Vuelo",
-                start_date = startDate!!,
+                start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!).time,
                 end_date = startDate!!
             )
+
             addFlightToTrip(flight)
         }
     }
