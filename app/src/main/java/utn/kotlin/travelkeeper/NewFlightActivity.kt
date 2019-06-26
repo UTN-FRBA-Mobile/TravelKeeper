@@ -43,8 +43,6 @@ class NewFlightActivity : AppCompatActivity() {
                 val horaFormateada = "$hourOfDay:$minutoFormateado"
                 (it as EditText).setText(horaFormateada)
 
-                //set time in view
-                //set time here
                 hourOfFlight = hourOfDay
                 minuteOfFlight = minute
             }, true)

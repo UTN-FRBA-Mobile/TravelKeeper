@@ -85,12 +85,12 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/horizontal_top_guideline"
-            app:layout_constraintGuide_percent="0.85"/>
+            app:layout_constraintGuide_percent="0.80"/>
     <androidx.constraintlayout.widget.Guideline
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/vertical_guideline"
-            app:layout_constraintGuide_percent="0.15"/>
+            app:layout_constraintGuide_percent="0.20"/>
     <Button
             android:text="Listo"
             android:layout_width="wrap_content"
@@ -99,5 +99,61 @@
             app:layout_constraintTop_toTopOf="@+id/horizontal_top_guideline"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="16dp"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_flight_24"
+            android:id="@+id/airline_image"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_airline_edit"
+            app:layout_constraintTop_toTopOf="@+id/flight_airline_edit"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_flight_land_24"
+            android:id="@+id/land_image"
+            app:layout_constraintTop_toTopOf="@+id/flight_from_airport_edit"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_from_airport_edit"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_flight_takeoff_24"
+            android:id="@+id/takeoff_image"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/flight_arrival_airport_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_arrival_airport_edit"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/ticket_outline"
+            android:id="@+id/flight_number_image"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/flight_number_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_number_edit"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/ticket_confirmation"
+            android:id="@+id/ticket_confirmation_image"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_reservation_number_edit"
+            app:layout_constraintTop_toTopOf="@+id/flight_reservation_number_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_calendar_today_24"
+            android:id="@+id/flight_date_image"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/flight_takeoff_date"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_takeoff_date"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_schedule_24"
+            android:id="@+id/flight_time_image"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_takeoff_hour"
+            app:layout_constraintTop_toTopOf="@+id/flight_takeoff_hour"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
