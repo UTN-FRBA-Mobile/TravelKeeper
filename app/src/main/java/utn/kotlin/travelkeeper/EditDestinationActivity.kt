@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_edit_destination.*
-import kotlinx.android.synthetic.main.activity_trip_time_line.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
@@ -124,7 +123,7 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
     }
 
     private fun setEditDestinationButton() {
-        destination_button_id.setOnClickListener { view ->
+        done_destination_button_id.setOnClickListener { view ->
             val editDest = TripTimeLineInfo(destination.id, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
 
             val intent = Intent(this@EditDestinationActivity, TripTimeLineActivity::class.java)

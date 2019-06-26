@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.accommodation_item_view.view.*
-import kotlinx.android.synthetic.main.borrar_text_view.view.*
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.models.Accommodation
 import java.text.SimpleDateFormat

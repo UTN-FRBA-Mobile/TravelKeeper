@@ -11,7 +11,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import utn.kotlin.travelkeeper.models.NewDestination
-import java.text.SimpleDateFormat
+import utn.kotlin.travelkeeper.utils.DatePicker
+import utn.kotlin.travelkeeper.utils.dateToString
 import java.util.*
 
 class DestinationsAdapter : RecyclerView.Adapter<NewDestinationViewHolder>() {
@@ -19,55 +20,43 @@ class DestinationsAdapter : RecyclerView.Adapter<NewDestinationViewHolder>() {
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewDestinationViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.new_destination_view, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.new_destination_item_view, parent, false)
         context = parent.context
 
         return NewDestinationViewHolder(view)
     }
 
-    private fun showDatePickerDialog(
+
+    private fun onDateSetListener(
+        calendar: Calendar,
         selectedDate: EditText,
-        position: Int,
-        isEndDate: Boolean
-    ) {
-        val calendar = Calendar.getInstance()
-        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        isEndDate: Boolean,
+        position: Int
+    ): DatePickerDialog.OnDateSetListener {
+        return DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            selectedDate.setText(dateToString(calendar.time))
+            selectedDate.setText(calendar.time.dateToString())
 
             if (isEndDate) data[position].endDate = calendar.time else data[position].startDate = calendar.time
         }
-
-        DatePickerDialog(
-            context,
-            dateSetListener,
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
-
-    }
-
-    private fun dateToString(date: Date): String { //todo: pasarlo a algun utils o algo asi no se repite
-        val myFormat = "dd/MM/yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
-
-        return sdf.format(date)
     }
 
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: NewDestinationViewHolder, position: Int) {
+        var calendar = Calendar.getInstance() //todo: ver el tema de Locale-Instance al pedir la instancia
         val fromDate = holder.view.findViewById(R.id.from_date_edit) as EditText
         fromDate.setOnClickListener {
-            showDatePickerDialog(it as EditText, position, false)
+            val onDateSetListener = onDateSetListener(calendar, it as EditText, false, position)
+            DatePicker.showDialog(onDateSetListener, calendar, context)
         }
 
         val endDate = holder.view.findViewById(R.id.to_date_edit) as EditText
         endDate.setOnClickListener {
-            showDatePickerDialog(it as EditText, position, true)
+            val onDateSetListener = onDateSetListener(calendar, it as EditText, true, position)
+            DatePicker.showDialog(onDateSetListener, calendar, context)
         }
 
         val destinationText = holder.view.findViewById(R.id.destination_edit) as EditText

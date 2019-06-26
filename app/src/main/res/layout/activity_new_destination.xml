@@ -7,123 +7,47 @@
         android:layout_height="match_parent"
         tools:context=".NewTripActivity">
 
-    <TextView android:id="@+id/destination_name_text"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Nombre"
-              app:layout_constraintTop_toTopOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginTop="20dp"
-              android:layout_marginStart="12dp"/>
-    <EditText
-            android:id="@+id/enter_destination_name"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/destination_name_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"/>
+    <include layout="@layout/destination_view" android:id="@+id/destination_include_id" app:layout_constraintTop_toTopOf="parent"
+             android:layout_marginTop="32dp" android:layout_height="wrap_content" android:layout_width="match_parent"/>
 
-    <TextView android:id="@+id/enter_name_error"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/error_message"
-              android:visibility="gone"
-              android:textColor="@color/colorPrimary"
-              app:layout_constraintTop_toBottomOf="@id/enter_destination_name"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginStart="12dp"/>
+    <!--    <TextView android:id="@+id/enter_name_error"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/error_message"
+                  android:visibility="gone"
+                  android:textColor="@color/colorPrimary"
+                  app:layout_constraintTop_toBottomOf="@id/enter_destination_name"
+                  app:layout_constraintStart_toStartOf="parent"
+                  android:layout_marginStart="12dp"/>
 
-    <TextView android:id="@+id/destination_type"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Tipo"
-              app:layout_constraintTop_toBottomOf="@id/enter_name_error"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginTop="10dp"
-              android:layout_marginStart="12dp"/>
+        <TextView android:id="@+id/start_date_error"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/error_message"
+                  android:visibility="gone"
+                  android:textColor="@color/colorPrimary"
+                  app:layout_constraintTop_toBottomOf="@id/destination_start_date_selected"
+                  app:layout_constraintStart_toStartOf="parent"
+                  android:layout_marginStart="12dp"/>
 
-    <Spinner
-            android:id="@+id/spinner_destination_type"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/destination_type"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginTop="10dp"/>
-
-    <TextView android:id="@+id/destination_start_date_title"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/dest_start_date"
-              app:layout_constraintTop_toBottomOf="@id/spinner_destination_type"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginTop="10dp"
-              android:layout_marginStart="12dp"/>
-    <TextView
-            android:id="@+id/destination_start_date_selected"
-            android:text="@string/pick_a_date"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:background="?attr/editTextBackground"
-            app:layout_constraintTop_toBottomOf="@+id/destination_start_date_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="12dp"/>
-
-    <TextView android:id="@+id/start_date_error"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/error_message"
-              android:visibility="gone"
-              android:textColor="@color/colorPrimary"
-              app:layout_constraintTop_toBottomOf="@id/destination_start_date_selected"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginStart="12dp"/>
-
-
-    <TextView android:id="@+id/destination_end_date_title"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/dest_end_date"
-              app:layout_constraintTop_toBottomOf="@id/start_date_error"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginTop="10dp"
-              android:layout_marginStart="12dp"/>
-    <TextView
-            android:id="@+id/destination_end_date_selected"
-            android:text="@string/pick_a_date"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:background="?attr/editTextBackground"
-            app:layout_constraintTop_toBottomOf="@+id/destination_end_date_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="12dp"/>
-
-    <TextView android:id="@+id/end_date_error"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/error_message"
-              android:visibility="gone"
-              android:textColor="@color/colorPrimary"
-              app:layout_constraintTop_toBottomOf="@id/destination_end_date_selected"
-              app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginStart="12dp"/>
+        <TextView android:id="@+id/end_date_error"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/error_message"
+                  android:visibility="gone"
+                  android:textColor="@color/colorPrimary"
+                  app:layout_constraintTop_toBottomOf="@id/destination_end_date_selected"
+                  app:layout_constraintStart_toStartOf="parent"
+                  android:layout_marginStart="12dp"/>-->
 
     <Button
-            android:id="@+id/destination_button_id"
+            android:id="@+id/done_destination_button_id"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="@string/btn_new_dest"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/destination_end_date_selected"
-            android:layout_marginTop="28dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/destination_include_id"
+            android:layout_marginTop="32dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

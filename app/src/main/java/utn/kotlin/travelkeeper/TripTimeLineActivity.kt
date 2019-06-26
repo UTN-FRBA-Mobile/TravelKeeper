@@ -9,9 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.getbase.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_trip_time_line.*
-import kotlinx.android.synthetic.main.content_trip_time_line.*
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
@@ -57,29 +55,37 @@ class TripTimeLineActivity : AppCompatActivity() {
                 viewAdapter = TripTimeLineAdapter(destinations, trip)
 
                 recyclerView = trip_timeline_recycler_view.apply {
-                    //                    setHasFixedSize(true)
                     layoutManager = viewManager
                     adapter = viewAdapter
-
-                    fab.setOnClickListener { view ->
-                        val newDestinationIntent = Intent(context, NewDestinationActivity::class.java)
-                        newDestinationIntent.putExtra("TRIP", trip)
-                        startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
-                    }
                 }
             }
+
 
             override fun onError(exception: Exception) {
                 Toast.makeText(this@TripTimeLineActivity, exception.message, Toast.LENGTH_LONG).show()
             }
         })
 
-        fab_action_one.setOnClickListener {
-            showToast("Fab uno")
+        fab.setOnClickListener {
+            val newDestinationIntent = Intent(this@TripTimeLineActivity, NewDestinationActivity::class.java)
+            newDestinationIntent.putExtra("TRIP", trip)
+            startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
         }
 
-        fab_action_two.setOnClickListener {
-            showToast("Fab dos")
+
+
+        add_destination_fab.setOnClickListener {
+            floating_actions_menu.collapse()
+            val newDestinationIntent = Intent(this@TripTimeLineActivity, NewDestinationActivity::class.java)
+            newDestinationIntent.putExtra("TRIP", trip)
+            startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST) //todo: preguntar para que se pasa este flag?
+        }
+
+        add_flight_fab.setOnClickListener {
+            floating_actions_menu.collapse()
+            val newDestinationIntent = Intent(this@TripTimeLineActivity, NewFlightActivity::class.java)
+            newDestinationIntent.putExtra("TRIP", trip)
+            startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
         }
 
     }

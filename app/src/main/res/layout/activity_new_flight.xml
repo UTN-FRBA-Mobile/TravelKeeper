@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/flight_number_edit"
+            android:hint="@string/flight_number_hint" android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/flight_airline_edit"
+            app:layout_constraintBottom_toTopOf="@+id/flight_arrival_airport_edit"
+            app:layout_constraintStart_toStartOf="@+id/flight_arrival_airport_edit" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/flight_airline_edit"
+            android:hint="@string/airline_hint" android:maxLines="1" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/flight_number_edit"
+            app:layout_constraintStart_toStartOf="@+id/flight_number_edit" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/flight_reservation_number_edit"
+            android:hint="@string/flight_confirmation_code" android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/flight_hour_date"
+            app:layout_constraintBottom_toTopOf="@+id/horizontal_top_guideline"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/flight_from_airport_edit" android:hint="@string/destination_airport_hint"
+            android:maxLines="1" app:layout_constraintTop_toBottomOf="@+id/flight_arrival_airport_edit"
+            app:layout_constraintBottom_toTopOf="@+id/flight_takeoff_date"
+            app:layout_constraintStart_toStartOf="@+id/flight_takeoff_date" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/flight_arrival_airport_edit" android:hint="@string/from_airport_hint"
+            android:maxLines="1" app:layout_constraintTop_toBottomOf="@+id/flight_number_edit"
+            app:layout_constraintBottom_toTopOf="@+id/flight_from_airport_edit"
+            app:layout_constraintStart_toStartOf="@+id/flight_from_airport_edit" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/flight_takeoff_date"
+            android:maxLines="1"
+            android:focusable="false"
+            android:clickable="true"
+            android:hint="@string/takeoff_date_hint" app:layout_constraintTop_toBottomOf="@+id/flight_from_airport_edit"
+            app:layout_constraintBottom_toTopOf="@+id/flight_hour_date"
+            app:layout_constraintStart_toStartOf="@+id/flight_hour_date" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"/>
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/flight_hour_date"
+            android:hint="@string/flight_hour_hint" app:layout_constraintTop_toBottomOf="@+id/flight_takeoff_date"
+            app:layout_constraintBottom_toTopOf="@+id/flight_reservation_number_edit"
+            app:layout_constraintStart_toStartOf="@+id/flight_reservation_number_edit"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+    <androidx.constraintlayout.widget.Guideline
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/horizontal_top_guideline"
+            app:layout_constraintGuide_percent="0.85"/>
+    <androidx.constraintlayout.widget.Guideline
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/vertical_guideline"
+            app:layout_constraintGuide_percent="0.15"/>
+    <Button
+            android:text="Listo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/flight_done_button" android:layout_marginTop="4dp"
+            app:layout_constraintTop_toTopOf="@+id/horizontal_top_guideline"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="8dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

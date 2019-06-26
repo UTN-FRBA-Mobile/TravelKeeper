@@ -52,7 +52,7 @@
     <string name="no_dest_available">¡No hay destinos todavia!</string>
     <string name="dest_start_date">Fecha Inicio</string>
     <string name="dest_end_date">Fecha Fin</string>
-    <string name="btn_new_dest">Agregar nuevo destino</string>
+    <string name="btn_new_dest">Listo</string>
     <string name="btn_edit_dest">Editar destino</string>
     <string name="remove_destination">¿Está seguro de eliminar el destino?</string>
     <string name="destination_removed">El destino fue removido exitosamente</string>
@@ -80,4 +80,14 @@
 
     <!--MAP-->
     <string name="title_activity_accommodation_maps">Ingrese la dirección</string>
+
+    <string name="fab_label_new_destination">Agregar destino</string>
+    <string name="fab_label_new_flight">Agregar vuelo</string>
+    <string name="airline_hint">Aerolínea</string>
+    <string name="from_airport_hint">¿Desde dónde?</string>
+    <string name="destination_airport_hint">¿A dónde?</string>
+    <string name="takeoff_date_hint">Día de salida</string>
+    <string name="flight_hour_hint">Hora del vuelo</string>
+    <string name="flight_confirmation_code">Número de reserva</string>
+    <string name="flight_number_hint">Número de vuelo</string>
 </resources>
