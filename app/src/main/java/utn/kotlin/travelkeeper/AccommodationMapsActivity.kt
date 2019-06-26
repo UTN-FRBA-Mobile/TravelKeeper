@@ -14,6 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.places.Places
 import com.google.android.gms.location.places.ui.PlacePicker
 import com.google.android.gms.maps.CameraUpdateFactory
 
@@ -41,6 +42,12 @@ class AccommodationMapsActivity : AppCompatActivity(), OnMapReadyCallback, Googl
         setContentView(R.layout.activity_accommodation_maps)
 
         setBackArrow()
+
+        // Initialize Places.
+//        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
+//
+//        // Create a new Places client instance.
+//        PlacesClient placesClient = Places.createClient(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
