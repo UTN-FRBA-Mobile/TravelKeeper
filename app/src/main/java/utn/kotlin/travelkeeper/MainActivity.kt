@@ -101,7 +101,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Glide.with(this).load(FirebaseAuth.getInstance().currentUser!!.photoUrl)
             .apply(RequestOptions.circleCropTransform())
             .into(imageView)
-
     }
 
     override fun onBackPressed() {
@@ -149,5 +148,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        onNavigationItemSelected(nav_view.menu.getItem(0))
     }
 }

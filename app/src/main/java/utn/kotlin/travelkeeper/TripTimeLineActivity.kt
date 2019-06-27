@@ -41,14 +41,18 @@ class TripTimeLineActivity : AppCompatActivity() {
 
         trip = intent.extras["TRIP"] as Trip
 
+        title = trip.title
+
         viajesService.getDestinationsFromTrip(
             trip.id!!,
             object : ViajesService.GetDestinationsViajeServiceListener {
                 override fun onSuccess(dests: MutableList<TripTimeLineInfo>) {
                     destinations = dests
 
-                    if (destinations != null && destinations.size > 0) {
-                        no_destinations.visibility = View.GONE
+                    loading.visibility = View.GONE
+
+                    if (destinations == null || destinations.size == 0) {
+                        no_destinations.visibility = View.VISIBLE
                     }
 
                     viewManager = androidx.recyclerview.widget.LinearLayoutManager(this@TripTimeLineActivity)
@@ -60,8 +64,9 @@ class TripTimeLineActivity : AppCompatActivity() {
                     }
                 }
 
-
                 override fun onError(exception: Exception) {
+                    loading.visibility = View.GONE
+                    no_destinations.visibility = View.VISIBLE
                     Toast.makeText(this@TripTimeLineActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
             })
@@ -74,6 +79,9 @@ class TripTimeLineActivity : AppCompatActivity() {
                 newDestinationIntent,
                 NEW_DESTINATION_REQUEST
             ) //todo: preguntar para que se pasa este flag?
+            //cuando el sistema envia una activity for result, ese código vuelve acompañado por el resultado
+            // de la activity. Si tu activity disparara mas de una for result, con ese codigo identificas quien es
+            // la activity que te esta devolviendo un resultado
         }
 
         add_flight_fab.setOnClickListener {
@@ -206,5 +214,4 @@ class TripTimeLineActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
 }

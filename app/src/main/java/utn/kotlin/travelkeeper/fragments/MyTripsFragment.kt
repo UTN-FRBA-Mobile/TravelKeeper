@@ -1,10 +1,8 @@
 package utn.kotlin.travelkeeper.fragments
 
-import android.content.Intent
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +16,6 @@ import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.adapters.MyTripsAdapter
 import utn.kotlin.travelkeeper.models.Trip
 import java.util.*
-import kotlin.Comparator
-import kotlin.collections.ArrayList
 
 
 class MyTripsFragment : androidx.fragment.app.Fragment() {
@@ -31,13 +27,8 @@ class MyTripsFragment : androidx.fragment.app.Fragment() {
 
         val fab = view.fab_add_trip
         fab.setOnClickListener {
-//            TODO DESCOMENTAR PARA VOLVER AL OTRO COMPORTAMIENTO, Y COMENTAR A PARTIR DE ********
             val newTripIntent = Intent(activity, NewTripActivity::class.java)
-            startActivity(newTripIntent)
-
-            //*************//
-//            val newFragment = CreateTripDialogFragment()
-//            newFragment.show(fragmentManager, "dialog")
+            startActivityForResult(newTripIntent, 8080)
         }
 
         return view
@@ -46,8 +37,10 @@ class MyTripsFragment : androidx.fragment.app.Fragment() {
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         loading.visibility = View.VISIBLE
         if (isOldTrips) {
+            fab_add_trip.visibility = View.GONE
             UsuariosService().getOldTrips(
                 FirebaseAuth.getInstance().currentUser!!.email!!,
                 object : UsuariosService.GOCUsuarioServiceListener {
@@ -95,8 +88,8 @@ class MyTripsFragment : androidx.fragment.app.Fragment() {
                         empty_view.visibility = View.VISIBLE
                     }
                 })
-            fab_add_trip.visibility = View.GONE
         } else {
+            fab_add_trip.visibility = View.VISIBLE
             UsuariosService().getOrCreateUser(
                 FirebaseAuth.getInstance().currentUser!!.email!!,
                 object : UsuariosService.GOCUsuarioServiceListener {

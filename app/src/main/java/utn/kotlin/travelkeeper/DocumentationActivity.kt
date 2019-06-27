@@ -51,8 +51,6 @@ class DocumentationActivity : AppCompatActivity() {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select file"), PICK_FILE)
         }
-
-
     }
 
     private fun setBackArrow() {
@@ -98,7 +96,6 @@ class DocumentationActivity : AppCompatActivity() {
         }
     }
 
-
     private fun getFileName(uri: Uri): String {
         var result: String? = null
         if (uri.scheme == "content") {
@@ -120,5 +117,4 @@ class DocumentationActivity : AppCompatActivity() {
         }
         return result
     }
-
 }
