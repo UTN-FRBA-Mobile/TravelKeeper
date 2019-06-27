@@ -1,137 +1,173 @@
 package utn.kotlin.travelkeeper
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.DatePicker
+import android.widget.EditText
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_edit_destination.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import kotlinx.android.synthetic.main.activity_view_destination.*
+import kotlinx.android.synthetic.main.destination_view.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
-import java.text.SimpleDateFormat
+import utn.kotlin.travelkeeper.utils.createCalendar
+import utn.kotlin.travelkeeper.utils.dateToString
 import java.util.*
 
-class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    private var destTypes = arrayOf("Lugar","Vuelo")
-    private lateinit var selectedDestType: String
+class EditDestinationActivity : AppCompatActivity() {
+
+    private lateinit var previousStartDate: Date
+    private lateinit var previousEndDate: Date
+    private lateinit var previousDestinationDescription: String
+
+    private lateinit var startDate: Date
+    private lateinit var endDate: Date
+
     private lateinit var destination: TripTimeLineInfo
-    private lateinit var destTypesArrayAdapter: ArrayAdapter<Any>
-    private var cal = Calendar.getInstance()
-    private var startDate : Date? = null
-    private var endDate : Date? = null
     private lateinit var trip: Trip
     private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_destination)
+        setContentView(R.layout.activity_view_destination)
 
         destination = intent.extras["DEST_EDIT"] as TripTimeLineInfo
         trip = intent.extras["TRIP_DEST_EDIT"] as Trip
         position = intent.extras["EDIT_DEST_POSITION"] as Int
 
-        setBackArrow()
-        setDestTypeSpinner()
-        setView()
+        configureActionBar()
+        setPreviousData()
+        setDestinationData()
         setEditDestinationButton()
     }
 
-    private fun setBackArrow() {
+    private fun setPreviousData() {
+        previousDestinationDescription = destination.name
+        previousStartDate = destination.start_date
+        previousEndDate = destination.end_date
+    }
+
+    private fun configureActionBar() {
         this.supportActionBar!!.setTitle(R.string.edit_destination_title)
         this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
 
-    private fun setDestTypeSpinner() {
-        spinner_destination_type!!.setOnItemSelectedListener(this)
-        destTypesArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, destTypes)
-        destTypesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spinner_destination_type!!.setAdapter(destTypesArrayAdapter)
-    }
-
-    private fun setView() {
-        enter_destination_name.setText(destination.name)
-        selectedDestType = destination.type
-        spinner_destination_type.setSelection(destTypesArrayAdapter.getPosition(destination.type))
-        cal.time = destination.start_date
+    private fun setDestinationData() {
+        destination_edit.setText(destination.name)
         startDate = destination.start_date
         endDate = destination.end_date
-        destination_start_date_selected!!.text = getDate(destination.start_date)
-        destination_end_date_selected!!.text = getDate(destination.end_date)
-        setStartDatePicker()
-        setEndDatePicker()
+        setStartDate()
+        setEndDate()
     }
 
-    private fun setStartDatePicker() {
+    private fun setStartDate() {
+        startDate.also { from_date_edit.setText(startDate.dateToString()) }
 
-        val dateSetListener = object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-                cal.set(Calendar.YEAR, year)
-                cal.set(Calendar.MONTH, monthOfYear)
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                startDate = cal.time
-                destination_start_date_selected!!.text = getDate(startDate!!)
-            }
+        from_date_edit.setOnClickListener {
+            val calendar = Calendar.getInstance()
+
+            val datePickerDialog = DatePickerDialog.newInstance(
+                { view, year, monthOfYear, dayOfMonth ->
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, monthOfYear)
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    (it as EditText).setText(calendar.time.dateToString())
+
+                    startDate = calendar.time
+                },
+
+                startDate.createCalendar().get(Calendar.YEAR),
+                startDate.createCalendar().get(Calendar.MONTH),
+                startDate.createCalendar().get(Calendar.DAY_OF_MONTH)
+            )
+
+            datePickerDialog.minDate = trip.startDate.createCalendar()
+            datePickerDialog.maxDate = trip.endDate.createCalendar()
+
+            datePickerDialog.show(this.supportFragmentManager, "Fecha de llegada")
         }
-
-        destination_start_date_selected!!.setOnClickListener { view ->
-            DatePickerDialog(this,
-                dateSetListener,
-                // set DatePickerDialog to point to today's date when it loads up
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
-        }
-
     }
 
-    private fun setEndDatePicker() {
-        val dateSetListener = object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-                cal.set(Calendar.YEAR, year)
-                cal.set(Calendar.MONTH, monthOfYear)
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                endDate = cal.time
-                destination_end_date_selected!!.text = getDate(endDate!!)
-            }
-        }
+    private fun setEndDate() {
+        endDate.also { to_date_edit.setText(endDate.dateToString()) }
 
-        destination_end_date_selected!!.setOnClickListener { view ->
-            DatePickerDialog(this,
-                dateSetListener,
-                // set DatePickerDialog to point to today's date when it loads up
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
-        }
+        to_date_edit.setOnClickListener {
+            val calendar = Calendar.getInstance()
 
+            val datePickerDialog = DatePickerDialog.newInstance(
+                { view, year, monthOfYear, dayOfMonth ->
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, monthOfYear)
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    (it as EditText).setText(calendar.time.dateToString())
+
+                    endDate = calendar.time
+                },
+
+                endDate.createCalendar().get(Calendar.YEAR),
+                endDate.createCalendar().get(Calendar.MONTH),
+                endDate.createCalendar().get(Calendar.DAY_OF_MONTH)
+            )
+
+            datePickerDialog.minDate = trip.startDate.createCalendar()
+            datePickerDialog.maxDate = trip.endDate.createCalendar()
+
+            datePickerDialog.show(this.supportFragmentManager, "Fecha de salida")
+        }
     }
 
-    private fun getDate(date: Date): String {
-        val myFormat = "dd/MM/yyyy" // mention the format you need
-        val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
+    private fun showAlertIfNeeded() {
+        if (anyItemHasChanged()) {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage(R.string.leave_activity_alert)
+            builder.setPositiveButton(R.string.yes) { _, _ -> onBackPressed() }
+            builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+            builder.create().show()
+            return
+        }
 
-        return sdf.format(date)
+        onBackPressed()
+    }
+
+    private fun anyItemHasChanged(): Boolean {
+        if (previousDestinationDescription != destination_edit.text.toString())
+            return true
+        if (previousEndDate != endDate)
+            return true
+        if (previousStartDate != startDate)
+            return true
+        return false
     }
 
     private fun setEditDestinationButton() {
         done_destination_button_id.setOnClickListener { view ->
-            val editDest = TripTimeLineInfo(destination.id, enter_destination_name.text.toString(), selectedDestType, startDate!!, endDate!!)
+            if (datesAreValid()) {
+                val editDest = TripTimeLineInfo(
+                    destination.id,
+                    destination_edit.text.toString(),
+                    "Lugar",
+                    startDate,
+                    endDate
+                )
 
-            val intent = Intent(this@EditDestinationActivity, TripTimeLineActivity::class.java)
-            intent.putExtra("EXTRA_EDIT_DEST", editDest)
-            setResult(Activity.RESULT_OK, intent)
+                editDestinationInFirebase(editDest)
+            }
 
-            editDestinationInFirebase(editDest)
         }
+    }
+
+    private fun datesAreValid(): Boolean {
+        if (startDate >= endDate) {
+            Toast.makeText(this, "La fecha de fin debe ser mayor a la fecha de inicio", Toast.LENGTH_LONG).show()
+            return false
+        }
+
+        return true
     }
 
     private fun editDestinationInFirebase(dest: TripTimeLineInfo) {
@@ -152,18 +188,10 @@ class EditDestinationActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
             })
     }
 
-    override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
-        selectedDestType = destTypes[position]
-    }
-
-    override fun onNothingSelected(arg0: AdapterView<*>) {
-
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                showAlertIfNeeded()
                 return true
             }
         }

@@ -138,7 +138,7 @@ class NewFlightActivity : AppCompatActivity() {
         }
 
         return true
-    } //todo: agregaar el cartel de si desea salir en el boton de back
+    }
 
     //    private fun isValid(): Boolean {
 //        var valid = true
@@ -169,7 +169,7 @@ class NewFlightActivity : AppCompatActivity() {
     private fun showAlertIfNeeded() {
         if (anyItemIsNotNull()) {
             val builder = AlertDialog.Builder(this)
-            builder.setMessage(R.string.leave_new_flight)
+            builder.setMessage(R.string.leave_activity_alert)
             builder.setPositiveButton(R.string.yes) { _, _ -> onBackPressed() }
             builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
             builder.create().show()

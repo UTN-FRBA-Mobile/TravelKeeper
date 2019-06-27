@@ -92,5 +92,5 @@
     <string name="flight_number_hint">Número de vuelo</string>
     <string name="discard">Descartar</string>
     <string name="cancel">Cancelar</string>
-    <string name="leave_new_flight">¿Está seguro que desea salir sin guardar el vuelo?</string>
+    <string name="leave_activity_alert">¿Está seguro que desea salir sin guardar los cambios?</string>
 </resources>
