@@ -3,15 +3,14 @@ package utn.kotlin.travelkeeper.adapters
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.ShareCompat
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ShareCompat
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.my_trips_list_item.view.*
@@ -21,7 +20,6 @@ import utn.kotlin.travelkeeper.MainActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.TripTimeLineActivity
 import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.ui.login.LoginActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -52,7 +50,6 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
 
         holder.view.documentation_btn.setOnClickListener {
             val documentationIntent = Intent(context, DocumentationActivity::class.java)
-//            tripTimeLineIntent.putExtra("TRIP", myDataset[position])
             documentationIntent.putExtra("tripId", myDataset[position].id)
             context.startActivity(documentationIntent)
         }
@@ -69,7 +66,7 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
             val builder = AlertDialog.Builder(context)
             builder.setMessage(R.string.remove_trip_from_library)
             builder.setPositiveButton(
-                R.string.log_out_yes
+                R.string.yes
             ) { dialog, _ ->
                 UsuariosService().removeTripFromUser(
                     FirebaseAuth.getInstance().currentUser!!.email!!,
@@ -91,7 +88,7 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
                 )
             }
             builder.setNegativeButton(
-                R.string.log_out_no
+                R.string.no
             ) { dialog, _ -> dialog.dismiss() }
 
             builder.create().show()

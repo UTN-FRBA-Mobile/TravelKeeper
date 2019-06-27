@@ -84,6 +84,7 @@
                 android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".AccommodationsListActivity"/>
         <activity android:name=".NewFlightActivity"/>
+        <activity android:name=".EditFlightActivity"/>
     </application>
 
 </manifest>

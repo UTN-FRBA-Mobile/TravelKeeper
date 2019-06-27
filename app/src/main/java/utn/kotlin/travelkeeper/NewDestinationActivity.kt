@@ -4,10 +4,11 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
-import android.widget.*
-import kotlinx.android.synthetic.main.activity_new_destination.*
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_view_destination.*
 import kotlinx.android.synthetic.main.destination_view.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Trip
@@ -24,7 +25,7 @@ class NewDestinationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_destination)
+        setContentView(R.layout.activity_view_destination)
 
         viajesService = ServiceProvider.viajesService
 

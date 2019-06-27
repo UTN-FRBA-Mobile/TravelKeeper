@@ -12,8 +12,8 @@
     <string name="old_trips_menu_title">Viajes Pasados</string>
     <string name="log_out_menu_title">Cerrar Sesión</string>
     <string name="log_out_msg">¿Está seguro de querer cerrar la sesión?</string>
-    <string name="log_out_yes">Si</string>
-    <string name="log_out_no">No</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
     <string name="edit_option">Editar</string>
     <string name="delete_option">Eliminar</string>
 
@@ -90,8 +90,11 @@
     <string name="airline_hint">Aerolínea</string>
     <string name="from_airport_hint">¿Desde dónde?</string>
     <string name="destination_airport_hint">¿A dónde?</string>
-    <string name="takeoff_date_hint">Día de salida</string>
+    <string name="takeoff_date_hint">Fecha de salida</string>
     <string name="flight_hour_hint">Hora del vuelo</string>
     <string name="flight_confirmation_code">Número de reserva</string>
     <string name="flight_number_hint">Número de vuelo</string>
+    <string name="discard">Descartar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="leave_activity_alert">¿Está seguro que desea salir sin guardar los cambios?</string>
 </resources>

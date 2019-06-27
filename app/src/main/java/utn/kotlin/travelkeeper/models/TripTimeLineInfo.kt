@@ -10,7 +10,7 @@ import kotlin.collections.HashMap
 class TripTimeLineInfo( //Destination //destinos_en_viaje en la bd
     var id: String? = null,
     var name: String,
-    var type: String,
+    var type: String, //Lugar //Vuelo
     var start_date: Date,
     var end_date: Date
 ) : Serializable {
