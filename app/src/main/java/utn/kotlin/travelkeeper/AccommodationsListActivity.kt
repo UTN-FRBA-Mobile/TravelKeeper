@@ -99,7 +99,7 @@ class AccommodationsListActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(R.string.remove_accommodation)
         builder.setPositiveButton(
-            R.string.log_out_yes
+            R.string.yes
         ) { dialog, _ ->
             accommodationService.deleteAccommodation(
                 tripId,
@@ -119,7 +119,7 @@ class AccommodationsListActivity : AppCompatActivity() {
             )
         }
         builder.setNegativeButton(
-            R.string.log_out_no
+            R.string.no
         ) { dialog, _ -> dialog.dismiss() }
 
         builder.create().show()
