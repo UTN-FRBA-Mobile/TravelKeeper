@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-import kotlinx.android.synthetic.main.activity_new_flight.*
+import kotlinx.android.synthetic.main.activity_view_flight.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
@@ -28,7 +28,7 @@ class NewFlightActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_flight)
+        setContentView(R.layout.activity_view_flight)
 
         trip = intent.extras["TRIP"] as Trip
         viajesService = ServiceProvider.viajesService

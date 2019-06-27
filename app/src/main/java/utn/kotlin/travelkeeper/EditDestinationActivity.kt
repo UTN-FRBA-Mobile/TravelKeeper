@@ -146,7 +146,7 @@ class EditDestinationActivity : AppCompatActivity() {
 
     private fun setEditDestinationButton() {
         done_destination_button_id.setOnClickListener { view ->
-            if (datesAreValid()) {
+            if (dataIsValid()) {
                 val editDest = TripTimeLineInfo(
                     destination.id,
                     destination_edit.text.toString(),
@@ -161,7 +161,12 @@ class EditDestinationActivity : AppCompatActivity() {
         }
     }
 
-    private fun datesAreValid(): Boolean {
+    private fun dataIsValid(): Boolean {
+        if (destination_edit.text.isNullOrBlank()) {
+            Toast.makeText(this, "Especifique un destino", Toast.LENGTH_LONG).show()
+            return false
+        }
+
         if (startDate >= endDate) {
             Toast.makeText(this, "La fecha de fin debe ser mayor a la fecha de inicio", Toast.LENGTH_LONG).show()
             return false

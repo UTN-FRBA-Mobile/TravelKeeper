@@ -100,7 +100,7 @@ class TripTimeLineActivity : AppCompatActivity() {
                 if (destinationOrFlight.type == "Lugar")
                     showEditDestinationActivity(destinationOrFlight, position)
                 else
-                    showEditFlightActiity(destinationOrFlight, position)
+                    showEditFlightActivity(destinationOrFlight, position)
                 return true
             }
             R.id.delete_option -> {
@@ -114,8 +114,12 @@ class TripTimeLineActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEditFlightActiity(position: TripTimeLineInfo, position1: Int) {
-
+    private fun showEditFlightActivity(position: TripTimeLineInfo, position1: Int) {
+        val editDestIntent = Intent(this, EditFlightActivity::class.java)
+        editDestIntent.putExtra("DEST_EDIT", position)
+        editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
+        editDestIntent.putExtra("EDIT_DEST_POSITION", position1)
+        startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
     }
 
     private fun showEditDestinationActivity(destination: TripTimeLineInfo, position: Int) {
