@@ -89,18 +89,83 @@ class NewFlightActivity : AppCompatActivity() {
 
     private fun setDoneButton() {
         flight_done_button.setOnClickListener { v ->
-            //checkDataIsComplete TODO
+            if (isDataComplete()) {
+                val flight = TripTimeLineInfo(
+                    name = flight_airline_edit.text.toString(),
+                    type = "Vuelo",
+                    start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!).time,
+                    end_date = startDate!!
+                )
 
-            val flight = TripTimeLineInfo(
-                name = flight_airline_edit.text.toString(),
-                type = "Vuelo",
-                start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!).time,
-                end_date = startDate!!
-            )
+                addFlightToTrip(flight)
 
-            addFlightToTrip(flight)
+            }
         }
     }
+
+    private fun showToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    }
+
+    private fun isDataComplete(): Boolean {
+        if (flight_airline_edit.text.isNullOrBlank()) {
+            showToast("Especifique una aerolínea")
+            return false
+        }
+        if (flight_departure_airport_edit.text.isNullOrBlank()) {
+            showToast("Especifique un aeropuerto de salida")
+            return false
+        }
+
+        if (flight_arrival_airport_edit.text.isNullOrBlank()) {
+            showToast("Especifique un aeropuerto de llegada")
+            return false
+        }
+
+        if (flight_number_edit.text.isNullOrBlank()) {
+            showToast("Especifique el número de vuelo")
+            return false
+        }
+
+        if (startDate == null) {
+            showToast("Especifique la fecha de salida")
+            return false
+        }
+
+        if (hourOfFlight == null || minuteOfFlight == null) {
+            showToast("Especifique la hora del vuelo")
+            return false
+        }
+
+        return true
+    } //todo: agregaar el cartel de si desea salir en el boton de back
+
+    //    private fun isValid(): Boolean {
+//        var valid = true
+//
+//        if (enter_destination_name.text == null || enter_destination_name.text.toString() == "") {
+//            enter_name_error.visibility = View.VISIBLE
+//            valid = false
+//        }
+//
+//        if (destination_start_date_selected == null || destination_start_date_selected.text.toString() == "" || destination_start_date_selected.text.toString() == "Seleccione una fecha") {
+//            start_date_error.visibility = View.VISIBLE
+//            valid = false
+//        }
+//
+//        if (destination_end_date_selected == null || destination_end_date_selected.text.toString() == "" || destination_end_date_selected.text.toString() == "Seleccione una fecha") {
+//            end_date_error.visibility = View.VISIBLE
+//            valid = false
+//        }
+//
+//        if (startDate != null && endDate != null && endDate!! < startDate!!) {
+//            end_date_error.setText(R.string.end_date_before_start_date)
+//            end_date_error.visibility = View.VISIBLE
+//            valid = false
+//        }
+//
+//        return valid
+
 
     private fun addFlightToTrip(flight: TripTimeLineInfo) {
         viajesService.addDestinationToTrip(trip.id!!, flight,

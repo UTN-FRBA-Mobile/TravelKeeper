@@ -86,7 +86,7 @@
     <string name="airline_hint">Aerolínea</string>
     <string name="from_airport_hint">¿Desde dónde?</string>
     <string name="destination_airport_hint">¿A dónde?</string>
-    <string name="takeoff_date_hint">Día de salida</string>
+    <string name="takeoff_date_hint">Fecha de salida</string>
     <string name="flight_hour_hint">Hora del vuelo</string>
     <string name="flight_confirmation_code">Número de reserva</string>
     <string name="flight_number_hint">Número de vuelo</string>

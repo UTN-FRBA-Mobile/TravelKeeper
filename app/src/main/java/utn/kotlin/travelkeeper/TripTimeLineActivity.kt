@@ -82,10 +82,6 @@ class TripTimeLineActivity : AppCompatActivity() {
 
     }
 
-    private fun showToast(id: String) {
-        Toast.makeText(this@TripTimeLineActivity, "Fab $id", Toast.LENGTH_SHORT).show()
-    }
-
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
 
