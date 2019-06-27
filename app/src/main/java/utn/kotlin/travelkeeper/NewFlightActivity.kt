@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
@@ -60,7 +61,6 @@ class NewFlightActivity : AppCompatActivity() {
     }
 
     private fun setDatePickerForTakeoffDate() {
-
         flight_takeoff_date.setOnClickListener {
             val calendar = Calendar.getInstance() //todo: ver el tema de Locale-Instance al pedir la instancia
 
@@ -166,6 +166,50 @@ class NewFlightActivity : AppCompatActivity() {
 //
 //        return valid
 
+    private fun showAlertIfNeeded() {
+        if (anyItemIsNotNull()) {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage(R.string.leave_new_flight)
+            builder.setPositiveButton(R.string.yes) { _, _ -> onBackPressed() }
+            builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+            builder.create().show()
+            return
+        }
+
+        onBackPressed()
+    }
+
+    private fun anyItemIsNotNull(): Boolean {
+        if (!flight_airline_edit.text.isNullOrBlank()) {
+            return true
+        }
+        if (!flight_departure_airport_edit.text.isNullOrBlank()) {
+            return true
+        }
+
+        if (!flight_arrival_airport_edit.text.isNullOrBlank()) {
+            return true
+        }
+
+        if (!flight_number_edit.text.isNullOrBlank()) {
+            return true
+        }
+
+        if (startDate != null) {
+            return true
+        }
+
+        if (hourOfFlight != null || minuteOfFlight != null) {
+            return true
+        }
+
+        if (!flight_reservation_number_edit.text.isNullOrBlank()) {
+            return true
+        }
+
+        return false
+    }
+
 
     private fun addFlightToTrip(flight: TripTimeLineInfo) {
         viajesService.addDestinationToTrip(trip.id!!, flight,
@@ -196,7 +240,7 @@ class NewFlightActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                showAlertIfNeeded()
                 return true
             }
         }
