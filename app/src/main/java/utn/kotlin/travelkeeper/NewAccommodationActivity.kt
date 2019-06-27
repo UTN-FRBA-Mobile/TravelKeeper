@@ -1,5 +1,10 @@
 package utn.kotlin.travelkeeper
 
+import `in`.madapps.placesautocomplete.PlaceAPI
+import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
+import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
+import `in`.madapps.placesautocomplete.model.Place
+import `in`.madapps.placesautocomplete.model.PlaceDetails
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -7,11 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.DatePicker
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_new_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
+import utn.kotlin.travelkeeper.models.Address
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,6 +29,9 @@ class NewAccommodationActivity : AppCompatActivity() {
     private var endDate: Date? = null
     private lateinit var destinationId: String
     private lateinit var tripId: String
+    private lateinit var addressSelected: Address
+
+    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@NewAccommodationActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +44,7 @@ class NewAccommodationActivity : AppCompatActivity() {
         setStartDatePicker()
         setEndDatePicker()
         setNewAccommodationButton()
-
-        enter_accommodation_address.setOnClickListener {view ->
-            val intent = Intent(this@NewAccommodationActivity, AccommodationMapsActivity::class.java)
-            startActivity(intent)
-        }
+        setSearchAddresses()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -125,6 +132,15 @@ class NewAccommodationActivity : AppCompatActivity() {
         }
     }
 
+    private fun setSearchAddresses() {
+        enter_accommodation_address.setAdapter(PlacesAutoCompleteAdapter(this, placesApi))
+        enter_accommodation_address.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val place = parent.getItemAtPosition(position) as Place
+                enter_accommodation_address.setText(place.description)
+            }
+    }
+
     private fun isValid(): Boolean {
         var valid = true
 
@@ -171,4 +187,6 @@ class NewAccommodationActivity : AppCompatActivity() {
                 }
             })
     }
+
+
 }
