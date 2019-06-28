@@ -26,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:visibility="gone"
             android:text="@string/no_dest_available"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
@@ -43,36 +44,57 @@
             app:layout_constraintTop_toBottomOf="@id/trip_timeline_app_bar_layout"
             app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="1.0"/>
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu android:layout_width="wrap_content"
-                                                          android:id="@+id/floating_actions_menu"
-                                                          android:layout_height="wrap_content"
-                                                          app:fab_addButtonColorNormal="@color/colorAccent"
-                                                          app:fab_addButtonColorPressed="@color/colorPrimaryDark"
-                                                          app:fab_addButtonPlusIconColor="@color/white"
-                                                          app:fab_labelStyle="@style/menu_labels_style"
-                                                          android:layout_marginEnd="16dp"
-                                                          app:layout_constraintEnd_toEndOf="parent"
-                                                          android:layout_marginBottom="16dp"
-                                                          app:layout_constraintBottom_toBottomOf="parent">
-        <com.getbase.floatingactionbutton.FloatingActionButton android:layout_width="wrap_content"
-                                                               android:layout_height="wrap_content"
-                                                               app:fab_colorNormal="@color/black_semi_transparent"
-                                                               app:fab_colorPressed="@color/half_black"
-                                                               app:fab_size="mini"
-                                                               app:fab_icon="@drawable/baseline_location_on_white"
-                                                               android:id="@+id/add_destination_fab"
-                                                               app:fab_title="@string/fab_label_new_destination"/>
-        <com.getbase.floatingactionbutton.FloatingActionButton android:layout_width="wrap_content"
-                                                               android:layout_height="wrap_content"
-                                                               app:fab_colorNormal="@color/black_semi_transparent"
-                                                               app:fab_colorPressed="@color/half_black"
-                                                               app:fab_size="mini"
-                                                               app:fab_icon="@drawable/baseline_airplanemode_active_white"
-                                                               android:id="@+id/add_flight_fab"
-                                                               app:fab_title="@string/fab_label_new_flight"/>
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:layout_width="wrap_content"
+            android:id="@+id/floating_actions_menu"
+            android:layout_height="wrap_content"
+            app:fab_addButtonColorNormal="@color/colorAccent"
+            app:fab_addButtonColorPressed="@color/colorPrimaryDark"
+            app:fab_addButtonPlusIconColor="@color/white"
+            app:fab_labelStyle="@style/menu_labels_style"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/black_semi_transparent"
+                app:fab_colorPressed="@color/half_black"
+                app:fab_size="mini"
+                app:fab_icon="@drawable/baseline_location_on_white"
+                android:id="@+id/add_destination_fab"
+                app:fab_title="@string/fab_label_new_destination"/>
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/black_semi_transparent"
+                app:fab_colorPressed="@color/half_black"
+                app:fab_size="mini"
+                app:fab_icon="@drawable/baseline_airplanemode_active_white"
+                android:id="@+id/add_flight_fab"
+                app:fab_title="@string/fab_label_new_flight"/>
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
+    <RelativeLayout
+            android:id="@+id/loading"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/transparent_dark"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

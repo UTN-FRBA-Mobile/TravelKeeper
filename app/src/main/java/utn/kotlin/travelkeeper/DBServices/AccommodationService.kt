@@ -29,6 +29,11 @@ class AccommodationService {
         fun onError(exception: Exception)
     }
 
+    interface SimpleServiceListener {
+        fun onSuccess()
+        fun onError(exception: Exception)
+    }
+
     fun getAccomodationFromDestination(tripId: String, destinationId: String, listener: GetAccommodationsViajeServiceListener) {
         val db = FirebaseFirestore.getInstance()
 
@@ -78,6 +83,36 @@ class AccommodationService {
             .add(newAccommodationToAdd)
             .addOnSuccessListener { documentReference ->
                 listener.onSuccess(documentReference.id)
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    fun editAccommodation(tripId: String, destId: String, accomodation: Accommodation, listener: CreateAccommodationServiceListener) {
+        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+
+        val accommodationToEdit = accomodation.createMapFromObject(dateFormatter)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId).collection(SUBTABLA_ALOJAMIENTOS).document(accomodation.id!!)
+            .set(accommodationToEdit)
+            .addOnSuccessListener {
+                listener.onSuccess("Alojamiento editado")
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
+    }
+
+    fun deleteAccommodation(tripId: String, destId: String, accommodationId: String, listener: AccommodationService.SimpleServiceListener) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS).document(destId).collection(SUBTABLA_ALOJAMIENTOS)
+            .document(accommodationId)
+            .delete()
+            .addOnSuccessListener {
+                listener.onSuccess()
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)

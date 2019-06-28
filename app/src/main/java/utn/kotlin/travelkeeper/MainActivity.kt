@@ -3,17 +3,17 @@ package utn.kotlin.travelkeeper
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.core.view.GravityCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         val builder = AlertDialog.Builder(this@MainActivity)
                         builder.setMessage(R.string.add_trip_to_library)
                         builder.setPositiveButton(
-                            R.string.log_out_yes
+                            R.string.yes
                         ) { dialog, _ ->
                             dialog.dismiss()
                             UsuariosService().addTripToUser(
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             )
                         }
                         builder.setNegativeButton(
-                            R.string.log_out_no
+                            R.string.no
                         ) { dialog, _ -> dialog.dismiss() }
 
                         builder.create().show()
@@ -101,7 +101,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Glide.with(this).load(FirebaseAuth.getInstance().currentUser!!.photoUrl)
             .apply(RequestOptions.circleCropTransform())
             .into(imageView)
-
     }
 
     override fun onBackPressed() {
@@ -130,7 +129,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage(R.string.log_out_msg)
                 builder.setPositiveButton(
-                    R.string.log_out_yes
+                    R.string.yes
                 ) { dialog, _ ->
                     dialog.dismiss()
                     FirebaseAuth.getInstance().signOut()
@@ -140,7 +139,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     finish()
                 }
                 builder.setNegativeButton(
-                    R.string.log_out_no
+                    R.string.no
                 ) { dialog, _ -> dialog.dismiss() }
 
                 builder.create().show()
@@ -149,5 +148,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        onNavigationItemSelected(nav_view.menu.getItem(0))
     }
 }

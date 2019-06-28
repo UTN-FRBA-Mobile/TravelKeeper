@@ -11,8 +11,8 @@
             android:id="@+id/flight_number_edit"
             android:hint="@string/flight_number_hint" android:maxLines="1"
             app:layout_constraintTop_toBottomOf="@+id/flight_airline_edit"
-            app:layout_constraintBottom_toTopOf="@+id/flight_arrival_airport_edit"
-            app:layout_constraintStart_toStartOf="@+id/flight_arrival_airport_edit" android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/flight_departure_airport_edit"
+            app:layout_constraintStart_toStartOf="@+id/flight_departure_airport_edit" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"/>
     <EditText
             android:layout_width="0dp"
@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:ems="10"
-            android:id="@+id/flight_from_airport_edit" android:hint="@string/destination_airport_hint"
-            android:maxLines="1" app:layout_constraintTop_toBottomOf="@+id/flight_arrival_airport_edit"
+            android:id="@+id/flight_arrival_airport_edit" android:hint="@string/destination_airport_hint"
+            android:maxLines="1" app:layout_constraintTop_toBottomOf="@+id/flight_departure_airport_edit"
             app:layout_constraintBottom_toTopOf="@+id/flight_takeoff_date"
             app:layout_constraintStart_toStartOf="@+id/flight_takeoff_date" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -50,10 +50,10 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:ems="10"
-            android:id="@+id/flight_arrival_airport_edit" android:hint="@string/from_airport_hint"
+            android:id="@+id/flight_departure_airport_edit" android:hint="@string/from_airport_hint"
             android:maxLines="1" app:layout_constraintTop_toBottomOf="@+id/flight_number_edit"
-            app:layout_constraintBottom_toTopOf="@+id/flight_from_airport_edit"
-            app:layout_constraintStart_toStartOf="@+id/flight_from_airport_edit" android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/flight_arrival_airport_edit"
+            app:layout_constraintStart_toStartOf="@+id/flight_arrival_airport_edit" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"/>
     <EditText
             android:layout_width="0dp"
@@ -64,7 +64,8 @@
             android:maxLines="1"
             android:focusable="false"
             android:clickable="true"
-            android:hint="@string/takeoff_date_hint" app:layout_constraintTop_toBottomOf="@+id/flight_from_airport_edit"
+            android:hint="@string/takeoff_date_hint"
+            app:layout_constraintTop_toBottomOf="@+id/flight_arrival_airport_edit"
             app:layout_constraintBottom_toTopOf="@+id/flight_takeoff_hour"
             app:layout_constraintStart_toStartOf="@+id/flight_takeoff_hour" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"/>
@@ -112,18 +113,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_flight_land_24"
             android:id="@+id/land_image"
-            app:layout_constraintTop_toTopOf="@+id/flight_from_airport_edit"
+            app:layout_constraintTop_toTopOf="@+id/flight_arrival_airport_edit"
             app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/flight_from_airport_edit"/>
+            app:layout_constraintBottom_toBottomOf="@+id/flight_arrival_airport_edit"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_flight_takeoff_24"
             android:id="@+id/takeoff_image"
             app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/flight_arrival_airport_edit"
-            app:layout_constraintBottom_toBottomOf="@+id/flight_arrival_airport_edit"/>
+            app:layout_constraintTop_toTopOf="@+id/flight_departure_airport_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/flight_departure_airport_edit"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@drawable/ticket_outline"

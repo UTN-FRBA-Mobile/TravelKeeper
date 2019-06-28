@@ -2,9 +2,7 @@ package utn.kotlin.travelkeeper
 
 import `in`.madapps.placesautocomplete.PlaceAPI
 import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
-import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
 import `in`.madapps.placesautocomplete.model.Place
-import `in`.madapps.placesautocomplete.model.PlaceDetails
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -13,37 +11,38 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.DatePicker
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_new_accommodation.*
+import kotlinx.android.synthetic.main.activity_edit_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
 import utn.kotlin.travelkeeper.models.Address
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewAccommodationActivity : AppCompatActivity() {
+class EditAccommodationActivity : AppCompatActivity() {
     private var cal = Calendar.getInstance()
     private var startDate: Date? = null
     private var endDate: Date? = null
     private lateinit var destinationId: String
     private lateinit var tripId: String
-    private lateinit var addressSelected: Address
+    private lateinit var accomodation: Accommodation
+    private var position: Int = 0
 
-    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@NewAccommodationActivity)
+    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@EditAccommodationActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_accommodation)
+        setContentView(R.layout.activity_edit_accommodation)
 
-        destinationId = intent.getStringExtra("DESTINATION_ID")
-        tripId = intent.getStringExtra("TRIP_ID")
+        accomodation = intent.extras["ACCOMMODATION_EDIT"] as Accommodation
+        destinationId = intent.getStringExtra("DESTID_ACCOMMODATION_EDIT")
+        tripId = intent.getStringExtra("TRIPID_ACCOMMODATION_EDIT")
+        position = intent.extras["EDIT_ACCOMMODATION_POSITION"] as Int
 
         setBackArrow()
-        setStartDatePicker()
-        setEndDatePicker()
-        setNewAccommodationButton()
+        setView()
+        setEditAccommodationButton()
         setSearchAddresses()
     }
 
@@ -61,6 +60,27 @@ class NewAccommodationActivity : AppCompatActivity() {
         this.supportActionBar!!.setTitle(R.string.accommodations_list)
         this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
+    }
+
+    private fun setView() {
+        enter_accommodation_name.setText(accomodation.name)
+        enter_accommodation_address.setText(accomodation.address)
+
+        if(accomodation.reservationCode != null) {
+            enter_accommodation_reservation_number.setText(accomodation.reservationCode)
+        }
+
+        if(accomodation.telephoneNumber != null) {
+            enter_accommodation_telephone_number.setText(accomodation.telephoneNumber)
+        }
+
+        cal.time = accomodation.startDate
+        startDate = accomodation.startDate
+        endDate = accomodation.endDate
+        accommodation_checkin_date_selected!!.text = getDate(accomodation.startDate)
+        accommodation_checkout_date_selected!!.text = getDate(accomodation.endDate)
+        setStartDatePicker()
+        setEndDatePicker()
     }
 
     private fun setStartDatePicker() {
@@ -118,18 +138,16 @@ class NewAccommodationActivity : AppCompatActivity() {
         return sdf.format(date)
     }
 
-    private fun setNewAccommodationButton() {
-        new_accommodation_button_id.setOnClickListener { view ->
-            if (isValid()) {
-                val newAccommodation = Accommodation(
-                    null, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
+    private fun setEditAccommodationButton() {
+        edit_accommodation_button_id.setOnClickListener { _ ->
+            if(isValid()) {
+                val editAccomodation = Accommodation(accomodation.id, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
                     startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
-                    enter_accommodation_reservation_number.text.toString()
-                )
+                    enter_accommodation_reservation_number.text.toString())
                 enter_name_error.visibility = View.GONE
                 checkin_date_error.visibility = View.GONE
                 checkout_date_error.visibility = View.GONE
-                addAccommodationToFirebase(newAccommodation)
+                editAccommodationInFirebase(editAccomodation)
             }
         }
     }
@@ -151,17 +169,17 @@ class NewAccommodationActivity : AppCompatActivity() {
             valid = false
         }
 
-        if (accommodation_checkin_date_selected == null || accommodation_checkin_date_selected.text.toString() == "" || accommodation_checkin_date_selected.text.toString() == "Seleccione una fecha") {
+        if(accommodation_checkin_date_selected == null || accommodation_checkin_date_selected.text.toString() == "" || accommodation_checkin_date_selected.text.toString() == "Seleccione una fecha") {
             checkin_date_error.visibility = View.VISIBLE
             valid = false
         }
 
-        if (accommodation_checkout_date_selected == null || accommodation_checkout_date_selected.text.toString() == "" || accommodation_checkout_date_selected.text.toString() == "Seleccione una fecha") {
+        if(accommodation_checkout_date_selected == null || accommodation_checkout_date_selected.text.toString() == "" || accommodation_checkout_date_selected.text.toString() == "Seleccione una fecha") {
             checkout_date_error.visibility = View.VISIBLE
             valid = false
         }
 
-        if (startDate != null && endDate != null && endDate!! < startDate!!) {
+        if(startDate != null && endDate != null && endDate!! < startDate!!) {
             checkout_date_error.setText(R.string.end_date_before_start_date)
             checkout_date_error.visibility = View.VISIBLE
             valid = false
@@ -170,29 +188,22 @@ class NewAccommodationActivity : AppCompatActivity() {
         return valid
     }
 
-    private fun addAccommodationToFirebase(accommodation: Accommodation) {
-        loading.visibility = View.VISIBLE
-        AccommodationService().addAccommodationToDestination(tripId, destinationId, accommodation,
+    private fun editAccommodationInFirebase(accommodation: Accommodation) {
+        AccommodationService().editAccommodation(tripId, destinationId, accommodation,
             object : AccommodationService.CreateAccommodationServiceListener {
                 override fun onSuccess(idCreated: String) {
-                    loading.visibility = View.GONE
-                    Toast.makeText(this@NewAccommodationActivity, "Alojamiento agregado", Toast.LENGTH_LONG).show()
-                    accommodation.id = idCreated
+                    Toast.makeText(this@EditAccommodationActivity, "Alojamiento editado", Toast.LENGTH_LONG).show()
 
-                    val accommodationIntent =
-                        Intent(this@NewAccommodationActivity, AccommodationsListActivity::class.java)
-                    accommodationIntent.putExtra("EXTRA_NEW_ACCOMMODATION", accommodation)
+                    val accommodationIntent = Intent(this@EditAccommodationActivity, AccommodationsListActivity::class.java)
+                    accommodationIntent.putExtra("ACCOMMODATION_EDIT", accommodation)
+                    accommodationIntent.putExtra("ACCOMMODATION_EDIT_DEST_POSITION", position)
                     setResult(Activity.RESULT_OK, accommodationIntent)
-
                     finish()
                 }
 
                 override fun onError(exception: Exception) {
-                    loading.visibility = View.GONE
-                    Toast.makeText(this@NewAccommodationActivity, exception.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@EditAccommodationActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
             })
     }
-
-
 }

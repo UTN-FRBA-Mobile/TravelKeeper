@@ -41,36 +41,47 @@ class TripTimeLineActivity : AppCompatActivity() {
 
         trip = intent.extras["TRIP"] as Trip
 
+        title = trip.title
+
         viajesService.getDestinationsFromTrip(
             trip.id!!,
             object : ViajesService.GetDestinationsViajeServiceListener {
-            override fun onSuccess(dests: MutableList<TripTimeLineInfo>) {
-                destinations = dests
+                override fun onSuccess(dests: MutableList<TripTimeLineInfo>) {
+                    destinations = dests
 
-                if(destinations != null && destinations.size > 0) {
-                    no_destinations.visibility = View.GONE
+                    loading.visibility = View.GONE
+
+                    if (destinations == null || destinations.size == 0) {
+                        no_destinations.visibility = View.VISIBLE
+                    }
+
+                    viewManager = androidx.recyclerview.widget.LinearLayoutManager(this@TripTimeLineActivity)
+                    viewAdapter = TripTimeLineAdapter(destinations, trip)
+
+                    recyclerView = trip_timeline_recycler_view.apply {
+                        layoutManager = viewManager
+                        adapter = viewAdapter
+                    }
                 }
 
-                viewManager = androidx.recyclerview.widget.LinearLayoutManager(this@TripTimeLineActivity)
-                viewAdapter = TripTimeLineAdapter(destinations, trip)
-
-                recyclerView = trip_timeline_recycler_view.apply {
-                    layoutManager = viewManager
-                    adapter = viewAdapter
+                override fun onError(exception: Exception) {
+                    loading.visibility = View.GONE
+                    no_destinations.visibility = View.VISIBLE
+                    Toast.makeText(this@TripTimeLineActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
-            }
-
-
-            override fun onError(exception: Exception) {
-                Toast.makeText(this@TripTimeLineActivity, exception.message, Toast.LENGTH_LONG).show()
-            }
-        })
+            })
 
         add_destination_fab.setOnClickListener {
             floating_actions_menu.collapse()
             val newDestinationIntent = Intent(this@TripTimeLineActivity, NewDestinationActivity::class.java)
             newDestinationIntent.putExtra("TRIP", trip)
-            startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST) //todo: preguntar para que se pasa este flag?
+            startActivityForResult(
+                newDestinationIntent,
+                NEW_DESTINATION_REQUEST
+            ) //todo: preguntar para que se pasa este flag?
+            //cuando el sistema envia una activity for result, ese código vuelve acompañado por el resultado
+            // de la activity. Si tu activity disparara mas de una for result, con ese codigo identificas quien es
+            // la activity que te esta devolviendo un resultado
         }
 
         add_flight_fab.setOnClickListener {
@@ -80,10 +91,6 @@ class TripTimeLineActivity : AppCompatActivity() {
             startActivityForResult(newDestinationIntent, NEW_DESTINATION_REQUEST)
         }
 
-    }
-
-    private fun showToast(id: String) {
-        Toast.makeText(this@TripTimeLineActivity, "Fab $id", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -97,7 +104,11 @@ class TripTimeLineActivity : AppCompatActivity() {
         when (item!!.itemId) {
             R.id.edit_option -> {
                 val position = destinationSelected.tag as Int
-                this.showEditDestinationActivity(position)
+                val destinationOrFlight = destinations[position]
+                if (destinationOrFlight.type == "Lugar")
+                    showEditDestinationActivity(destinationOrFlight, position)
+                else
+                    showEditFlightActivity(destinationOrFlight, position)
                 return true
             }
             R.id.delete_option -> {
@@ -111,38 +122,48 @@ class TripTimeLineActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEditDestinationActivity(position: Int) {
-        val editDestIntent = Intent(this@TripTimeLineActivity, EditDestinationActivity::class.java)
-        editDestIntent.putExtra("DEST_EDIT", destinations[position])
+    private fun showEditFlightActivity(position: TripTimeLineInfo, position1: Int) {
+        val editDestIntent = Intent(this, EditFlightActivity::class.java)
+        editDestIntent.putExtra("DEST_EDIT", position)
+        editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
+        editDestIntent.putExtra("EDIT_DEST_POSITION", position1)
+        startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
+    }
+
+    private fun showEditDestinationActivity(destination: TripTimeLineInfo, position: Int) {
+        val editDestIntent = Intent(this, EditDestinationActivity::class.java)
+        editDestIntent.putExtra("DEST_EDIT", destination)
         editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
         editDestIntent.putExtra("EDIT_DEST_POSITION", position)
-        this@TripTimeLineActivity.startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
+        startActivityForResult(editDestIntent, EDIT_DESTINATION_INTENT)
     }
 
     private fun deleteDestination(position: Int) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(R.string.remove_destination)
         builder.setPositiveButton(
-            R.string.log_out_yes
+            R.string.yes
         ) { dialog, _ ->
             viajesService.deleteDestinationInTrip(
                 trip.id!!,
                 destinations[position].id!!,
                 object : UsuariosService.SimpleServiceListener {
                     override fun onSuccess() {
-                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_removed, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_removed, Toast.LENGTH_SHORT)
+                            .show()
                         destinations.removeAt(position)
                         resetAdapter()
                     }
 
                     override fun onError(exception: Exception) {
-                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_not_removed, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_not_removed, Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             )
         }
         builder.setNegativeButton(
-            R.string.log_out_no
+            R.string.no
         ) { dialog, _ -> dialog.dismiss() }
 
         builder.create().show()
@@ -153,7 +174,7 @@ class TripTimeLineActivity : AppCompatActivity() {
         if (requestCode == NEW_DESTINATION_REQUEST) {
             // Make sure the request was successful
             if (resultCode == Activity.RESULT_OK) {
-                if(data!!.extras != null && data!!.extras.size() > 0) {
+                if (data!!.extras != null && data!!.extras.size() > 0) {
                     val newDest = data!!.extras["EXTRA_NEW_DEST"] as TripTimeLineInfo
                     if (newDest != null) {
                         no_destinations.visibility = View.GONE
@@ -163,10 +184,9 @@ class TripTimeLineActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-        else if (requestCode == EDIT_DESTINATION_REQUEST) {
+        } else if (requestCode == EDIT_DESTINATION_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                if(data!!.extras != null && data!!.extras.size() > 0) {
+                if (data!!.extras != null && data!!.extras.size() > 0) {
                     val editDest = data!!.extras["DEST_EDIT"] as TripTimeLineInfo
                     val position = data!!.extras["EDIT_DEST_POSITION"] as Int
                     if (editDest != null) {
@@ -194,5 +214,4 @@ class TripTimeLineActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
 }

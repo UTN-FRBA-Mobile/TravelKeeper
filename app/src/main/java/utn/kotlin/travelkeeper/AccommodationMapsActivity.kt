@@ -14,7 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.places.Places
+import com.google.android.libraries.places.compat.Places
 import com.google.android.gms.location.places.ui.PlacePicker
 import com.google.android.gms.maps.CameraUpdateFactory
 
@@ -51,9 +51,9 @@ class AccommodationMapsActivity : AppCompatActivity(), OnMapReadyCallback, Googl
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        search_fab.setOnClickListener {
-            loadPlacePicker()
-        }
+//        search_fab.setOnClickListener {
+//            loadPlacePicker()
+//        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -104,6 +104,7 @@ class AccommodationMapsActivity : AppCompatActivity(), OnMapReadyCallback, Googl
             e.printStackTrace()
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

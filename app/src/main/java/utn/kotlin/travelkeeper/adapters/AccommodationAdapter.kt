@@ -1,5 +1,7 @@
 package utn.kotlin.travelkeeper.adapters
 
+import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +17,13 @@ class AccommodationAdapter (
     private val tripId: String,
     private val destinationId: String) :RecyclerView.Adapter<AccommodationViewHolder>() {
 
+    private lateinit var context: Context
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccommodationViewHolder {
         val accommodationItem = LayoutInflater.from(parent.context)
             .inflate(R.layout.accommodation_item_view, parent, false)
+
+        context = parent.context
         return AccommodationViewHolder(accommodationItem)
     }
 
@@ -27,6 +33,11 @@ class AccommodationAdapter (
     val accommodation = accommodationList[position]
         holder.view.accommodation_desc_text.text = accommodation.name
         holder.view.accommodation_date_text.text = getDate(accommodation.startDate) + " - " + getDate(accommodation.endDate)
+
+        holder.view.tag = position
+
+        var activity = context as Activity
+        activity.registerForContextMenu(holder.view)
     }
 
     private fun getDate(date: Date): String {

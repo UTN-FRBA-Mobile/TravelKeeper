@@ -3,7 +3,6 @@ package utn.kotlin.travelkeeper.models
 import com.google.firebase.firestore.DocumentSnapshot
 import java.io.Serializable
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 data class Accommodation(
