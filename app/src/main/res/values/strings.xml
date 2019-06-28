@@ -69,6 +69,7 @@
 
     <!--ACCOMMODATIONS-->
     <string name="accommodations_list">"Alojamientos"</string>
+    <string name="no_accommodations_yet">"Todavía no hay Alojamientos!"</string>
     <string name="new_accommodation">"Nuevo alojamiento"</string>
     <string name="accommodation_name">"Nombre"</string>
     <string name="accommodation_address">"Direccion"</string>

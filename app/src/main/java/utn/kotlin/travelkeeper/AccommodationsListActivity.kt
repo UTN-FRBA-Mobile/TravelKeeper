@@ -37,28 +37,45 @@ class AccommodationsListActivity : AppCompatActivity() {
 
         accommodationService = ServiceProvider.accommodationService
 
-        accommodationService.getAccomodationFromDestination(tripId, destinationId, object : AccommodationService.GetAccommodationsViajeServiceListener {
-            override fun onSuccess(accommodationsSaved: MutableList<Accommodation>) {
-                accommodations = accommodationsSaved
-                viewAdapter = AccommodationAdapter(accommodations, tripId, destinationId)
-                recyclerView = findViewById<RecyclerView>(R.id.recycler_accommodations).apply {
-                    adapter = viewAdapter
-                    setHasFixedSize(true)
+        accommodationService.getAccomodationFromDestination(
+            tripId,
+            destinationId,
+            object : AccommodationService.GetAccommodationsViajeServiceListener {
+                override fun onSuccess(accommodationsSaved: MutableList<Accommodation>) {
+                    accommodations = accommodationsSaved
+                    loading.visibility = View.GONE
+
+                    if (accommodationsSaved == null || accommodations.size < 1) {
+                        empty_view.visibility = View.VISIBLE
+                        recycler_accommodations.visibility = View.GONE
+                        return
+                    }
+
+                    viewAdapter = AccommodationAdapter(accommodations, tripId, destinationId)
+                    recyclerView = findViewById<RecyclerView>(R.id.recycler_accommodations).apply {
+                        adapter = viewAdapter
+                        setHasFixedSize(true)
+                    }
+                    recyclerView.visibility = View.VISIBLE
                 }
 
-                add_accommodation_fab.setOnClickListener { view ->
-                    val newAcommodationIntent = Intent(this@AccommodationsListActivity, NewAccommodationActivity::class.java)
-                    newAcommodationIntent.putExtra("TRIP_ID", tripId)
-                    newAcommodationIntent.putExtra("DESTINATION_ID", destinationId)
-                    startActivityForResult(newAcommodationIntent, NEW_ACCOMMODATION_REQUEST)
+                override fun onError(exception: Exception) {
+                    if (accommodations == null || accommodations.size < 1) {
+                        empty_view.visibility = View.VISIBLE
+                        recycler_accommodations.visibility = View.GONE
+                        return
+                    }
+                    Toast.makeText(this@AccommodationsListActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
+            })
 
-            }
-
-            override fun onError(exception: Exception) {
-                Toast.makeText(this@AccommodationsListActivity, exception.message, Toast.LENGTH_LONG).show()
-            }
-        })
+        add_accommodation_fab.setOnClickListener { view ->
+            val newAcommodationIntent =
+                Intent(this@AccommodationsListActivity, NewAccommodationActivity::class.java)
+            newAcommodationIntent.putExtra("TRIP_ID", tripId)
+            newAcommodationIntent.putExtra("DESTINATION_ID", destinationId)
+            startActivityForResult(newAcommodationIntent, NEW_ACCOMMODATION_REQUEST)
+        }
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -101,19 +118,30 @@ class AccommodationsListActivity : AppCompatActivity() {
         builder.setPositiveButton(
             R.string.yes
         ) { dialog, _ ->
+            loading.visibility = View.VISIBLE
             accommodationService.deleteAccommodation(
                 tripId,
                 destinationId,
                 accommodations[position].id!!,
                 object : AccommodationService.SimpleServiceListener {
                     override fun onSuccess() {
-                        Toast.makeText(this@AccommodationsListActivity, R.string.accommodation_removed, Toast.LENGTH_SHORT).show()
+                        loading.visibility = View.GONE
+                        Toast.makeText(
+                            this@AccommodationsListActivity,
+                            R.string.accommodation_removed,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         accommodations.removeAt(position)
                         resetAdapter()
                     }
 
                     override fun onError(exception: Exception) {
-                        Toast.makeText(this@AccommodationsListActivity, R.string.accommodation_not_removed, Toast.LENGTH_SHORT).show()
+                        loading.visibility = View.GONE
+                        Toast.makeText(
+                            this@AccommodationsListActivity,
+                            R.string.accommodation_not_removed,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             )
@@ -146,20 +174,18 @@ class AccommodationsListActivity : AppCompatActivity() {
         if (requestCode == NEW_ACCOMMODATION_REQUEST) {
             // Make sure the request was successful
             if (resultCode == Activity.RESULT_OK) {
-                if(data!!.extras != null && data!!.extras.size() > 0) {
+                if (data!!.extras != null && data.extras.size() > 0) {
                     val newAccommodation = data!!.extras["EXTRA_NEW_ACCOMMODATION"] as Accommodation
                     if (newAccommodation != null) {
-//                        no_destinations.visibility = View.GONE
                         accommodations.add(newAccommodation)
                         accommodations.sortBy { d1 -> d1.startDate }
                         resetAdapter()
                     }
                 }
             }
-        }
-        else if (requestCode == EDIT_ACCOMMODATION_INTENT) {
+        } else if (requestCode == EDIT_ACCOMMODATION_INTENT) {
             if (resultCode == Activity.RESULT_OK) {
-                if(data!!.extras != null && data!!.extras.size() > 0) {
+                if (data!!.extras != null && data.extras.size() > 0) {
                     val editAccommodation = data!!.extras["ACCOMMODATION_EDIT"] as Accommodation
                     val position = data!!.extras["ACCOMMODATION_EDIT_DEST_POSITION"] as Int
                     if (editAccommodation != null) {
@@ -176,7 +202,13 @@ class AccommodationsListActivity : AppCompatActivity() {
         var preAdapter = recyclerView.adapter
         recyclerView.adapter = null
         recyclerView.adapter = preAdapter
+
+        if (accommodations == null || accommodations.size < 1) {
+            empty_view.visibility = View.VISIBLE
+            recycler_accommodations.visibility = View.GONE
+        } else {
+            empty_view.visibility = View.GONE
+            recycler_accommodations.visibility = View.VISIBLE
+        }
     }
-
-
 }

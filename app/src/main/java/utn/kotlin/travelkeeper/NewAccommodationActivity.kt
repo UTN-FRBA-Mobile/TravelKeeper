@@ -120,10 +120,12 @@ class NewAccommodationActivity : AppCompatActivity() {
 
     private fun setNewAccommodationButton() {
         new_accommodation_button_id.setOnClickListener { view ->
-            if(isValid()) {
-                val newAccommodation = Accommodation(null, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
+            if (isValid()) {
+                val newAccommodation = Accommodation(
+                    null, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
                     startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
-                    enter_accommodation_reservation_number.text.toString())
+                    enter_accommodation_reservation_number.text.toString()
+                )
                 enter_name_error.visibility = View.GONE
                 checkin_date_error.visibility = View.GONE
                 checkout_date_error.visibility = View.GONE
@@ -149,17 +151,17 @@ class NewAccommodationActivity : AppCompatActivity() {
             valid = false
         }
 
-        if(accommodation_checkin_date_selected == null || accommodation_checkin_date_selected.text.toString() == "" || accommodation_checkin_date_selected.text.toString() == "Seleccione una fecha") {
+        if (accommodation_checkin_date_selected == null || accommodation_checkin_date_selected.text.toString() == "" || accommodation_checkin_date_selected.text.toString() == "Seleccione una fecha") {
             checkin_date_error.visibility = View.VISIBLE
             valid = false
         }
 
-        if(accommodation_checkout_date_selected == null || accommodation_checkout_date_selected.text.toString() == "" || accommodation_checkout_date_selected.text.toString() == "Seleccione una fecha") {
+        if (accommodation_checkout_date_selected == null || accommodation_checkout_date_selected.text.toString() == "" || accommodation_checkout_date_selected.text.toString() == "Seleccione una fecha") {
             checkout_date_error.visibility = View.VISIBLE
             valid = false
         }
 
-        if(startDate != null && endDate != null && endDate!! < startDate!!) {
+        if (startDate != null && endDate != null && endDate!! < startDate!!) {
             checkout_date_error.setText(R.string.end_date_before_start_date)
             checkout_date_error.visibility = View.VISIBLE
             valid = false
@@ -169,13 +171,16 @@ class NewAccommodationActivity : AppCompatActivity() {
     }
 
     private fun addAccommodationToFirebase(accommodation: Accommodation) {
+        loading.visibility = View.VISIBLE
         AccommodationService().addAccommodationToDestination(tripId, destinationId, accommodation,
             object : AccommodationService.CreateAccommodationServiceListener {
                 override fun onSuccess(idCreated: String) {
+                    loading.visibility = View.GONE
                     Toast.makeText(this@NewAccommodationActivity, "Alojamiento agregado", Toast.LENGTH_LONG).show()
                     accommodation.id = idCreated
 
-                    val accommodationIntent = Intent(this@NewAccommodationActivity, AccommodationsListActivity::class.java)
+                    val accommodationIntent =
+                        Intent(this@NewAccommodationActivity, AccommodationsListActivity::class.java)
                     accommodationIntent.putExtra("EXTRA_NEW_ACCOMMODATION", accommodation)
                     setResult(Activity.RESULT_OK, accommodationIntent)
 
@@ -183,6 +188,7 @@ class NewAccommodationActivity : AppCompatActivity() {
                 }
 
                 override fun onError(exception: Exception) {
+                    loading.visibility = View.GONE
                     Toast.makeText(this@NewAccommodationActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
             })
