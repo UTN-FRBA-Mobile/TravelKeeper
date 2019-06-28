@@ -3,6 +3,7 @@ package utn.kotlin.travelkeeper.adapters;
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,8 @@ class DocumentationAdapter(
         holder.view.documentation_file_type.text = documentInfo.type
 
         holder.view.findViewById<TextView>(R.id.documentation_file_name).setOnClickListener {
+            val builder = StrictMode.VmPolicy.Builder()
+            StrictMode.setVmPolicy(builder.build())
             val uri = fileStorageService.getFileUri(tripId, documentInfo.fileName)
             val mimeTypeMap = MimeTypeMap.getSingleton()
             val openFileIntent = Intent(Intent.ACTION_VIEW)

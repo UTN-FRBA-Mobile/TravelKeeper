@@ -37,7 +37,7 @@ class FileStorageService {
     }
 
     fun getFileUri(tripId: String, fileName: String): Uri {
-        return Uri.parse("$basePath/$tripId/$fileName")
+        return Uri.parse("file://$basePath/$tripId/$fileName")
     }
     fun deleteFileFromLocalStorage(tripId: String, fileName: String){
         val fileDelete = File(getFileUri(tripId, fileName).path)

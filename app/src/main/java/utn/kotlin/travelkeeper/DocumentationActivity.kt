@@ -28,6 +28,7 @@ class DocumentationActivity : AppCompatActivity() {
     val PICK_FILE = 1
     val REQUEST_IMAGE_CAPTURE = 2
     var pendingShowRecycler = false
+    var cameraPhotoPath = ""
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: DocumentationAdapter
@@ -143,12 +144,11 @@ class DocumentationActivity : AppCompatActivity() {
                 }
             }
         }
-        if (requestCode != REQUEST_IMAGE_CAPTURE) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
-                val outFilePath = data!!.getStringExtra(MediaStore.EXTRA_OUTPUT)
-                val fileName = "testFileName"
+                val fileName = "testPhoto.jpg"
                 FileStorageService().uploadFile(
-                    Uri.parse(outFilePath),
+                    Uri.parse(cameraPhotoPath),
                     tripId,
                     fileName
                 ).addOnSuccessListener {
@@ -207,10 +207,7 @@ class DocumentationActivity : AppCompatActivity() {
             takePictureIntent.resolveActivity(packageManager)?.also {
                 val builder = StrictMode.VmPolicy.Builder()
                 StrictMode.setVmPolicy(builder.build())
-                val photoUri = FileStorageService().getFileUri(tripId, "testPhoto.jpg").path
-                val imageFile = File(photoUri)
-                val uriFile = Uri.fromFile(imageFile)
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriFile)
+                cameraPhotoPath = FileStorageService().getFileUri(tripId, "testPhoto.jpg").toString()
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             }
         }
