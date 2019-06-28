@@ -1,15 +1,20 @@
 package utn.kotlin.travelkeeper.models
 
 import com.google.firebase.firestore.DocumentSnapshot
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewDestination(
+class Destination(
     var destination: String? = null,
     var startDate: Date? = null,
     var endDate: Date? = null,
     var id: String? = null
-) {
+) : Serializable, TripElement {
+
+    override fun getType(): Int {
+        return TripElementType.DESTINATION.type
+    }
 
     fun createMapFromObject(dateFormatter: SimpleDateFormat): HashMap<String, String> {
         val returnMap = HashMap<String, String>()

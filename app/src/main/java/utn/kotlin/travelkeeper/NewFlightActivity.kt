@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_view_flight.*
+import utn.kotlin.travelkeeper.DBServices.FlightService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.models.Flight
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import utn.kotlin.travelkeeper.utils.addHourAndMinutes
@@ -90,15 +92,25 @@ class NewFlightActivity : AppCompatActivity() {
     private fun setDoneButton() {
         flight_done_button.setOnClickListener { v ->
             if (isDataComplete()) {
-                val flight = TripTimeLineInfo(
-                    name = flight_airline_edit.text.toString(),
-                    type = "Vuelo",
-                    start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!).time,
-                    end_date = startDate!!
+//                val flight = TripTimeLineInfo(
+//                    name = flight_airline_edit.text.toString(),
+//                    type = "Vuelo",
+//                    start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!).time,
+//                    end_date = startDate!!
+//                )
+//
+//                addFlightToTrip(flight)
+
+                val flight = Flight(
+                    airline = flight_airline_edit.text.toString(),
+                    flightNumber = flight_number_edit.text.toString(),
+                    departureAirport = flight_departure_airport_edit.text.toString(),
+                    arrivalAirport = flight_arrival_airport_edit.text.toString(),
+                    takeOffDate = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!),
+                    reservationNumber = flight_reservation_number_edit.text.toString()
                 )
 
-                addFlightToTrip(flight)
-
+                addFlight(flight)
             }
         }
     }
@@ -210,8 +222,35 @@ class NewFlightActivity : AppCompatActivity() {
         return false
     }
 
+    private fun addFlight(flight: Flight) {
+        FlightService().add(flight, trip.id!!, object : FlightService.AddFlightListener {
+            override fun onSuccess(flightId: String) {
 
-    private fun addFlightToTrip(flight: TripTimeLineInfo) {
+                Toast.makeText(this@NewFlightActivity, "Vuelo agregado", Toast.LENGTH_LONG).show()
+
+                val tripTimeLineInfo = TripTimeLineInfo(
+                    name = flight_airline_edit.text.toString(),
+                    type = "Vuelo",
+                    start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!),
+                    end_date = startDate!!
+                )
+
+                val intent = Intent(this@NewFlightActivity, TripTimeLineActivity::class.java)
+                intent.putExtra("EXTRA_NEW_DEST", tripTimeLineInfo) //todo: borrar y pasar el flight acá
+                setResult(Activity.RESULT_OK, intent)
+
+                finish()
+            }
+
+            override fun onError(exception: Exception) {
+                Toast.makeText(this@NewFlightActivity, exception.message, Toast.LENGTH_LONG).show()
+            }
+
+        })
+    }
+
+
+    private fun addFlightToTrip(flight: TripTimeLineInfo) { //todo: borrar
         viajesService.addDestinationToTrip(trip.id!!, flight,
             object : ViajesService.CreateTripServiceListener {
                 override fun onSuccess(idCreated: String) {

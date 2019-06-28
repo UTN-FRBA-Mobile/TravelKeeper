@@ -43,4 +43,4 @@ data class Accommodation(
             )
         }
     }
-} //todo: ver el tema del archivo
+}

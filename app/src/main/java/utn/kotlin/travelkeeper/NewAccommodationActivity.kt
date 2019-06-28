@@ -2,20 +2,17 @@ package utn.kotlin.travelkeeper
 
 import `in`.madapps.placesautocomplete.PlaceAPI
 import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
-import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
 import `in`.madapps.placesautocomplete.model.Place
-import `in`.madapps.placesautocomplete.model.PlaceDetails
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
@@ -113,7 +110,7 @@ class NewAccommodationActivity : AppCompatActivity() {
 
     private fun getDate(date: Date): String {
         val myFormat = "dd/MM/yyyy" // mention the format you need
-        val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
+        val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
 
         return sdf.format(date)
     }

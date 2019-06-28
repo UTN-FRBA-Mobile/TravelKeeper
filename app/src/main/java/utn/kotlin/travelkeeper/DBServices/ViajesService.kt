@@ -3,11 +3,7 @@ package utn.kotlin.travelkeeper.DBServices
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import utn.kotlin.travelkeeper.models.DocumentationInfo
-import utn.kotlin.travelkeeper.models.Hotel
-import utn.kotlin.travelkeeper.models.NewDestination
-import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.models.TripTimeLineInfo
+import utn.kotlin.travelkeeper.models.*
 import utn.kotlin.travelkeeper.storage.FileStorageService
 import java.text.SimpleDateFormat
 import java.util.*
@@ -86,7 +82,7 @@ class ViajesService {
         db.collection(TABLA_VIAJES).document(tripId)
             .collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS)
             .get().addOnSuccessListener {
-                var documentation: MutableList<DocumentationInfo> = mutableListOf<DocumentationInfo>()
+                var documentation: MutableList<DocumentationInfo> = mutableListOf()
                 it.forEach {
                     val documentInfo = DocumentationInfo.createObjectFromSnapshot(it.data, it.id)
                     FileStorageService().getFile(tripId, documentInfo.fileName)
@@ -170,7 +166,7 @@ class ViajesService {
             }
     }
 
-    fun addDestinationToTrip(tripId: String, dest: NewDestination, listener: CreateTripServiceListener) {
+    fun addDestinationToTrip(tripId: String, dest: Destination, listener: CreateTripServiceListener) {
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
         val newDestToAdd = dest.createMapFromObject(dateFormatter)

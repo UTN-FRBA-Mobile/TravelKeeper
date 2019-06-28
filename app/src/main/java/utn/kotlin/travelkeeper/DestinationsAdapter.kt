@@ -10,13 +10,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import utn.kotlin.travelkeeper.models.NewDestination
+import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.utils.DatePicker
 import utn.kotlin.travelkeeper.utils.dateToString
 import java.util.*
 
 class DestinationsAdapter : RecyclerView.Adapter<NewDestinationViewHolder>() {
-    val data: MutableList<NewDestination> = mutableListOf()
+    val data: MutableList<Destination> = mutableListOf()
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewDestinationViewHolder {

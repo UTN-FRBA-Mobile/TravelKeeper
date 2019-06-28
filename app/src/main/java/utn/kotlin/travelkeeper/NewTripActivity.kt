@@ -15,13 +15,13 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.activity_new_trip.*
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
-import utn.kotlin.travelkeeper.models.NewDestination
+import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.models.Trip
-import java.util.*
-import kotlinx.android.synthetic.main.activity_new_trip.*
 import utn.kotlin.travelkeeper.utils.Keyboard
+import java.util.*
 
 
 class NewTripActivity : AppCompatActivity() {
@@ -56,7 +56,7 @@ class NewTripActivity : AppCompatActivity() {
 
         val addDestinationButton = findViewById<Button>(R.id.add_destination_button)
         addDestinationButton.setOnClickListener {
-            destinationsAdapter.data.add(NewDestination())
+            destinationsAdapter.data.add(Destination())
             destinationsAdapter.notifyDataSetChanged()
             Keyboard.hide(it, this)
         }
@@ -122,7 +122,7 @@ class NewTripActivity : AppCompatActivity() {
 
     }
 
-    private fun addDestination(tripId: String, destination: NewDestination) {
+    private fun addDestination(tripId: String, destination: Destination) {
         viajesService.addDestinationToTrip(
             tripId, destination,
             object : ViajesService.CreateTripServiceListener {
