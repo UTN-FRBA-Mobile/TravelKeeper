@@ -54,17 +54,15 @@ class DocumentationAdapter(
                 Toast.makeText(context, "No handler for this type of file.", Toast.LENGTH_LONG).show();
             }
         }
-        holder.view.findViewById<ImageView>(R.id.delete_document_btn).setOnClickListener{
-            fileStorageService.deleteFile(tripId, documentInfo.fileName).addOnSuccessListener {
+        holder.view.findViewById<ImageView>(R.id.delete_document_btn).setOnClickListener {
+            fileStorageService.deleteFile(tripId, documentInfo.fileName).addOnCompleteListener {
                 ViajesService().deleteDocumentFromTrip(tripId, documentInfo).addOnSuccessListener {
                     fileStorageService.deleteFileFromLocalStorage(tripId, documentInfo.fileName)
                     documentationList.removeAt(position)
                     this.notifyDataSetChanged()
-                    Toast.makeText(context, "Archivo borrado", Toast.LENGTH_LONG).show();}
-            }
-                .addOnFailureListener{
-                    Toast.makeText(context, "Error borrando archivo", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Archivo borrado", Toast.LENGTH_LONG).show();
                 }
+            }
         }
 
     }

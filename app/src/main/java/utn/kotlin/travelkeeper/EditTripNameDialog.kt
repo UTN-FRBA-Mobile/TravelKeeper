@@ -5,11 +5,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import android.widget.EditText
-import kotlinx.android.synthetic.main.edit_trip_name_dialog.*
-import utn.kotlin.travelkeeper.R
-import utn.kotlin.travelkeeper.TripDashboardActivity
+import kotlinx.android.synthetic.main.input_photo_title_dialog.*
 
 class EditTripNameDialog : androidx.fragment.app.DialogFragment() {
 
@@ -38,7 +35,7 @@ class EditTripNameDialog : androidx.fragment.app.DialogFragment() {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
             val input = EditText(it)
-            builder.setView(inflater.inflate(R.layout.edit_trip_name_dialog, null))
+            builder.setView(inflater.inflate(R.layout.input_photo_title_dialog, null))
                 .setPositiveButton("OK")
                     { dialog, id ->
                         val text = getDialog().editText.text.toString()
