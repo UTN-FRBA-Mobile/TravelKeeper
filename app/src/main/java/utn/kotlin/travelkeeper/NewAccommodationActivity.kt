@@ -1,8 +1,8 @@
 package utn.kotlin.travelkeeper
 
-import `in`.madapps.placesautocomplete.PlaceAPI
-import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
-import `in`.madapps.placesautocomplete.model.Place
+//import `in`.madapps.placesautocomplete.PlaceAPI
+//import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
+//import `in`.madapps.placesautocomplete.model.Place
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -13,6 +13,10 @@ import android.widget.AdapterView
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.common.api.Status
+import com.google.android.libraries.places.compat.Place
+import com.google.android.libraries.places.compat.ui.PlaceAutocompleteFragment
+import com.google.android.libraries.places.compat.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_new_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
@@ -20,7 +24,7 @@ import utn.kotlin.travelkeeper.models.Address
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewAccommodationActivity : AppCompatActivity() {
+class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     private var cal = Calendar.getInstance()
     private var startDate: Date? = null
     private var endDate: Date? = null
@@ -28,7 +32,7 @@ class NewAccommodationActivity : AppCompatActivity() {
     private lateinit var tripId: String
     private lateinit var addressSelected: Address
 
-    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@NewAccommodationActivity)
+//    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@NewAccommodationActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,7 +123,7 @@ class NewAccommodationActivity : AppCompatActivity() {
         new_accommodation_button_id.setOnClickListener { view ->
             if (isValid()) {
                 val newAccommodation = Accommodation(
-                    null, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
+                    null, enter_accommodation_name.text.toString(), "",// enter_accommodation_address.text.toString(),
                     startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
                     enter_accommodation_reservation_number.text.toString()
                 )
@@ -132,13 +136,27 @@ class NewAccommodationActivity : AppCompatActivity() {
     }
 
     private fun setSearchAddresses() {
-        enter_accommodation_address.setAdapter(PlacesAutoCompleteAdapter(this, placesApi))
-        enter_accommodation_address.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val place = parent.getItemAtPosition(position) as Place
-                enter_accommodation_address.setText(place.description)
-            }
+//        enter_accommodation_address.setAdapter(PlacesAutoCompleteAdapter(this, placesApi))
+//        enter_accommodation_address.onItemClickListener =
+//            AdapterView.OnItemClickListener { parent, _, position, _ ->
+//                val place = parent.getItemAtPosition(position) as Place
+//                enter_accommodation_address.setText(place.description)
+//            }
+
+        val autocompleteFragment = fragmentManager.findFragmentById(R.id.address_autocomplete_fragment)
+                as PlaceAutocompleteFragment
+        autocompleteFragment.setOnPlaceSelectedListener(this)
     }
+
+    override fun onPlaceSelected(p0: Place?) {
+
+        Toast.makeText(applicationContext,""+p0!!.name+p0!!.latLng,Toast.LENGTH_LONG).show();
+    }
+
+    override fun onError(status: Status) {
+        Toast.makeText(applicationContext,""+status.toString(),Toast.LENGTH_LONG).show();
+    }
+
 
     private fun isValid(): Boolean {
         var valid = true
