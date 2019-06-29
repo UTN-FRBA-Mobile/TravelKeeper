@@ -123,7 +123,7 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
         new_accommodation_button_id.setOnClickListener { view ->
             if (isValid()) {
                 val newAccommodation = Accommodation(
-                    null, enter_accommodation_name.text.toString(), "",// enter_accommodation_address.text.toString(),
+                    null, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
                     startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
                     enter_accommodation_reservation_number.text.toString()
                 )
@@ -136,27 +136,20 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     }
 
     private fun setSearchAddresses() {
-//        enter_accommodation_address.setAdapter(PlacesAutoCompleteAdapter(this, placesApi))
-//        enter_accommodation_address.onItemClickListener =
-//            AdapterView.OnItemClickListener { parent, _, position, _ ->
-//                val place = parent.getItemAtPosition(position) as Place
-//                enter_accommodation_address.setText(place.description)
-//            }
-
         val autocompleteFragment = fragmentManager.findFragmentById(R.id.address_autocomplete_fragment)
                 as PlaceAutocompleteFragment
         autocompleteFragment.setOnPlaceSelectedListener(this)
     }
 
     override fun onPlaceSelected(p0: Place?) {
-
-        Toast.makeText(applicationContext,""+p0!!.name+p0!!.latLng,Toast.LENGTH_LONG).show();
+        enter_accommodation_name.setText(p0!!.name)
+        var latlng = p0!!.latLng
+        enter_accommodation_address.setText( p0!!.address)
     }
 
     override fun onError(status: Status) {
         Toast.makeText(applicationContext,""+status.toString(),Toast.LENGTH_LONG).show();
     }
-
 
     private fun isValid(): Boolean {
         var valid = true
