@@ -11,10 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_view_destination.*
 import kotlinx.android.synthetic.main.destination_view.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import utn.kotlin.travelkeeper.utils.DatePicker
-import utn.kotlin.travelkeeper.utils.dateToString
+import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
 
 class NewDestinationActivity : AppCompatActivity() {
@@ -30,7 +30,6 @@ class NewDestinationActivity : AppCompatActivity() {
         viajesService = ServiceProvider.viajesService
 
         trip = intent.extras["TRIP"] as Trip
-//        cal.time = trip.startDate
 
         setBackArrow()
         setNewDestinationButton()
@@ -86,7 +85,7 @@ class NewDestinationActivity : AppCompatActivity() {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            selectedDate.setText(calendar.time.dateToString())
+            selectedDate.setText(calendar.time.toStringDateOnly())
 
             if (isEndDate) endDate = calendar.time else startDate = calendar.time
         }
@@ -95,11 +94,10 @@ class NewDestinationActivity : AppCompatActivity() {
     private fun setNewDestinationButton() {
         done_destination_button_id.setOnClickListener { view ->
 //            if (isValid()) {
-                val newDest = TripTimeLineInfo(
+            val newDest = Destination(
                     name = destination_edit.text.toString(),
-                    type = "Lugar",
-                    start_date = startDate!!,
-                    end_date = endDate!!
+                startDate = startDate!!,
+                endDate = endDate!!
                 )
 //                enter_name_error.visibility = View.GONE
 //                start_date_error.visibility = View.GONE
@@ -136,7 +134,7 @@ class NewDestinationActivity : AppCompatActivity() {
 //        return valid
 //    }
 
-    private fun addDestinationToFirebase(destination: TripTimeLineInfo) {
+    private fun addDestinationToFirebase(destination: Destination) {
         viajesService.addDestinationToTrip(trip.id!!, destination,
             object : ViajesService.CreateTripServiceListener {
                 override fun onSuccess(idCreated: String) {

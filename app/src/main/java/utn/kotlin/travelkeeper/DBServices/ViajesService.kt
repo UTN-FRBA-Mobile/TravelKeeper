@@ -3,7 +3,10 @@ package utn.kotlin.travelkeeper.DBServices
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import utn.kotlin.travelkeeper.models.*
+import utn.kotlin.travelkeeper.models.Destination
+import utn.kotlin.travelkeeper.models.DocumentationInfo
+import utn.kotlin.travelkeeper.models.Hotel
+import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.storage.FileStorageService
 import java.text.SimpleDateFormat
 import java.util.*
@@ -122,12 +125,12 @@ class ViajesService {
             .collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS).document(documentationInfo.id).delete()
     }
 
-    interface GetDestinationsViajeServiceListener {
-        fun onSuccess(destinations: MutableList<TripTimeLineInfo>)
+    interface GetDestinationsListener {
+        fun onSuccess(destinations: MutableList<Destination>)
         fun onError(exception: Exception)
     }
 
-    fun getDestinationsFromTrip(tripId: String, listener: GetDestinationsViajeServiceListener) {
+    fun getDestinationsFromTrip(tripId: String, listener: GetDestinationsListener) {
         val db = FirebaseFirestore.getInstance()
 
         val reference = db.collection(TABLA_VIAJES).document(tripId)
@@ -135,31 +138,15 @@ class ViajesService {
             .orderBy("start_date", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val destsList = mutableListOf<TripTimeLineInfo>()
+                val destsList = mutableListOf<Destination>()
                 val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
                 querySnapshot.documents.forEach {
-                    val destInfo = TripTimeLineInfo.createObjectFromSnapshot(it, dateParser, it.id)
+                    val destInfo = Destination.createObjectFromSnapshot(it, dateParser, it.id)
 
                     destsList.add(destInfo)
                 }
 
                 listener.onSuccess(destsList)
-            }
-            .addOnFailureListener { exception ->
-                listener.onError(exception)
-            }
-    }
-
-    fun addDestinationToTrip(tripId: String, dest: TripTimeLineInfo, listener: CreateTripServiceListener) {
-        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
-
-        val newDestToAdd = dest.createMapFromObject(dateFormatter)
-
-        val db = FirebaseFirestore.getInstance()
-        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DESTINOS)
-            .add(newDestToAdd)
-            .addOnSuccessListener { documentReference ->
-                listener.onSuccess(documentReference.id)
             }
             .addOnFailureListener { exception ->
                 listener.onError(exception)
@@ -182,7 +169,7 @@ class ViajesService {
             }
     }
 
-    fun editDestinationInTrip(tripId: String, dest: TripTimeLineInfo, listener: CreateTripServiceListener) {
+    fun editDestinationInTrip(tripId: String, dest: Destination, listener: CreateTripServiceListener) {
         val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
 
         val destToEdit = dest.createMapFromObject(dateFormatter)

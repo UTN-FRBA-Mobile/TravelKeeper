@@ -2,9 +2,7 @@ package utn.kotlin.travelkeeper.DBServices
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
 import utn.kotlin.travelkeeper.models.Accommodation
-import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import java.text.SimpleDateFormat
 import java.util.*
 

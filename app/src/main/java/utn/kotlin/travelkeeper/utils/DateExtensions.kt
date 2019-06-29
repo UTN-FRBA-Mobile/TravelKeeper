@@ -9,9 +9,21 @@ val DATE_AND_HOUR_PATTERN = "dd/MM/yyyy HH:mm:ss"
 fun dateAndHourFormat() = SimpleDateFormat(DATE_AND_HOUR_PATTERN, Locale.getDefault())
 fun dateOnlyFormat() = SimpleDateFormat(DATE_ONLY_PATTERN, Locale.getDefault())
 
-fun Date.dateToString(): String {
+fun Date.toStringDateOnly(): String {
     val sdf = SimpleDateFormat(DATE_ONLY_PATTERN, Locale("es", "ES")) //probar con country es_AR
     return sdf.format(this)
+}
+
+fun Date.getHour(): Int {
+    val calendarDate = Calendar.getInstance()
+    calendarDate.time = this
+    return calendarDate.get(Calendar.HOUR_OF_DAY)
+}
+
+fun Date.getMinute(): Int {
+    val calendarDate = Calendar.getInstance()
+    calendarDate.time = this
+    return calendarDate.get(Calendar.MINUTE)
 }
 
 fun Date.createCalendar(): Calendar {

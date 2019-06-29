@@ -3,67 +3,65 @@ package utn.kotlin.travelkeeper.adapters
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.github.vipulasri.timelineview.TimelineView
-import kotlinx.android.synthetic.main.view_trip_time_line.view.*
-import utn.kotlin.travelkeeper.R.*
+import kotlinx.android.synthetic.main.trip_timeline_view.view.*
+import utn.kotlin.travelkeeper.R.drawable
+import utn.kotlin.travelkeeper.R.layout
 import utn.kotlin.travelkeeper.TripDashboardActivity
-import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.models.TripTimeLineInfo
-import java.text.SimpleDateFormat
-import java.util.*
+import utn.kotlin.travelkeeper.models.*
+import utn.kotlin.travelkeeper.utils.toStringDateOnly
 
-class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo>, private val trip: Trip) :
+class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, private val trip: Trip) :
     androidx.recyclerview.widget.RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
+
     private lateinit var context: Context
 
-    // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): TripTimeLineAdapter.TripTimeLineViewHolder {
-        // create a new view
-        val view = LayoutInflater.from(parent.context)
-            .inflate(layout.view_trip_time_line, parent, false)
-        // set the view's size, margins, paddings and layout parameters
+        val view = LayoutInflater.from(parent.context).inflate(layout.trip_timeline_view, parent, false)
         context = parent.context
 
         return TripTimeLineViewHolder(view, viewType)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: TripTimeLineViewHolder, position: Int) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.view.trip_info_date.text =
-            getDate(destinations[position].start_date) + " - " + getDate(destinations[position].end_date)
-        holder.view.trip_info_detail.text = destinations[position].name
+        when (tripElements[position].getType()) {
+            TripElementType.FLIGHT -> {
+                val flight = tripElements[position] as Flight
+                holder.view.trip_info_date.text = flight.takeOffDate.toStringDateOnly()
+                holder.view.trip_info_detail.text = flight.departureAirport + " - " + flight.arrivalAirport
+                holder.view.trip_timeline.marker = ContextCompat.getDrawable(context, drawable.ic_airplane)
+            }
 
-        if (destinations[position].type == "Vuelo") {
-            holder.view.trip_timeline.marker = ContextCompat.getDrawable(context, drawable.ic_airplane)
-        }
-
-        holder.view.setOnClickListener {
-            if (destinations[position].type == "Lugar")
-                showDashboard(position)
+            TripElementType.DESTINATION -> {
+                val destination = tripElements[position] as Destination
+                holder.view.trip_info_date.text =
+                    destination.startDate?.toStringDateOnly() + " - " + destination.endDate?.toStringDateOnly()
+                holder.view.trip_info_detail.text = destination.name
+                holder.view.setOnClickListener {
+                    showDashboard(position)
+                }
+            }
         }
 
         holder.view.tag = position
 
-        var activity = context as Activity
+        val activity = context as Activity
         activity.registerForContextMenu(holder.view)
     }
-
 
 
     private fun showDashboard(position: Int) {
         val intent = Intent(context, TripDashboardActivity::class.java).apply {
             putExtra(
                 "DESTINATION_ID",
-                destinations[position].id
+                (tripElements[position] as Destination).id
             )
             putExtra(
                 "TRIP_ID",
@@ -74,15 +72,7 @@ class TripTimeLineAdapter(private val destinations: MutableList<TripTimeLineInfo
         context.startActivity(intent)
     }
 
-    private fun getDate(date: Date): String {
-        val myFormat = "dd/MM/yyyy" // mention the format you need
-        val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
-
-        return sdf.format(date)
-    }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = destinations.size
+    override fun getItemCount() = tripElements.size
 
     override fun getItemViewType(position: Int): Int {
         return TimelineView.getTimeLineViewType(position, itemCount)

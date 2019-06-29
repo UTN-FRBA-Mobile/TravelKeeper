@@ -12,10 +12,10 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_view_destination.*
 import kotlinx.android.synthetic.main.destination_view.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import utn.kotlin.travelkeeper.utils.createCalendar
-import utn.kotlin.travelkeeper.utils.dateToString
+import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
 
 class EditDestinationActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class EditDestinationActivity : AppCompatActivity() {
     private lateinit var startDate: Date
     private lateinit var endDate: Date
 
-    private lateinit var destination: TripTimeLineInfo
+    private lateinit var destination: Destination
     private lateinit var trip: Trip
     private var position: Int = 0
 
@@ -35,7 +35,7 @@ class EditDestinationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_destination)
 
-        destination = intent.extras["DEST_EDIT"] as TripTimeLineInfo
+        destination = intent.extras["DEST_EDIT"] as Destination
         trip = intent.extras["TRIP_DEST_EDIT"] as Trip
         position = intent.extras["EDIT_DEST_POSITION"] as Int
 
@@ -46,9 +46,9 @@ class EditDestinationActivity : AppCompatActivity() {
     }
 
     private fun setPreviousData() {
-        previousDestinationDescription = destination.name
-        previousStartDate = destination.start_date
-        previousEndDate = destination.end_date
+        previousDestinationDescription = destination.name!!
+        previousStartDate = destination.startDate!!
+        previousEndDate = destination.endDate!!
     }
 
     private fun configureActionBar() {
@@ -59,14 +59,14 @@ class EditDestinationActivity : AppCompatActivity() {
 
     private fun setDestinationData() {
         destination_edit.setText(destination.name)
-        startDate = destination.start_date
-        endDate = destination.end_date
+        startDate = destination.startDate!!
+        endDate = destination.endDate!!
         setStartDate()
         setEndDate()
     }
 
     private fun setStartDate() {
-        startDate.also { from_date_edit.setText(startDate.dateToString()) }
+        startDate.also { from_date_edit.setText(startDate.toStringDateOnly()) }
 
         from_date_edit.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -76,7 +76,7 @@ class EditDestinationActivity : AppCompatActivity() {
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, monthOfYear)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    (it as EditText).setText(calendar.time.dateToString())
+                    (it as EditText).setText(calendar.time.toStringDateOnly())
 
                     startDate = calendar.time
                 },
@@ -94,7 +94,7 @@ class EditDestinationActivity : AppCompatActivity() {
     }
 
     private fun setEndDate() {
-        endDate.also { to_date_edit.setText(endDate.dateToString()) }
+        endDate.also { to_date_edit.setText(endDate.toStringDateOnly()) }
 
         to_date_edit.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -104,7 +104,7 @@ class EditDestinationActivity : AppCompatActivity() {
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, monthOfYear)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    (it as EditText).setText(calendar.time.dateToString())
+                    (it as EditText).setText(calendar.time.toStringDateOnly())
 
                     endDate = calendar.time
                 },
@@ -147,12 +147,11 @@ class EditDestinationActivity : AppCompatActivity() {
     private fun setEditDestinationButton() {
         done_destination_button_id.setOnClickListener { view ->
             if (dataIsValid()) {
-                val editDest = TripTimeLineInfo(
-                    destination.id,
+                val editDest = Destination(
                     destination_edit.text.toString(),
-                    "Lugar",
                     startDate,
-                    endDate
+                    endDate,
+                    destination.id
                 )
 
                 editDestinationInFirebase(editDest)
@@ -175,7 +174,7 @@ class EditDestinationActivity : AppCompatActivity() {
         return true
     }
 
-    private fun editDestinationInFirebase(dest: TripTimeLineInfo) {
+    private fun editDestinationInFirebase(dest: Destination) {
         ViajesService().editDestinationInTrip(trip.id!!, dest,
             object : ViajesService.CreateTripServiceListener {
                 override fun onSuccess(idCreated: String) {

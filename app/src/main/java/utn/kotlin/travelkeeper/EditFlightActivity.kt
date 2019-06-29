@@ -11,11 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_view_flight.*
-import utn.kotlin.travelkeeper.DBServices.ViajesService
+import utn.kotlin.travelkeeper.DBServices.FlightService
+import utn.kotlin.travelkeeper.models.Flight
 import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import utn.kotlin.travelkeeper.utils.createCalendar
-import utn.kotlin.travelkeeper.utils.dateToString
+import utn.kotlin.travelkeeper.utils.getHour
+import utn.kotlin.travelkeeper.utils.getMinute
+import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
 
 class EditFlightActivity : AppCompatActivity() {
@@ -25,7 +27,7 @@ class EditFlightActivity : AppCompatActivity() {
     private lateinit var previousDepartureAirport: String
     private lateinit var previousArrivalAirport: String
     private lateinit var previousStartDate: Date
-    private lateinit var previousReservationNumber: String
+    private var previousReservationNumber: String? = null
     private var previousHour: Int = 0
     private var previousMinutes: Int = 0
 
@@ -33,7 +35,7 @@ class EditFlightActivity : AppCompatActivity() {
     private var hourOfFlight: Int = 0
     private var minuteOfFlight: Int = 0
 
-    private lateinit var destination: TripTimeLineInfo
+    private lateinit var flight: Flight
     private lateinit var trip: Trip
     private var position: Int = 0
 
@@ -41,9 +43,9 @@ class EditFlightActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_flight)
 
-        destination = intent.extras["DEST_EDIT"] as TripTimeLineInfo
+        flight = intent.extras["FLIGHT_EDIT"] as Flight
         trip = intent.extras["TRIP_DEST_EDIT"] as Trip
-        position = intent.extras["EDIT_DEST_POSITION"] as Int
+        position = intent.extras["EDIT_FLIGHT_POSITION"] as Int
 
         configureActionBar()
         setPreviousData()
@@ -52,15 +54,13 @@ class EditFlightActivity : AppCompatActivity() {
     }
 
     private fun setPreviousData() {
-        previousAirline = destination.name
-        previousStartDate = destination.start_date
+        previousAirline = flight.airline
+        previousStartDate = flight.takeOffDate
 
-        previousFlightNumber = "Prueba" //todo: cambiar
-        previousDepartureAirport = "Prueba"
-        previousArrivalAirport = "Prueba"
-        previousReservationNumber = "Prueba"
-        previousHour = 5
-        previousMinutes = 5
+        previousFlightNumber = flight.flightNumber
+        previousDepartureAirport = flight.departureAirport
+        previousArrivalAirport = flight.arrivalAirport
+        previousReservationNumber = flight.reservationNumber
     }
 
     private fun configureActionBar() {
@@ -82,10 +82,8 @@ class EditFlightActivity : AppCompatActivity() {
     }
 
     private fun setTimePicker() {
-        //todo: ver como sacar la hora y minuti inicial desde el stardate
-
-        hourOfFlight = previousHour
-        minuteOfFlight = previousMinutes
+        hourOfFlight = previousStartDate.getHour() //todo: revisar si saca bien la hora
+        minuteOfFlight = previousStartDate.getMinute()
 
         val minutoFormateado = if (minuteOfFlight < 10) "0$minuteOfFlight" else "$minuteOfFlight"
         val horaFormateada = "$hourOfFlight:$minutoFormateado"
@@ -112,7 +110,7 @@ class EditFlightActivity : AppCompatActivity() {
     }
 
     private fun setDatePicker() {
-        startDate.also { flight_takeoff_date.setText(startDate.dateToString()) }
+        startDate.also { flight_takeoff_date.setText(startDate.toStringDateOnly()) }
 
         flight_takeoff_date.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -122,7 +120,7 @@ class EditFlightActivity : AppCompatActivity() {
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, monthOfYear)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    (it as EditText).setText(calendar.time.dateToString())
+                    (it as EditText).setText(calendar.time.toStringDateOnly())
 
                     startDate = calendar.time
                 },
@@ -165,8 +163,6 @@ class EditFlightActivity : AppCompatActivity() {
             return true
         if (previousReservationNumber != flight_reservation_number_edit.text.toString())
             return true
-//        if(previousHour != TODO validar hora y minutos si cambia
-//        previousMinutes = 5
 
         return false
     }
@@ -174,15 +170,17 @@ class EditFlightActivity : AppCompatActivity() {
     private fun setEditButton() {
         flight_done_button.setOnClickListener { view ->
             if (isDataComplete()) {
-                val editDest = TripTimeLineInfo(
-                    destination.id,
+                val flight = Flight(
+                    flight.id,
                     flight_airline_edit.text.toString(),
-                    "Vuelo",
+                    flight_number_edit.text.toString(),
+                    flight_departure_airport_edit.text.toString(),
+                    flight_arrival_airport_edit.text.toString(),
                     startDate,
-                    startDate
+                    flight_reservation_number_edit.text.toString()
                 )
 
-                editDestinationInFirebase(editDest)
+                editFlightInFirebase(flight)
             }
 
         }
@@ -215,14 +213,15 @@ class EditFlightActivity : AppCompatActivity() {
         return true
     }
 
-    private fun editDestinationInFirebase(dest: TripTimeLineInfo) {
-        ViajesService().editDestinationInTrip(trip.id!!, dest,
-            object : ViajesService.CreateTripServiceListener {
-                override fun onSuccess(idCreated: String) {
+    private fun editFlightInFirebase(flight: Flight) {
+        FlightService().edit(
+            trip.id!!, flight,
+            object : FlightService.EditFlightListener {
+                override fun onSuccess() {
                     Toast.makeText(this@EditFlightActivity, "Vuelo editado", Toast.LENGTH_LONG).show()
                     val intent = Intent(this@EditFlightActivity, TripTimeLineActivity::class.java)
-                    intent.putExtra("DEST_EDIT", dest)
-                    intent.putExtra("EDIT_DEST_POSITION", position)
+                    intent.putExtra("FLIGHT_EDIT", flight)
+                    intent.putExtra("EDIT_FLIGHT_POSITION", position)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 }

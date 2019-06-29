@@ -15,7 +15,7 @@ class FlightService {
     private val COLECCION_VUELOS = "vuelos"
 
     interface GetFlightsListener {
-        fun onSuccess(fileList: MutableList<Flight>)
+        fun onSuccess(flights: MutableList<Flight>)
         fun onError(exception: Exception)
     }
 
@@ -54,7 +54,8 @@ class FlightService {
         val flight = flightToAdd.createMapFromObject(dateAndHourFormat())
 
         val db = FirebaseFirestore.getInstance()
-        db.collection(TABLA_VIAJES).document(tripId)
+        db.collection(TABLA_VIAJES)
+            .document(tripId)
             .collection(COLECCION_VUELOS)
             .add(flight)
             .addOnSuccessListener { documentReference ->
@@ -66,8 +67,26 @@ class FlightService {
 
     }
 
-    fun editFlight() {
+    interface EditFlightListener {
+        fun onSuccess()
+        fun onError(exception: Exception)
+    }
 
+    fun edit(tripId: String, flight: Flight, listener: EditFlightListener) {
+        val flightToEdit = flight.createMapFromObject(dateAndHourFormat())
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection(TABLA_VIAJES)
+            .document(tripId)
+            .collection(COLECCION_VUELOS)
+            .document(flight.id!!)
+            .set(flightToEdit)
+            .addOnSuccessListener {
+                listener.onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
     }
 
     fun deleteFlight() {

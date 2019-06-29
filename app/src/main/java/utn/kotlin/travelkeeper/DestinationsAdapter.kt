@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.utils.DatePicker
-import utn.kotlin.travelkeeper.utils.dateToString
+import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
 
 class DestinationsAdapter : RecyclerView.Adapter<NewDestinationViewHolder>() {
@@ -37,7 +37,7 @@ class DestinationsAdapter : RecyclerView.Adapter<NewDestinationViewHolder>() {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            selectedDate.setText(calendar.time.dateToString())
+            selectedDate.setText(calendar.time.toStringDateOnly())
 
             if (isEndDate) data[position].endDate = calendar.time else data[position].startDate = calendar.time
         }
@@ -84,7 +84,7 @@ class DestinationsAdapter : RecyclerView.Adapter<NewDestinationViewHolder>() {
     }
 
     private fun saveDestinationText(destinationText: String, position: Int) {
-        data[position].destination = destinationText
+        data[position].name = destinationText
     }
 
 }

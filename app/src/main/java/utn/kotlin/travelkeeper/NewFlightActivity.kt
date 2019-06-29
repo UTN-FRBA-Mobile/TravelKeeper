@@ -15,10 +15,9 @@ import utn.kotlin.travelkeeper.DBServices.FlightService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Flight
 import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.models.TripTimeLineInfo
 import utn.kotlin.travelkeeper.utils.addHourAndMinutes
 import utn.kotlin.travelkeeper.utils.createCalendar
-import utn.kotlin.travelkeeper.utils.dateToString
+import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
 
 class NewFlightActivity : AppCompatActivity() {
@@ -71,7 +70,7 @@ class NewFlightActivity : AppCompatActivity() {
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, monthOfYear)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    (it as EditText).setText(calendar.time.dateToString())
+                    (it as EditText).setText(calendar.time.toStringDateOnly())
 
                     startDate = calendar.time
                 },
@@ -92,14 +91,6 @@ class NewFlightActivity : AppCompatActivity() {
     private fun setDoneButton() {
         flight_done_button.setOnClickListener { v ->
             if (isDataComplete()) {
-//                val flight = TripTimeLineInfo(
-//                    name = flight_airline_edit.text.toString(),
-//                    type = "Vuelo",
-//                    start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!).time,
-//                    end_date = startDate!!
-//                )
-//
-//                addFlightToTrip(flight)
 
                 val flight = Flight(
                     airline = flight_airline_edit.text.toString(),
@@ -152,32 +143,6 @@ class NewFlightActivity : AppCompatActivity() {
         return true
     }
 
-    //    private fun isValid(): Boolean {
-//        var valid = true
-//
-//        if (enter_destination_name.text == null || enter_destination_name.text.toString() == "") {
-//            enter_name_error.visibility = View.VISIBLE
-//            valid = false
-//        }
-//
-//        if (destination_start_date_selected == null || destination_start_date_selected.text.toString() == "" || destination_start_date_selected.text.toString() == "Seleccione una fecha") {
-//            start_date_error.visibility = View.VISIBLE
-//            valid = false
-//        }
-//
-//        if (destination_end_date_selected == null || destination_end_date_selected.text.toString() == "" || destination_end_date_selected.text.toString() == "Seleccione una fecha") {
-//            end_date_error.visibility = View.VISIBLE
-//            valid = false
-//        }
-//
-//        if (startDate != null && endDate != null && endDate!! < startDate!!) {
-//            end_date_error.setText(R.string.end_date_before_start_date)
-//            end_date_error.visibility = View.VISIBLE
-//            valid = false
-//        }
-//
-//        return valid
-
     private fun showAlertIfNeeded() {
         if (anyItemIsNotNull()) {
             val builder = AlertDialog.Builder(this)
@@ -228,15 +193,10 @@ class NewFlightActivity : AppCompatActivity() {
 
                 Toast.makeText(this@NewFlightActivity, "Vuelo agregado", Toast.LENGTH_LONG).show()
 
-                val tripTimeLineInfo = TripTimeLineInfo(
-                    name = flight_airline_edit.text.toString(),
-                    type = "Vuelo",
-                    start_date = startDate!!.addHourAndMinutes(hourOfFlight!!, minuteOfFlight!!),
-                    end_date = startDate!!
-                )
+                flight.id = flightId
 
                 val intent = Intent(this@NewFlightActivity, TripTimeLineActivity::class.java)
-                intent.putExtra("EXTRA_NEW_DEST", tripTimeLineInfo) //todo: borrar y pasar el flight acá
+                intent.putExtra("EXTRA_NEW_FLIGHT", flight)
                 setResult(Activity.RESULT_OK, intent)
 
                 finish()
@@ -247,27 +207,6 @@ class NewFlightActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-
-    private fun addFlightToTrip(flight: TripTimeLineInfo) { //todo: borrar
-        viajesService.addDestinationToTrip(trip.id!!, flight,
-            object : ViajesService.CreateTripServiceListener {
-                override fun onSuccess(idCreated: String) {
-                    Toast.makeText(this@NewFlightActivity, "Vuelo agregado", Toast.LENGTH_LONG).show()
-//                    destination.id = idCreated
-
-                    val intent = Intent(this@NewFlightActivity, TripTimeLineActivity::class.java)
-                    intent.putExtra("EXTRA_NEW_DEST", flight)
-                    setResult(Activity.RESULT_OK, intent)
-
-                    finish()
-                }
-
-                override fun onError(exception: Exception) {
-                    Toast.makeText(this@NewFlightActivity, exception.message, Toast.LENGTH_LONG).show()
-                }
-            })
     }
 
     private fun setBackArrow() {

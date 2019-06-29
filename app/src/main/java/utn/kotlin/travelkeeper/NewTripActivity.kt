@@ -186,7 +186,7 @@ class NewTripActivity : AppCompatActivity() {
     private fun hasAtLeastOneDestination(): Boolean {
         if (destinationsAdapter.data.isEmpty()) return false
         val firstDestination = destinationsAdapter.data[0]
-        return !firstDestination.destination.isNullOrBlank() && firstDestination.endDate != null && firstDestination.startDate != null
+        return !firstDestination.name.isNullOrBlank() && firstDestination.endDate != null && firstDestination.startDate != null
         //todo: pasar la validacion de las fechas a otro lado y validar fchas de inicio y fin
     }
 

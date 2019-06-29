@@ -15,8 +15,12 @@ class Flight(
     var reservationNumber: String? = null
 ) : TripElement, Serializable {
 
-    override fun getType(): Int {
-        return TripElementType.FLIGHT.type
+    override fun getBeginDate(): Date {
+        return takeOffDate
+    }
+
+    override fun getType(): TripElementType {
+        return TripElementType.FLIGHT
     }
 
     fun createMapFromObject(dateFormatter: SimpleDateFormat): HashMap<String, String> {
