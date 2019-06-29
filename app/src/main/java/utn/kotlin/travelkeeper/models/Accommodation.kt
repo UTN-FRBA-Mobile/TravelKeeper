@@ -1,5 +1,6 @@
 package utn.kotlin.travelkeeper.models
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
 import java.io.Serializable
 import java.text.SimpleDateFormat
@@ -9,6 +10,8 @@ data class Accommodation(
     var id: String? = null,
     var name: String,
     var address: String,
+    var latitude: Double,
+    var longitude: Double,
     var startDate: Date,
     var endDate: Date,
     val telephoneNumber: String? = null,
@@ -20,6 +23,8 @@ data class Accommodation(
         returnMap["start_date"] = dateFormatter.format(this.startDate)
         returnMap["end_date"] = dateFormatter.format(this.endDate)
         returnMap["address"] = address
+        returnMap["latitude"] = latitude.toString()
+        returnMap["longitude"] = longitude.toString()
         telephoneNumber?.apply { returnMap["telephoneNumber"] = telephoneNumber }
         reservationCode?.apply { returnMap["reservationCode"] = reservationCode }
 
@@ -36,6 +41,8 @@ data class Accommodation(
                 id,
                 snapshot.getString("name")!!,
                 snapshot.getString("address")!!,
+                (snapshot.getString("latitude")!!).toDouble(),
+                (snapshot.getString("longitude")!!).toDouble(),
                 dateParser.parse(snapshot.getString("start_date")),
                 dateParser.parse(snapshot.getString("end_date")),
                 snapshot.getString("telephoneNumber"),

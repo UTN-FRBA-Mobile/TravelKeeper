@@ -9,18 +9,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.compat.Place
 import com.google.android.libraries.places.compat.ui.PlaceAutocompleteFragment
 import com.google.android.libraries.places.compat.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_new_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
-import utn.kotlin.travelkeeper.models.Address
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,7 +29,7 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     private var endDate: Date? = null
     private lateinit var destinationId: String
     private lateinit var tripId: String
-    private lateinit var addressSelected: Address
+    private lateinit var latLngSelected: LatLng
 
 //    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@NewAccommodationActivity)
 
@@ -124,6 +123,7 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
             if (isValid()) {
                 val newAccommodation = Accommodation(
                     null, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
+                    latLngSelected.latitude, latLngSelected.longitude,
                     startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
                     enter_accommodation_reservation_number.text.toString()
                 )
@@ -143,8 +143,9 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
 
     override fun onPlaceSelected(p0: Place?) {
         enter_accommodation_name.setText(p0!!.name)
-        var latlng = p0!!.latLng
-        enter_accommodation_address.setText( p0!!.address)
+        enter_accommodation_address.setText(p0!!.address)
+
+        latLngSelected = p0!!.latLng
     }
 
     override fun onError(status: Status) {

@@ -32,6 +32,7 @@ class AccommodationsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_accommodations_list)
         destinationId = intent.getStringExtra("DESTINATION_ID")
         tripId = intent.getStringExtra("TRIP_ID")
+//        accommodations = mutableListOf<Accommodation>()
 
         setBackArrow()
 
@@ -45,17 +46,18 @@ class AccommodationsListActivity : AppCompatActivity() {
                     accommodations = accommodationsSaved
                     loading.visibility = View.GONE
 
+                    viewAdapter = AccommodationAdapter(accommodations, tripId, destinationId)
+                    recyclerView = findViewById<RecyclerView>(R.id.recycler_accommodations).apply {
+                        adapter = viewAdapter
+                        setHasFixedSize(true)
+                    }
+
                     if (accommodationsSaved == null || accommodations.size < 1) {
                         empty_view.visibility = View.VISIBLE
                         recycler_accommodations.visibility = View.GONE
                         return
                     }
 
-                    viewAdapter = AccommodationAdapter(accommodations, tripId, destinationId)
-                    recyclerView = findViewById<RecyclerView>(R.id.recycler_accommodations).apply {
-                        adapter = viewAdapter
-                        setHasFixedSize(true)
-                    }
                     recyclerView.visibility = View.VISIBLE
                 }
 
@@ -199,7 +201,7 @@ class AccommodationsListActivity : AppCompatActivity() {
     }
 
     private fun resetAdapter() {
-        var preAdapter = recyclerView.adapter
+        var preAdapter = recyclerView?.adapter
         recyclerView.adapter = null
         recyclerView.adapter = preAdapter
 

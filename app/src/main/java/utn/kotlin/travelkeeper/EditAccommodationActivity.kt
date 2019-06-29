@@ -16,7 +16,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_edit_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
-import utn.kotlin.travelkeeper.models.Address
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -139,17 +138,17 @@ class EditAccommodationActivity : AppCompatActivity() {
     }
 
     private fun setEditAccommodationButton() {
-        edit_accommodation_button_id.setOnClickListener { _ ->
-            if(isValid()) {
-                val editAccomodation = Accommodation(accomodation.id, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
-                    startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
-                    enter_accommodation_reservation_number.text.toString())
-                enter_name_error.visibility = View.GONE
-                checkin_date_error.visibility = View.GONE
-                checkout_date_error.visibility = View.GONE
-                editAccommodationInFirebase(editAccomodation)
-            }
-        }
+//        edit_accommodation_button_id.setOnClickListener { _ ->
+//            if(isValid()) {
+//                val editAccomodation = Accommodation(accomodation.id, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
+//                    startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
+//                    enter_accommodation_reservation_number.text.toString())
+//                enter_name_error.visibility = View.GONE
+//                checkin_date_error.visibility = View.GONE
+//                checkout_date_error.visibility = View.GONE
+//                editAccommodationInFirebase(editAccomodation)
+//            }
+//        }
     }
 
     private fun setSearchAddresses() {
