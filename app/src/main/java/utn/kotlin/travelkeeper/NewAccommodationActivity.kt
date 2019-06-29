@@ -142,10 +142,20 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     }
 
     override fun onPlaceSelected(p0: Place?) {
-        enter_accommodation_name.setText(p0!!.name)
-        enter_accommodation_address.setText(p0!!.address)
+        if(p0 != null && p0.name != null) {
+            enter_accommodation_name.setText(p0!!.name)
+        }
 
-        latLngSelected = p0!!.latLng
+        if(p0 != null && p0.address != null) {
+            enter_accommodation_address.setText(p0!!.address)
+        }
+
+        if(p0 != null && p0.latLng != null) {
+            latLngSelected = p0!!.latLng
+        }
+        else {
+            latLngSelected = LatLng(0.0,0.0)
+        }
     }
 
     override fun onError(status: Status) {
