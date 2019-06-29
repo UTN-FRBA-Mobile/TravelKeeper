@@ -140,9 +140,11 @@ class TripTimeLineActivity : AppCompatActivity() {
                 val position = destinationSelected.tag as Int
                 val destinationOrFlight = tripElements[position]
                 when (destinationOrFlight.getType()) {
-                    TripElementType.DESTINATION -> deleteDestination(position)
-                    TripElementType.FLIGHT -> { //TODO: eliminar vuelo
-                    }
+                    TripElementType.DESTINATION -> showAlertForDeleteDestination(
+                        destinationOrFlight as Destination,
+                        position
+                    )
+                    TripElementType.FLIGHT -> deleteFlight(destinationOrFlight as Flight, position)
                 }
                 return true
             }
@@ -150,6 +152,35 @@ class TripTimeLineActivity : AppCompatActivity() {
                 return super.onContextItemSelected(item)
             }
         }
+    }
+
+    private fun deleteFlight(flight: Flight, position: Int) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(R.string.remove_flight)
+        builder.setPositiveButton(R.string.yes) { _, _ -> deleteFlightFromFirebase(flight, position) }
+        builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+        builder.create().show()
+
+    }
+
+    private fun deleteFlightFromFirebase(flight: Flight, position: Int) {
+        flightService.delete(
+            trip.id!!,
+            flight.id!!,
+            object : FlightService.EditOrDeleteFlightListener {
+                override fun onSuccess() {
+                    Toast.makeText(this@TripTimeLineActivity, R.string.flight_removed, Toast.LENGTH_SHORT)
+                        .show()
+                    tripElements.removeAt(position)
+                    resetAdapter()
+                }
+
+                override fun onError(exception: Exception) {
+                    Toast.makeText(this@TripTimeLineActivity, R.string.flight_not_removed, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        )
     }
 
     private fun showEditFlightActivity(flight: Flight, position: Int) {
@@ -168,35 +199,32 @@ class TripTimeLineActivity : AppCompatActivity() {
         startActivityForResult(editDestIntent, EDIT_DESTINATION_REQUEST)
     }
 
-    private fun deleteDestination(position: Int) {
+    private fun showAlertForDeleteDestination(destination: Destination, position: Int) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(R.string.remove_destination)
-        builder.setPositiveButton(
-            R.string.yes
-        ) { dialog, _ ->
-            viajesService.deleteDestinationInTrip(
-                trip.id!!,
-                (tripElements[position] as Destination).id!!,
-                object : UsuariosService.SimpleServiceListener {
-                    override fun onSuccess() {
-                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_removed, Toast.LENGTH_SHORT)
-                            .show()
-                        tripElements.removeAt(position)
-                        resetAdapter()
-                    }
-
-                    override fun onError(exception: Exception) {
-                        Toast.makeText(this@TripTimeLineActivity, R.string.destination_not_removed, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            )
-        }
-        builder.setNegativeButton(
-            R.string.no
-        ) { dialog, _ -> dialog.dismiss() }
-
+        builder.setPositiveButton(R.string.yes) { _, _ -> deleteDestinationFromFirebase(destination, position) }
+        builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
         builder.create().show()
+    }
+
+    private fun deleteDestinationFromFirebase(destination: Destination, position: Int) {
+        viajesService.deleteDestinationInTrip(
+            trip.id!!,
+            destination.id!!,
+            object : UsuariosService.SimpleServiceListener {
+                override fun onSuccess() {
+                    Toast.makeText(this@TripTimeLineActivity, R.string.destination_removed, Toast.LENGTH_SHORT)
+                        .show()
+                    tripElements.removeAt(position)
+                    resetAdapter()
+                }
+
+                override fun onError(exception: Exception) {
+                    Toast.makeText(this@TripTimeLineActivity, R.string.destination_not_removed, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -216,7 +216,7 @@ class EditFlightActivity : AppCompatActivity() {
     private fun editFlightInFirebase(flight: Flight) {
         FlightService().edit(
             trip.id!!, flight,
-            object : FlightService.EditFlightListener {
+            object : FlightService.EditOrDeleteFlightListener {
                 override fun onSuccess() {
                     Toast.makeText(this@EditFlightActivity, "Vuelo editado", Toast.LENGTH_LONG).show()
                     val intent = Intent(this@EditFlightActivity, TripTimeLineActivity::class.java)

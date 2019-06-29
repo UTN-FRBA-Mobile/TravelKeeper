@@ -45,12 +45,7 @@ class FlightService {
         fun onError(exception: Exception)
     }
 
-    fun add(
-        flightToAdd: Flight,
-        tripId: String,
-        listener: AddFlightListener
-    ) {
-
+    fun add(flightToAdd: Flight, tripId: String, listener: AddFlightListener) {
         val flight = flightToAdd.createMapFromObject(dateAndHourFormat())
 
         val db = FirebaseFirestore.getInstance()
@@ -67,12 +62,12 @@ class FlightService {
 
     }
 
-    interface EditFlightListener {
+    interface EditOrDeleteFlightListener {
         fun onSuccess()
         fun onError(exception: Exception)
     }
 
-    fun edit(tripId: String, flight: Flight, listener: EditFlightListener) {
+    fun edit(tripId: String, flight: Flight, listener: EditOrDeleteFlightListener) {
         val flightToEdit = flight.createMapFromObject(dateAndHourFormat())
 
         val db = FirebaseFirestore.getInstance()
@@ -89,8 +84,20 @@ class FlightService {
             }
     }
 
-    fun deleteFlight() {
+    fun delete(tripId: String, flightId: String, listener: EditOrDeleteFlightListener) {
+        val db = FirebaseFirestore.getInstance()
 
+        db.collection(TABLA_VIAJES)
+            .document(tripId)
+            .collection(COLECCION_VUELOS)
+            .document(flightId)
+            .delete()
+            .addOnSuccessListener {
+                listener.onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                listener.onError(exception)
+            }
     }
 
 
