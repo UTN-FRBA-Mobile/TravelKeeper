@@ -4,7 +4,7 @@
                                                    android:layout_height="match_parent">
 
     <TextView
-            android:text="Ingrese nuevo nombre"
+            android:text="Ingrese nombre del archivo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView2" tools:layout_editor_absoluteX="8dp" app:layout_constraintTop_toTopOf="parent"/>

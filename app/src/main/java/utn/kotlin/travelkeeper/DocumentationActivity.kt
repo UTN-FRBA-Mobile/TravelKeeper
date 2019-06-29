@@ -19,19 +19,19 @@ import utn.kotlin.travelkeeper.models.DocumentationInfo
 import utn.kotlin.travelkeeper.storage.FileStorageService
 import utn.kotlin.travelkeeper.utils.Permissions
 import utn.kotlin.travelkeeper.utils.Permissions.checkForPermissions
-import java.io.File
 
 
-class DocumentationActivity : AppCompatActivity() {
+class DocumentationActivity : AppCompatActivity(), InputFileNameDialog.InputFileNameListener {
 
     lateinit var tripId: String
     val PICK_FILE = 1
     val REQUEST_IMAGE_CAPTURE = 2
     var pendingShowRecycler = false
-    var cameraPhotoPath = ""
+    var cameraPhotoPath: Uri? = null
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: DocumentationAdapter
+    private lateinit var cameraNewDocumentFilename: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,42 +146,47 @@ class DocumentationActivity : AppCompatActivity() {
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
-                val fileName = "testPhoto.jpg"
+                Toast.makeText(this@DocumentationActivity, cameraNewDocumentFilename, Toast.LENGTH_SHORT)
                 FileStorageService().uploadFile(
-                    Uri.parse(cameraPhotoPath),
+                    cameraPhotoPath!!,
                     tripId,
-                    fileName
-                ).addOnSuccessListener {
-                    FileStorageService().getFile(tripId, fileName)
+                    cameraNewDocumentFilename
+                ).addOnProgressListener {
+                    FileStorageService().getFile(tripId, cameraNewDocumentFilename)
                     ViajesService().addDocumentToTrip(
                         tripId,
-                        DocumentationInfo(fileName, FileStorageService().getFileExtension(fileName)!!, ""),
+                        DocumentationInfo(cameraNewDocumentFilename, FileStorageService().getFileExtension(cameraNewDocumentFilename)!!, ""),
                         object : ViajesService.AddDocumentationListener {
                             override fun onSuccess(id: String) {
                                 viewAdapter.documentationList.add(
                                     DocumentationInfo(
-                                        fileName,
-                                        FileStorageService().getFileExtension(fileName)!!,
+                                        cameraNewDocumentFilename,
+                                        FileStorageService().getFileExtension(cameraNewDocumentFilename)!!,
                                         id
                                     )
                                 )
                                 viewAdapter.notifyDataSetChanged()
-                                Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG)
+                                    .show()
                             }
 
                             override fun onError(exception: Exception) {
-                                Toast.makeText(this@DocumentationActivity, exception.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(this@DocumentationActivity, exception.message, Toast.LENGTH_LONG)
+                                    .show()
                             }
-                        })
+                        }
+                    )
                 }
+
+
             }
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == Permissions.REQUEST_WRITE_EXTERNAL_STORAGE) {
-            if(grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                if(pendingShowRecycler){
+            if (grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (pendingShowRecycler) {
                     showRecyclerDocuments()
                 } else {
                     startSelectFileIntent()
@@ -189,7 +194,7 @@ class DocumentationActivity : AppCompatActivity() {
             }
         }
         if (requestCode == Permissions.REQUEST_CAMERA) {
-            if(grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCameraIntent()
             }
         }
@@ -203,14 +208,34 @@ class DocumentationActivity : AppCompatActivity() {
     }
 
     private fun startCameraIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                val builder = StrictMode.VmPolicy.Builder()
-                StrictMode.setVmPolicy(builder.build())
-                cameraPhotoPath = FileStorageService().getFileUri(tripId, "testPhoto.jpg").toString()
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        val dialog = InputFileNameDialog(object : InputFileNameDialog.InputFileNameListener{
+            override fun onDialogPositiveClick(fileName: String) {
+                cameraNewDocumentFilename = fileName.replace(" ", "_")
+                if(FileStorageService().getFileExtension(cameraNewDocumentFilename) == null) cameraNewDocumentFilename = cameraNewDocumentFilename + ".jpg"
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                    takePictureIntent.resolveActivity(packageManager)?.also {
+                        val builder = StrictMode.VmPolicy.Builder()
+                        StrictMode.setVmPolicy(builder.build())
+                        cameraPhotoPath = FileStorageService().getFileUri(tripId, cameraNewDocumentFilename)
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraPhotoPath)
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    }
+                }
             }
-        }
+
+            override fun onDialogNegativeClick() {
+                Toast.makeText(this@DocumentationActivity, "Foto cancelada", Toast.LENGTH_SHORT)
+            }
+        })
+        dialog.show(supportFragmentManager, "Nuevo documento")
+    }
+
+    override fun onDialogPositiveClick(fileName: String) {
+
+    }
+
+    override fun onDialogNegativeClick() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun showRecyclerDocuments() {
