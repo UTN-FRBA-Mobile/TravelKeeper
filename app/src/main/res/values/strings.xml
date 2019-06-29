@@ -59,6 +59,8 @@
     <string name="destination_not_removed">No se pudo eliminar el destino. Intente nuevamente</string>
     <string name="pick_a_date">"Seleccione una fecha"</string>
 
+
+    <string name="edit_flight_title">Editar vuelo</string>
     <string name="remove_flight">¿Está seguro que desea eliminar el vuelo?</string>
     <string name="flight_removed">Vuelo removido exitosamente</string>
     <string name="flight_not_removed">No se pudo eliminar el vuelo. Intente nuevamente</string>

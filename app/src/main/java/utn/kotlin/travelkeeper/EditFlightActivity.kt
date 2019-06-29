@@ -64,7 +64,7 @@ class EditFlightActivity : AppCompatActivity() {
     }
 
     private fun configureActionBar() {
-        this.supportActionBar!!.setTitle(R.string.edit_destination_title)
+        this.supportActionBar!!.setTitle(R.string.edit_flight_title)
         this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
