@@ -103,12 +103,14 @@
                       android:layout_marginStart="12dp"/>
             <TextView
                     android:id="@+id/accommodation_checkin_date_selected"
-                    android:text="@string/pick_a_date"
+                    android:hint="Seleccione una fecha"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:background="?attr/editTextBackground"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="12dp"/>
+                    android:layout_marginEnd="12dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"/>
 
             <TextView
                     android:id="@+id/checkin_date_error"
@@ -128,12 +130,14 @@
                     android:layout_marginStart="12dp"/>
             <TextView
                     android:id="@+id/accommodation_checkout_date_selected"
-                    android:text="@string/pick_a_date"
+                    android:hint="Seleccione una fecha"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:background="?attr/editTextBackground"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="12dp"/>
+                    android:layout_marginEnd="12dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"/>
 
             <TextView
                     android:id="@+id/checkout_date_error"
@@ -175,7 +179,7 @@
                     android:layout_marginEnd="12dp"/>
 
             <Button
-                    android:id="@+id/new_accommodation_button_id"
+                    android:id="@+id/accommodation_button_id"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="@string/btn_new_accommodation"

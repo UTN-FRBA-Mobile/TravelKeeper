@@ -1,8 +1,5 @@
 package utn.kotlin.travelkeeper
 
-import `in`.madapps.placesautocomplete.PlaceAPI
-import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
-import `in`.madapps.placesautocomplete.model.Place
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -10,16 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.DatePicker
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_edit_accommodation.*
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.compat.Place
+import com.google.android.libraries.places.compat.ui.PlaceAutocompleteFragment
+import com.google.android.libraries.places.compat.ui.PlaceSelectionListener
+import kotlinx.android.synthetic.main.activity_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditAccommodationActivity : AppCompatActivity() {
+class EditAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     private var cal = Calendar.getInstance()
     private var startDate: Date? = null
     private var endDate: Date? = null
@@ -27,12 +28,11 @@ class EditAccommodationActivity : AppCompatActivity() {
     private lateinit var tripId: String
     private lateinit var accomodation: Accommodation
     private var position: Int = 0
-
-    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@EditAccommodationActivity)
+    private lateinit var latLngSelected: LatLng
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_accommodation)
+        setContentView(R.layout.activity_accommodation)
 
         accomodation = intent.extras["ACCOMMODATION_EDIT"] as Accommodation
         destinationId = intent.getStringExtra("DESTID_ACCOMMODATION_EDIT")
@@ -62,8 +62,10 @@ class EditAccommodationActivity : AppCompatActivity() {
     }
 
     private fun setView() {
+        accommodation_button_id.setText(getString(R.string.btn_edit_accommodation))
         enter_accommodation_name.setText(accomodation.name)
         enter_accommodation_address.setText(accomodation.address)
+        latLngSelected = LatLng(accomodation.latitude, accomodation.longitude)
 
         if(accomodation.reservationCode != null) {
             enter_accommodation_reservation_number.setText(accomodation.reservationCode)
@@ -138,26 +140,45 @@ class EditAccommodationActivity : AppCompatActivity() {
     }
 
     private fun setEditAccommodationButton() {
-//        edit_accommodation_button_id.setOnClickListener { _ ->
-//            if(isValid()) {
-//                val editAccomodation = Accommodation(accomodation.id, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
-//                    startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
-//                    enter_accommodation_reservation_number.text.toString())
-//                enter_name_error.visibility = View.GONE
-//                checkin_date_error.visibility = View.GONE
-//                checkout_date_error.visibility = View.GONE
-//                editAccommodationInFirebase(editAccomodation)
-//            }
-//        }
+        accommodation_button_id.setOnClickListener { _ ->
+            if(isValid()) {
+                val editAccomodation = Accommodation(accomodation.id, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
+                    latLngSelected.latitude, latLngSelected.longitude,
+                    startDate!!, endDate!!, enter_accommodation_telephone_number.text.toString(),
+                    enter_accommodation_reservation_number.text.toString())
+                enter_name_error.visibility = View.GONE
+                checkin_date_error.visibility = View.GONE
+                checkout_date_error.visibility = View.GONE
+                editAccommodationInFirebase(editAccomodation)
+            }
+        }
     }
 
     private fun setSearchAddresses() {
-        enter_accommodation_address.setAdapter(PlacesAutoCompleteAdapter(this, placesApi))
-        enter_accommodation_address.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val place = parent.getItemAtPosition(position) as Place
-                enter_accommodation_address.setText(place.description)
-            }
+        val autocompleteFragment = fragmentManager.findFragmentById(R.id.address_autocomplete_fragment)
+                as PlaceAutocompleteFragment
+        autocompleteFragment.setOnPlaceSelectedListener(this)
+    }
+
+    override fun onPlaceSelected(p0: Place?) {
+        if(p0 != null && p0.name != null) {
+            enter_accommodation_name.setText(p0!!.name)
+        }
+
+        if(p0 != null && p0.address != null) {
+            enter_accommodation_address.setText(p0!!.address)
+        }
+
+        if(p0 != null && p0.latLng != null) {
+            latLngSelected = p0!!.latLng
+        }
+        else {
+            latLngSelected = LatLng(0.0,0.0)
+        }
+    }
+
+    override fun onError(status: Status) {
+        Toast.makeText(applicationContext,""+status.toString(),Toast.LENGTH_LONG).show();
     }
 
     private fun isValid(): Boolean {

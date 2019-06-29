@@ -1,8 +1,5 @@
 package utn.kotlin.travelkeeper
 
-//import `in`.madapps.placesautocomplete.PlaceAPI
-//import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
-//import `in`.madapps.placesautocomplete.model.Place
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -17,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.compat.Place
 import com.google.android.libraries.places.compat.ui.PlaceAutocompleteFragment
 import com.google.android.libraries.places.compat.ui.PlaceSelectionListener
-import kotlinx.android.synthetic.main.activity_new_accommodation.*
+import kotlinx.android.synthetic.main.activity_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
 import java.text.SimpleDateFormat
@@ -31,11 +28,9 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     private lateinit var tripId: String
     private lateinit var latLngSelected: LatLng
 
-//    val placesApi = PlaceAPI.Builder().apiKey("YOUR_API_KEY").build(this@NewAccommodationActivity)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_accommodation)
+        setContentView(R.layout.activity_accommodation)
 
         destinationId = intent.getStringExtra("DESTINATION_ID")
         tripId = intent.getStringExtra("TRIP_ID")
@@ -119,7 +114,7 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     }
 
     private fun setNewAccommodationButton() {
-        new_accommodation_button_id.setOnClickListener { view ->
+        accommodation_button_id.setOnClickListener { view ->
             if (isValid()) {
                 val newAccommodation = Accommodation(
                     null, enter_accommodation_name.text.toString(), enter_accommodation_address.text.toString(),
