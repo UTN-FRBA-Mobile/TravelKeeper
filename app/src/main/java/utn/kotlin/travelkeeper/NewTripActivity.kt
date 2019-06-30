@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -88,6 +89,7 @@ class NewTripActivity : AppCompatActivity() {
     }
 
     private fun saveNewTrip() {
+        loading.visibility = View.VISIBLE
         viajesService.createTrip(
             tripName.text.toString(),
             getTripStartDate(),
@@ -102,10 +104,12 @@ class NewTripActivity : AppCompatActivity() {
                         getTripEndDate(),
                         object : UsuariosService.SimpleServiceListener {
                             override fun onSuccess() {
+                                loading.visibility = View.GONE
                                 destinationsAdapter.data.forEach { addDestination(idCreated, it) }
                             }
 
                             override fun onError(exception: Exception) {
+                                loading.visibility = View.GONE
                                 Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
                             }
                         }
@@ -113,13 +117,11 @@ class NewTripActivity : AppCompatActivity() {
                 }
 
                 override fun onError(exception: Exception) {
+                    loading.visibility = View.GONE
                     Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
             }
-
         )
-
-
     }
 
     private fun addDestination(tripId: String, destination: Destination) {
@@ -187,11 +189,11 @@ class NewTripActivity : AppCompatActivity() {
         if (destinationsAdapter.data.isEmpty()) return false
         val firstDestination = destinationsAdapter.data[0]
         return !firstDestination.name.isNullOrBlank() && firstDestination.endDate != null && firstDestination.startDate != null
-        //todo: pasar la validacion de las fechas a otro lado y validar fchas de inicio y fin
     }
 
     private fun isTripNameComplete() = !tripName.text.isNullOrBlank()
 
+    //TODO: falta validar las fechas de inicio y fin de los destinos
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean { //para back button
         return when (item.itemId) {
