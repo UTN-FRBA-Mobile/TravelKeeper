@@ -80,8 +80,12 @@
         <activity android:name=".NewTripActivity"/>
         <activity android:name=".NewDestinationActivity"/>
         <activity android:name=".AccommodationsListActivity"/>
-        <activity android:name=".NewFlightActivity"/>
         <activity android:name=".EditFlightActivity"/>
+
+        <activity android:name=".NewFlightActivity"/>
+
+        <activity android:name=".AirlineSearchActivity"
+                  android:theme="@style/SearchAirline"/>
         <activity
                 android:name=".DocumentationShareActivity">
             <intent-filter>
@@ -95,7 +99,6 @@
                 <data android:mimeType="application/*"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AirlineSearchActivity"></activity>
     </application>
 
 </manifest>

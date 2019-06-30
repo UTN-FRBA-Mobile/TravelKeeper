@@ -28,6 +28,7 @@ class NewFlightActivity : AppCompatActivity() {
     private var minuteOfFlight: Int? = null
     private lateinit var trip: Trip
     private lateinit var viajesService: ViajesService
+    private val AIRLINE_SELECTED: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +49,6 @@ class NewFlightActivity : AppCompatActivity() {
             showSearch()
         }
     }
-
-    private val AIRLINE_SELECTED: Int = 1
 
     private fun showSearch() {
         val intent = Intent(this@NewFlightActivity, AirlineSearchActivity::class.java)
