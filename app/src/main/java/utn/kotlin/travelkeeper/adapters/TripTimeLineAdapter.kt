@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.trip_timeline_view.view.*
+import utn.kotlin.travelkeeper.AccommodationsListActivity
 import utn.kotlin.travelkeeper.R.drawable
 import utn.kotlin.travelkeeper.R.layout
 import utn.kotlin.travelkeeper.TripDashboardActivity
@@ -37,6 +38,7 @@ class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, pr
                 holder.view.trip_info_date.text = flight.takeOffDate.toStringDateOnly()
                 holder.view.trip_info_detail.text = flight.departureAirport + " - " + flight.arrivalAirport
                 holder.view.trip_timeline.marker = ContextCompat.getDrawable(context, drawable.ic_airplane)
+                holder.view.accomodation_imageView.visibility = View.GONE
             }
 
             TripElementType.DESTINATION -> {
@@ -45,7 +47,11 @@ class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, pr
                     destination.startDate?.toStringDateOnly() + " - " + destination.endDate?.toStringDateOnly()
                 holder.view.trip_info_detail.text = destination.name
                 holder.view.setOnClickListener {
-                    showDashboard(position)
+                    showEditView(position)
+                }
+
+                holder.view.accomodation_imageView.setOnClickListener {
+                    showAccommodations(position)
                 }
             }
         }
@@ -57,8 +63,23 @@ class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, pr
     }
 
 
-    private fun showDashboard(position: Int) {
+    private fun showEditView(position: Int) {
         val intent = Intent(context, TripDashboardActivity::class.java).apply {
+            putExtra(
+                "DESTINATION_ID",
+                (tripElements[position] as Destination).id
+            )
+            putExtra(
+                "TRIP_ID",
+                trip.id
+            )
+        }
+
+        context.startActivity(intent)
+    }
+
+    private fun showAccommodations(position: Int) {
+        val intent = Intent(context, AccommodationsListActivity::class.java).apply {
             putExtra(
                 "DESTINATION_ID",
                 (tripElements[position] as Destination).id
