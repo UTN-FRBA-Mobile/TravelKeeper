@@ -79,10 +79,6 @@
         </activity>
         <activity android:name=".NewTripActivity"/>
         <activity android:name=".NewDestinationActivity"/>
-        <activity
-                android:name=".TripDashboardActivity"
-                android:label="Dashboard"
-                android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".AccommodationsListActivity"/>
         <activity android:name=".NewFlightActivity"/>
         <activity android:name=".EditFlightActivity"/>

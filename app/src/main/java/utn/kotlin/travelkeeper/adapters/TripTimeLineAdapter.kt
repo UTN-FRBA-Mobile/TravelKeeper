@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.trip_timeline_view.view.*
 import utn.kotlin.travelkeeper.AccommodationsListActivity
 import utn.kotlin.travelkeeper.R.drawable
 import utn.kotlin.travelkeeper.R.layout
-import utn.kotlin.travelkeeper.TripDashboardActivity
 import utn.kotlin.travelkeeper.interfaces.TripTimeLineInterface
 import utn.kotlin.travelkeeper.models.*
 import utn.kotlin.travelkeeper.utils.toStringDateOnly
