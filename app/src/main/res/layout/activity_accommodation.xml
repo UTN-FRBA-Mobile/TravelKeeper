@@ -50,141 +50,221 @@
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"/>
 
-            <TextView
-                    android:id="@+id/accommodation_name"
+            <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+                                                               android:layout_height="match_parent">
+
+
+                <androidx.constraintlayout.widget.Guideline
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vertical_guideline"
+                        app:layout_constraintGuide_percent="0.20"/>
+
+
+                <EditText
+                        android:id="@+id/enter_accommodation_name"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:hint="@string/accommodation_name"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.0"/>
+
+                    <TextView
+                            android:id="@+id/enter_name_error"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/error_message"
+                            android:visibility="gone"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintTop_toBottomOf="@id/enter_accommodation_name"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            android:layout_marginStart="12dp"/>
+
+                    <EditText
+                            android:id="@+id/enter_accommodation_address"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:hint="@string/accommodation_address"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            app:layout_constraintTop_toBottomOf="@+id/enter_name_error"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/accommodation_checkin_date_selected"
+                            android:hint="@string/accommodation_checkin"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:background="?attr/editTextBackground"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            app:layout_constraintTop_toBottomOf="@+id/enter_accommodation_address"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/checkin_date_error"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/error_message"
+                            android:visibility="gone"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_marginStart="12dp"
+                            app:layout_constraintTop_toBottomOf="@+id/accommodation_checkin_date_selected"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/accommodation_checkout_date_selected"
+                            android:hint="@string/accommodation_checkout"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:background="?attr/editTextBackground"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            app:layout_constraintTop_toBottomOf="@+id/checkin_date_error"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/checkout_date_error"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/error_message"
+                            android:visibility="gone"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_marginStart="12dp"
+                            app:layout_constraintTop_toBottomOf="@+id/accommodation_checkout_date_selected"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <EditText
+                            android:id="@+id/enter_accommodation_reservation_number"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:hint="@string/accommodation_reservation_number"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginTop="20dp"
+                            app:layout_constraintTop_toBottomOf="@+id/checkout_date_error"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <EditText
+                            android:id="@+id/enter_accommodation_telephone_number"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:hint="@string/accommodation_telephone_number"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            app:layout_constraintTop_toBottomOf="@+id/enter_accommodation_reservation_number"
+                            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/accommodation_name"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="12dp"/>
-
-            <EditText
-                    android:id="@+id/enter_accommodation_name"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"/>
-
-            <TextView
-                    android:id="@+id/enter_name_error"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/error_message"
-                    android:visibility="gone"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintTop_toBottomOf="@id/enter_accommodation_name"
+                    app:srcCompat="@drawable/ic_hotel_gray_32dp"
+                    android:id="@+id/accommodation_name_img"
+                    app:layout_constraintBottom_toBottomOf="@+id/enter_accommodation_name"
+                    app:layout_constraintTop_toTopOf="@+id/enter_accommodation_name"
+                    app:layout_constraintEnd_toStartOf="@+id/enter_accommodation_name"
+                    android:layout_marginEnd="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="12dp"/>
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintHorizontal_bias="0.35"/>
 
-            <TextView
-                    android:id="@+id/accommodation_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accommodation_address"
-                    app:layout_constraintTop_toBottomOf="@+id/enter_accommodation_name"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="12dp"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_place_gray_32dp"
+                        android:id="@+id/accommodation_address_img"
+                        app:layout_constraintBottom_toBottomOf="@+id/enter_accommodation_address"
+                        app:layout_constraintTop_toTopOf="@+id/enter_accommodation_address"
+                        app:layout_constraintEnd_toStartOf="@+id/enter_accommodation_address"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintHorizontal_bias="0.35"/>
 
-            <EditText
-                    android:id="@+id/enter_accommodation_address"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_calendar_gray_32dp"
+                        android:id="@+id/accommodation_checkin_img"
+                        app:layout_constraintBottom_toBottomOf="@+id/accommodation_checkin_date_selected"
+                        app:layout_constraintTop_toTopOf="@+id/accommodation_checkin_date_selected"
+                        app:layout_constraintEnd_toStartOf="@+id/accommodation_checkin_date_selected"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintHorizontal_bias="0.35"/>
 
-            <TextView android:id="@+id/accommodation_checkin"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="@string/accommodation_checkin"
-                      app:layout_constraintTop_toBottomOf="@id/enter_accommodation_address"
-                      app:layout_constraintStart_toStartOf="parent"
-                      android:layout_marginTop="10dp"
-                      android:layout_marginStart="12dp"/>
-            <TextView
-                    android:id="@+id/accommodation_checkin_date_selected"
-                    android:hint="Seleccione una fecha"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:background="?attr/editTextBackground"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="12dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_calendar_gray_32dp"
+                        android:id="@+id/accommodation_checkout_img"
+                        app:layout_constraintBottom_toBottomOf="@+id/accommodation_checkout_date_selected"
+                        app:layout_constraintTop_toTopOf="@+id/accommodation_checkout_date_selected"
+                        app:layout_constraintEnd_toStartOf="@+id/accommodation_checkout_date_selected"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintHorizontal_bias="0.35"/>
 
-            <TextView
-                    android:id="@+id/checkin_date_error"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/error_message"
-                    android:visibility="gone"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_marginStart="12dp"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ticket_confirmation_32dp"
+                        android:id="@+id/accommodation_reservation_number_img"
+                        app:layout_constraintBottom_toBottomOf="@+id/enter_accommodation_reservation_number"
+                        app:layout_constraintTop_toTopOf="@+id/enter_accommodation_reservation_number"
+                        app:layout_constraintEnd_toStartOf="@+id/enter_accommodation_reservation_number"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintHorizontal_bias="0.35"/>
 
-            <TextView
-                    android:id="@+id/accommodation_checkout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accommodation_checkout"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="12dp"/>
-            <TextView
-                    android:id="@+id/accommodation_checkout_date_selected"
-                    android:hint="Seleccione una fecha"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:background="?attr/editTextBackground"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="12dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_call_telephone_32dp"
+                        android:id="@+id/accommodation_telephone_number_img"
+                        app:layout_constraintBottom_toBottomOf="@+id/enter_accommodation_telephone_number"
+                        app:layout_constraintTop_toTopOf="@+id/enter_accommodation_telephone_number"
+                        app:layout_constraintEnd_toStartOf="@+id/enter_accommodation_telephone_number"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintHorizontal_bias="0.35"/>
 
-            <TextView
-                    android:id="@+id/checkout_date_error"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/error_message"
-                    android:visibility="gone"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_marginStart="12dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                    android:id="@+id/accommodation_reservation_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accommodation_reservation_number"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="12dp"/>
+                    <Button
+                            android:id="@+id/accommodation_button_id"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:text="@string/btn_new_accommodation"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="28dp"/>
 
-            <EditText
-                    android:id="@+id/enter_accommodation_reservation_number"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"/>
-
-            <TextView
-                    android:id="@+id/accommodation_telephone_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accommodation_telephone_number"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="12dp"/>
-
-            <EditText
-                    android:id="@+id/enter_accommodation_telephone_number"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"/>
-
-            <Button
-                    android:id="@+id/accommodation_button_id"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="@string/btn_new_accommodation"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="28dp"/>
         </LinearLayout>
     </ScrollView>
 
