@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,6 +21,7 @@ import utn.kotlin.travelkeeper.MainActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.TripTimeLineActivity
 import utn.kotlin.travelkeeper.models.Trip
+import utn.kotlin.travelkeeper.utils.InternetConnection
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,35 +65,40 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
         }
 
         holder.view.findViewById<ImageView>(R.id.delete_btn).setOnClickListener {
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage(R.string.remove_trip_from_library)
-            builder.setPositiveButton(
-                R.string.yes
-            ) { dialog, _ ->
-                UsuariosService().removeTripFromUser(
-                    FirebaseAuth.getInstance().currentUser!!.email!!,
-                    myDataset[position].id!!,
-                    object : UsuariosService.SimpleServiceListener {
-                        override fun onSuccess() {
-                            Toast.makeText(context, R.string.trip_removed_from_library, Toast.LENGTH_SHORT).show()
-                            (context as MainActivity).onNavigationItemSelected(
-                                (context as MainActivity).nav_view.menu.getItem(
-                                    0
+            if(InternetConnection.verifyAvailableNetwork(context as AppCompatActivity)) {
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage(R.string.remove_trip_from_library)
+                builder.setPositiveButton(
+                    R.string.yes
+                ) { dialog, _ ->
+                    UsuariosService().removeTripFromUser(
+                        FirebaseAuth.getInstance().currentUser!!.email!!,
+                        myDataset[position].id!!,
+                        object : UsuariosService.SimpleServiceListener {
+                            override fun onSuccess() {
+                                Toast.makeText(context, R.string.trip_removed_from_library, Toast.LENGTH_SHORT).show()
+                                (context as MainActivity).onNavigationItemSelected(
+                                    (context as MainActivity).nav_view.menu.getItem(
+                                        0
+                                    )
                                 )
-                            )
-                        }
+                            }
 
-                        override fun onError(exception: Exception) {
-                            Toast.makeText(context, R.string.trip_not_removed_from_library, Toast.LENGTH_SHORT).show()
+                            override fun onError(exception: Exception) {
+                                Toast.makeText(context, R.string.trip_not_removed_from_library, Toast.LENGTH_SHORT).show()
+                            }
                         }
-                    }
-                )
+                    )
+                }
+                builder.setNegativeButton(
+                    R.string.no
+                ) { dialog, _ -> dialog.dismiss() }
+
+                builder.create().show()
+                }
+            else {
+                InternetConnection.alertNoInternet(context)
             }
-            builder.setNegativeButton(
-                R.string.no
-            ) { dialog, _ -> dialog.dismiss() }
-
-            builder.create().show()
         }
 
         holder.view.findViewById<TextView>(R.id.trip_title).text = myDataset[position].title
