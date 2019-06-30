@@ -13,11 +13,13 @@ import kotlinx.android.synthetic.main.accommodation_item_view.view.*
 import utn.kotlin.travelkeeper.AccommodationMapsActivity
 import utn.kotlin.travelkeeper.EditAccommodationActivity
 import utn.kotlin.travelkeeper.R
+import utn.kotlin.travelkeeper.interfaces.AccommodationListInterface
 import utn.kotlin.travelkeeper.models.Accommodation
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AccommodationAdapter (
+    private val accommodationListInterface: AccommodationListInterface,
     private val accommodationList: MutableList<Accommodation>,
     private val tripId: String,
     private val destinationId: String) :RecyclerView.Adapter<AccommodationViewHolder>() {
@@ -50,14 +52,7 @@ class AccommodationAdapter (
         }
 
         holder.view.setOnClickListener {
-            val editDestIntent = Intent(context, EditAccommodationActivity::class.java)
-            editDestIntent.putExtra("ACCOMMODATION_EDIT", accommodation)
-            editDestIntent.putExtra("TRIPID_ACCOMMODATION_EDIT", tripId)
-            editDestIntent.putExtra("DESTID_ACCOMMODATION_EDIT", destinationId)
-            editDestIntent.putExtra("EDIT_ACCOMMODATION_POSITION", position)
-
-            val act = context as Activity
-            act.startActivityForResult(editDestIntent, EDIT_ACCOMMODATION_INTENT)
+            accommodationListInterface.showEditAccommodationActivity(position)
         }
 
         holder.view.tag = position

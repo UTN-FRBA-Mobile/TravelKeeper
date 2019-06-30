@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_accommodations_list.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.adapters.AccommodationAdapter
+import utn.kotlin.travelkeeper.interfaces.AccommodationListInterface
 import utn.kotlin.travelkeeper.models.Accommodation
 
-class AccommodationsListActivity : AppCompatActivity() {
+class AccommodationsListActivity : AppCompatActivity(), AccommodationListInterface {
     private lateinit var accommodationService: AccommodationService
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -45,7 +46,7 @@ class AccommodationsListActivity : AppCompatActivity() {
                     accommodations = accommodationsSaved
                     loading.visibility = View.GONE
 
-                    viewAdapter = AccommodationAdapter(accommodations, tripId, destinationId)
+                    viewAdapter = AccommodationAdapter(this@AccommodationsListActivity, accommodations, tripId, destinationId)
                     recyclerView = findViewById<RecyclerView>(R.id.recycler_accommodations).apply {
                         adapter = viewAdapter
                         setHasFixedSize(true)
@@ -104,7 +105,7 @@ class AccommodationsListActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEditAccommodationActivity(position: Int) {
+    override fun showEditAccommodationActivity(position: Int) {
         val editDestIntent = Intent(this@AccommodationsListActivity, EditAccommodationActivity::class.java)
         editDestIntent.putExtra("ACCOMMODATION_EDIT", accommodations[position])
         editDestIntent.putExtra("TRIPID_ACCOMMODATION_EDIT", tripId)
