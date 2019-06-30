@@ -29,6 +29,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            val loginIntent = Intent(this@MainActivity, LoginActivity::class.java)
+            loginIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(loginIntent)
+            finish()
+        }
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 

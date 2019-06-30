@@ -77,6 +77,10 @@
     <!--DOCUMENTS-->
     <string name="documents_title">"Documentos"</string>
 
+    <!--DOCUMENTS SHARE-->
+    <string name="add_file_to_trip">"Adjuntar archivo al viaje"</string>
+    <string name="add_file">"Adjuntar"</string>
+
     <!--VALIDATION-->
     <string name="error_message">Este campo es requerido</string>
     <string name="end_date_before_start_date">La fecha fin no puede ser menor a la fecha de inicio</string>

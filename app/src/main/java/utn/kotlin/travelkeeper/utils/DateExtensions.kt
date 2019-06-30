@@ -6,12 +6,17 @@ import java.util.*
 val DATE_ONLY_PATTERN = "dd/MM/yyyy"
 val DATE_AND_HOUR_PATTERN = "dd/MM/yyyy HH:mm:ss"
 
-fun dateAndHourFormat() = SimpleDateFormat(DATE_AND_HOUR_PATTERN, Locale.getDefault())
-fun dateOnlyFormat() = SimpleDateFormat(DATE_ONLY_PATTERN, Locale.getDefault())
+private fun locale() = Locale("es", "ES") //probar con country es_AR
+fun dateAndHourFormat() = SimpleDateFormat(DATE_AND_HOUR_PATTERN, locale())
+fun dateOnlyFormat() = SimpleDateFormat(DATE_ONLY_PATTERN, locale())
 
 fun Date.toStringDateOnly(): String {
-    val sdf = SimpleDateFormat(DATE_ONLY_PATTERN, Locale("es", "ES")) //probar con country es_AR
+    val sdf = SimpleDateFormat(DATE_ONLY_PATTERN, locale())
     return sdf.format(this)
+}
+
+fun parserWithFormat(format: String): SimpleDateFormat {
+    return SimpleDateFormat(format, locale())
 }
 
 fun Date.getHour(): Int {

@@ -15,6 +15,7 @@ import utn.kotlin.travelkeeper.EditAccommodationActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.interfaces.AccommodationListInterface
 import utn.kotlin.travelkeeper.models.Accommodation
+import utn.kotlin.travelkeeper.utils.dateOnlyFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,10 +63,7 @@ class AccommodationAdapter (
     }
 
     private fun getDate(date: Date): String {
-        val myFormat = "dd/MM/yyyy" // mention the format you need
-        val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
-
-        return sdf.format(date)
+        return dateOnlyFormat().format(date)
     }
 
 }

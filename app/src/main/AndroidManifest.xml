@@ -82,6 +82,14 @@
         <activity android:name=".AccommodationsListActivity"/>
         <activity android:name=".NewFlightActivity"/>
         <activity android:name=".EditFlightActivity"/>
+        <activity
+                android:name=".DocumentationShareActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

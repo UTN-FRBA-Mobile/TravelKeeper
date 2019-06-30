@@ -3,6 +3,7 @@ package utn.kotlin.travelkeeper.DBServices
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.models.Trip
+import utn.kotlin.travelkeeper.utils.parserWithFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,13 +28,13 @@ class UsuariosService {
                 val document = task.result
                 if (document!!.exists()) {
                     reference.collection(SUBTABLA_VIAJES)
-                        .whereGreaterThan("date_end", SimpleDateFormat(DATE_ONLY, Locale.getDefault()).format(Date()))
+                        .whereGreaterThan("date_end", parserWithFormat(DATE_ONLY).format(Date()))
                         .orderBy("date_end", Query.Direction.ASCENDING)
                         .orderBy("date_start", Query.Direction.ASCENDING)
                         .get()
                         .addOnSuccessListener { querySnapshot ->
                             val tripsList = arrayListOf<Trip>()
-                            val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                            val dateParser = parserWithFormat(DATE_ONLY)
                             querySnapshot.documents.forEach {
                                 val trip = Trip(
                                     it.id,
@@ -71,13 +72,13 @@ class UsuariosService {
 
         val reference = db.collection(TABLA_USUARIOS).document(username)
         reference.collection(SUBTABLA_VIAJES)
-            .whereLessThan("date_end", SimpleDateFormat(DATE_ONLY, Locale.getDefault()).format(Date()))
+            .whereLessThan("date_end", parserWithFormat(DATE_ONLY).format(Date()))
             .orderBy("date_end", Query.Direction.ASCENDING)
             .orderBy("date_start", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val tripsList = arrayListOf<Trip>()
-                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                val dateParser = parserWithFormat(DATE_ONLY)
                 querySnapshot.documents.forEach {
                     val trip = Trip(
                         it.id,
@@ -105,7 +106,7 @@ class UsuariosService {
         username: String, tripId: String, tripName: String, dateStart: Date, dateEnd: Date,
         listener: SimpleServiceListener
     ) {
-        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+        val dateFormatter = parserWithFormat(DATE_ONLY)
 
         val newTripToAdd = HashMap<String, String>()
         newTripToAdd["name"] = tripName
