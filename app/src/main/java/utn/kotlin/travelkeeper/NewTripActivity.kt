@@ -21,6 +21,7 @@ import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.models.Trip
+import utn.kotlin.travelkeeper.utils.InternetConnection
 import utn.kotlin.travelkeeper.utils.Keyboard
 import java.util.*
 
@@ -65,7 +66,12 @@ class NewTripActivity : AppCompatActivity() {
         val doneButton = findViewById<Button>(R.id.done_button)
         doneButton.setOnClickListener {
             if (isDataComplete()) {
-                saveNewTrip()
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    saveNewTrip()
+                }
+                else {
+                    InternetConnection.alertNoInternet(this)
+                }
             }
         }
 

@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.destination_view.*
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.models.Trip
+import utn.kotlin.travelkeeper.utils.InternetConnection
 import utn.kotlin.travelkeeper.utils.createCalendar
 import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
@@ -154,7 +155,12 @@ class EditDestinationActivity : AppCompatActivity() {
                     destination.id
                 )
 
-                editDestinationInFirebase(editDest)
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    editDestinationInFirebase(editDest)
+                }
+                else {
+                    InternetConnection.alertNoInternet(this)
+                }
             }
 
         }

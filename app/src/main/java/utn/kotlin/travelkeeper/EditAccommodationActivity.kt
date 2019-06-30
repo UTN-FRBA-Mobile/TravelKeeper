@@ -17,6 +17,7 @@ import com.google.android.libraries.places.compat.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
+import utn.kotlin.travelkeeper.utils.InternetConnection
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -149,7 +150,13 @@ class EditAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
                 enter_name_error.visibility = View.GONE
                 checkin_date_error.visibility = View.GONE
                 checkout_date_error.visibility = View.GONE
-                editAccommodationInFirebase(editAccomodation)
+
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    editAccommodationInFirebase(editAccomodation)
+                }
+                else {
+                    InternetConnection.alertNoInternet(this)
+                }
             }
         }
     }

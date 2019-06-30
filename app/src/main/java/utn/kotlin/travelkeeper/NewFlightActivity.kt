@@ -15,6 +15,7 @@ import utn.kotlin.travelkeeper.DBServices.FlightService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Flight
 import utn.kotlin.travelkeeper.models.Trip
+import utn.kotlin.travelkeeper.utils.InternetConnection
 import utn.kotlin.travelkeeper.utils.addHourAndMinutes
 import utn.kotlin.travelkeeper.utils.createCalendar
 import utn.kotlin.travelkeeper.utils.toStringDateOnly
@@ -101,7 +102,12 @@ class NewFlightActivity : AppCompatActivity() {
                     reservationNumber = flight_reservation_number_edit.text.toString()
                 )
 
-                addFlight(flight)
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    addFlight(flight)
+                }
+                else {
+                    InternetConnection.alertNoInternet(this)
+                }
             }
         }
     }

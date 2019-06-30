@@ -14,10 +14,7 @@ import kotlinx.android.synthetic.main.activity_view_flight.*
 import utn.kotlin.travelkeeper.DBServices.FlightService
 import utn.kotlin.travelkeeper.models.Flight
 import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.utils.createCalendar
-import utn.kotlin.travelkeeper.utils.getHour
-import utn.kotlin.travelkeeper.utils.getMinute
-import utn.kotlin.travelkeeper.utils.toStringDateOnly
+import utn.kotlin.travelkeeper.utils.*
 import java.util.*
 
 class EditFlightActivity : AppCompatActivity() {
@@ -180,7 +177,12 @@ class EditFlightActivity : AppCompatActivity() {
                     flight_reservation_number_edit.text.toString()
                 )
 
-                editFlightInFirebase(flight)
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    editFlightInFirebase(flight)
+                }
+                else {
+                    InternetConnection.alertNoInternet(this)
+                }
             }
 
         }

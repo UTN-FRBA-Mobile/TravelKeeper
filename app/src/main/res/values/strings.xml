@@ -7,7 +7,11 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <!--Menu-->
+    <!--GENERAL-->
+    <string name="no_internet">No tiene conexión a internet. Intente más tarde nuevamente</string>
+    <string name="accept">Aceptar</string>
+
+    <!--MENU-->
     <string name="my_trips_menu_title">Mis Viajes</string>
     <string name="old_trips_menu_title">Viajes Pasados</string>
     <string name="log_out_menu_title">Cerrar Sesión</string>
@@ -17,7 +21,7 @@
     <string name="edit_option">Editar</string>
     <string name="delete_option">Eliminar</string>
 
-    <!--My trips-->
+    <!--MY TRIPS-->
     <string name="current">Actual</string>
     <string name="next_trips">Próximos</string>
     <string name="no_data_available">No hay viajes todavía!</string>

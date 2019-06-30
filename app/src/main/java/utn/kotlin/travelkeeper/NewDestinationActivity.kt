@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_view_destination.*
 import kotlinx.android.synthetic.main.destination_view.*
@@ -14,6 +15,7 @@ import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.utils.DatePicker
+import utn.kotlin.travelkeeper.utils.InternetConnection
 import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
 
@@ -102,7 +104,11 @@ class NewDestinationActivity : AppCompatActivity() {
 //                enter_name_error.visibility = View.GONE
 //                start_date_error.visibility = View.GONE
 //                end_date_error.visibility = View.GONE
-                addDestinationToFirebase(newDest)
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    addDestinationToFirebase(newDest)
+                } else {
+                    InternetConnection.alertNoInternet(this)
+                }
 //            }
         }
     }
