@@ -33,6 +33,7 @@ class AccommodationAdapter (
     val accommodation = accommodationList[position]
         holder.view.accommodation_desc_text.text = accommodation.name
         holder.view.accommodation_date_text.text = getDate(accommodation.startDate) + " - " + getDate(accommodation.endDate)
+        holder.view.accommodation_address.text = accommodation.address
 
         holder.view.tag = position
 

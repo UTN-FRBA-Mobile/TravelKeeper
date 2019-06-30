@@ -1,47 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools"
+                                   android:orientation="vertical"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_marginTop="1dp"
+                                   android:id="@+id/cardView">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" app:srcCompat="@drawable/baseline_hotel_24"
-                    android:id="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="24dp" app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="16dp" app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    android:layout_marginBottom="24dp"/>
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:id="@+id/accommodation_desc_text"
-                    app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp" app:layout_constraintStart_toEndOf="@+id/imageView"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    tools:text="Placeholder"
-                    android:layout_marginBottom="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toBottomOf="@+id/accommodation_date_text"/>
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/accommodation_date_text"
-                    app:layout_constraintStart_toStartOf="@+id/guideline4"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="8dp"
-            />
-            <androidx.constraintlayout.widget.Guideline
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" app:layout_constraintGuide_begin="48dp"
-                    android:id="@+id/guideline4"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/baseline_hotel_24"
+                android:id="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+
+        />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintGuide_percent="0.14"
+                android:id="@+id/guideline4"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/accommodation_date_text"
+                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                android:hint="Fecha desde - fecha hasta"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/accommodation_desc_text"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:hint="Nombre"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toBottomOf="@+id/accommodation_date_text"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintVertical_bias="0.050000012"/>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/accommodation_address"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:hint="Dirección"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toBottomOf="@+id/accommodation_desc_text"
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"/>
+
+        <androidx.constraintlayout.widget.Guideline
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintGuide_percent="0.85"
+                android:id="@+id/guideline2"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_place_24px"
+                android:id="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.66"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
