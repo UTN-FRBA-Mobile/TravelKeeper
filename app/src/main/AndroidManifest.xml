@@ -95,6 +95,7 @@
                 <data android:mimeType="application/*"/>
             </intent-filter>
         </activity>
+        <activity android:name=".AirlineSearchActivity"></activity>
     </application>
 
 </manifest>

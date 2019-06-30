@@ -118,4 +118,6 @@
     <string name="discard">Descartar</string>
     <string name="cancel">Cancelar</string>
     <string name="leave_activity_alert">¿Está seguro que desea salir sin guardar los cambios?</string>
+
+    <string name="search_hint">Buscar aerolíneas</string>
 </resources>

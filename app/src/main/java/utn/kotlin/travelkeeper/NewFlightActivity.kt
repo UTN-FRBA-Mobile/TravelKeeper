@@ -21,6 +21,7 @@ import utn.kotlin.travelkeeper.utils.createCalendar
 import utn.kotlin.travelkeeper.utils.toStringDateOnly
 import java.util.*
 
+
 class NewFlightActivity : AppCompatActivity() {
     private var startDate: Date? = null
     private var hourOfFlight: Int? = null
@@ -39,6 +40,37 @@ class NewFlightActivity : AppCompatActivity() {
         setDatePickerForTakeoffDate()
         setTimePickerForTakeoffTime()
         setBackArrow()
+        setAirlineSearch()
+    }
+
+    private fun setAirlineSearch() {
+        flight_airline_edit.setOnClickListener {
+            showSearch()
+        }
+    }
+
+    private val AIRLINE_SELECTED: Int = 1
+
+    private fun showSearch() {
+        val intent = Intent(this@NewFlightActivity, AirlineSearchActivity::class.java)
+        startActivityForResult(intent, AIRLINE_SELECTED)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            AIRLINE_SELECTED -> {
+                setAirline(resultCode, data)
+            }
+        }
+    }
+
+    private fun setAirline(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (data!!.extras != null && data!!.extras.size() > 0) {
+                val airline = data!!.extras["FLIGHT_AIRLINE"] as String
+                flight_airline_edit.setText(airline)
+            }
+        }
     }
 
     private fun setTimePickerForTakeoffTime() {
