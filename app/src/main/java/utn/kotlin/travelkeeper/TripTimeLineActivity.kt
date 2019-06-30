@@ -15,10 +15,10 @@ import utn.kotlin.travelkeeper.DBServices.FlightService
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
+import utn.kotlin.travelkeeper.interfaces.TripTimeLineInterface
 import utn.kotlin.travelkeeper.models.*
 
-
-class TripTimeLineActivity : AppCompatActivity() {
+class TripTimeLineActivity : AppCompatActivity(), TripTimeLineInterface {
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var viewAdapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>
     private lateinit var viewManager: androidx.recyclerview.widget.RecyclerView.LayoutManager
@@ -107,7 +107,7 @@ class TripTimeLineActivity : AppCompatActivity() {
 
     private fun configureRecyclerView() {
         viewManager = LinearLayoutManager(this@TripTimeLineActivity)
-        viewAdapter = TripTimeLineAdapter(tripElements, trip)
+        viewAdapter = TripTimeLineAdapter(tripElements, trip, this)
 
         recyclerView = trip_timeline_recycler_view.apply {
             layoutManager = viewManager
@@ -182,7 +182,7 @@ class TripTimeLineActivity : AppCompatActivity() {
         )
     }
 
-    private fun showEditFlightActivity(flight: Flight, position: Int) {
+    override fun showEditFlightActivity(flight: Flight, position: Int) {
         val editDestIntent = Intent(this, EditFlightActivity::class.java)
         editDestIntent.putExtra("FLIGHT_EDIT", flight)
         editDestIntent.putExtra("TRIP_DEST_EDIT", trip)
@@ -190,7 +190,7 @@ class TripTimeLineActivity : AppCompatActivity() {
         startActivityForResult(editDestIntent, EDIT_FLIGHT_REQUEST)
     }
 
-    private fun showEditDestinationActivity(destination: Destination, position: Int) {
+    override fun showEditDestinationActivity(destination: Destination, position: Int) {
         val editDestIntent = Intent(this, EditDestinationActivity::class.java)
         editDestIntent.putExtra("DEST_EDIT", destination)
         editDestIntent.putExtra("TRIP_DEST_EDIT", trip)

@@ -13,10 +13,11 @@ import utn.kotlin.travelkeeper.AccommodationsListActivity
 import utn.kotlin.travelkeeper.R.drawable
 import utn.kotlin.travelkeeper.R.layout
 import utn.kotlin.travelkeeper.TripDashboardActivity
+import utn.kotlin.travelkeeper.interfaces.TripTimeLineInterface
 import utn.kotlin.travelkeeper.models.*
 import utn.kotlin.travelkeeper.utils.toStringDateOnly
 
-class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, private val trip: Trip) :
+class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, private val trip: Trip, private val tripTimeLine: TripTimeLineInterface) :
     androidx.recyclerview.widget.RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
 
     private lateinit var context: Context
@@ -46,14 +47,15 @@ class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, pr
                 holder.view.trip_info_date.text =
                     destination.startDate?.toStringDateOnly() + " - " + destination.endDate?.toStringDateOnly()
                 holder.view.trip_info_detail.text = destination.name
-                holder.view.setOnClickListener {
-                    showEditView(position)
-                }
 
                 holder.view.accomodation_imageView.setOnClickListener {
                     showAccommodations(position)
                 }
             }
+        }
+
+        holder.view.setOnClickListener {
+            showEditView(position)
         }
 
         holder.view.tag = position
@@ -64,18 +66,14 @@ class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, pr
 
 
     private fun showEditView(position: Int) {
-        val intent = Intent(context, TripDashboardActivity::class.java).apply {
-            putExtra(
-                "DESTINATION_ID",
-                (tripElements[position] as Destination).id
+        val destinationOrFlight = tripElements[position]
+        when (destinationOrFlight.getType()) {
+            TripElementType.DESTINATION -> tripTimeLine.showEditDestinationActivity(
+                destinationOrFlight as Destination,
+                position
             )
-            putExtra(
-                "TRIP_ID",
-                trip.id
-            )
+            TripElementType.FLIGHT -> tripTimeLine.showEditFlightActivity(destinationOrFlight as Flight, position)
         }
-
-        context.startActivity(intent)
     }
 
     private fun showAccommodations(position: Int) {

@@ -32,7 +32,6 @@ class AccommodationsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_accommodations_list)
         destinationId = intent.getStringExtra("DESTINATION_ID")
         tripId = intent.getStringExtra("TRIP_ID")
-//        accommodations = mutableListOf<Accommodation>()
 
         setBackArrow()
 
