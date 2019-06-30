@@ -3,6 +3,7 @@ package utn.kotlin.travelkeeper
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,12 +18,16 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import utn.kotlin.travelkeeper.DBServices.UsuariosService
 import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.fragments.MyTripsFragment
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.ui.login.LoginActivity
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -117,6 +122,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             super.onBackPressed()
         }
     }
+
+    private lateinit var airlines_1: List<Airline>
+
+    override fun onStart() {
+        super.onStart()
+
+        val service = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create()) // Para parsear automágicamente el json
+            .baseUrl("http://demo9783220.mockable.io/")
+            .build()
+            .create(Airlines::class.java)
+
+        service.getAll().enqueue(object : Callback<AirlinesResponse> {
+            override fun onResponse(call: Call<AirlinesResponse>, response: Response<AirlinesResponse>) {
+                airlines_1 = response.body()?.airlines!!
+
+//                tweetsAdapter.items = response.body()?.tweets!!
+//                tweetsAdapter.notifyDataSetChanged()
+            }
+
+            override fun onFailure(call: Call<AirlinesResponse>, error: Throwable) {
+                Log.e("Sofi", error.message, error)
+                Toast.makeText(this@MainActivity, "No tweets founds!", Toast.LENGTH_LONG).show()
+            }
+        })
+
+
+    }
+
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
