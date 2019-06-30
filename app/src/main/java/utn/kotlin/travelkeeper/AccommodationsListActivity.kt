@@ -15,6 +15,7 @@ import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.adapters.AccommodationAdapter
 import utn.kotlin.travelkeeper.interfaces.AccommodationListInterface
 import utn.kotlin.travelkeeper.models.Accommodation
+import utn.kotlin.travelkeeper.utils.InternetConnection
 
 class AccommodationsListActivity : AppCompatActivity(), AccommodationListInterface {
     private lateinit var accommodationService: AccommodationService
@@ -96,7 +97,14 @@ class AccommodationsListActivity : AppCompatActivity(), AccommodationListInterfa
             }
             R.id.delete_option -> {
                 val position = accommodationSelected.tag as Int
-                this.deleteAccommodation(position)
+
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    this.deleteAccommodation(position)
+                }
+                else {
+                    InternetConnection.alertNoInternet(this)
+                }
+
                 return true
             }
             else -> {

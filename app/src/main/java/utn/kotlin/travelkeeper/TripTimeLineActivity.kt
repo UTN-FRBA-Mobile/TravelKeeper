@@ -17,6 +17,7 @@ import utn.kotlin.travelkeeper.DBServices.ViajesService
 import utn.kotlin.travelkeeper.adapters.TripTimeLineAdapter
 import utn.kotlin.travelkeeper.interfaces.TripTimeLineInterface
 import utn.kotlin.travelkeeper.models.*
+import utn.kotlin.travelkeeper.utils.InternetConnection
 
 class TripTimeLineActivity : AppCompatActivity(), TripTimeLineInterface {
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
@@ -137,14 +138,19 @@ class TripTimeLineActivity : AppCompatActivity(), TripTimeLineInterface {
                 return true
             }
             R.id.delete_option -> {
-                val position = destinationSelected.tag as Int
-                val destinationOrFlight = tripElements[position]
-                when (destinationOrFlight.getType()) {
-                    TripElementType.DESTINATION -> showAlertForDeleteDestination(
-                        destinationOrFlight as Destination,
-                        position
-                    )
-                    TripElementType.FLIGHT -> deleteFlight(destinationOrFlight as Flight, position)
+                if(InternetConnection.verifyAvailableNetwork(this)) {
+                    val position = destinationSelected.tag as Int
+                    val destinationOrFlight = tripElements[position]
+                    when (destinationOrFlight.getType()) {
+                        TripElementType.DESTINATION -> showAlertForDeleteDestination(
+                            destinationOrFlight as Destination,
+                            position
+                        )
+                        TripElementType.FLIGHT -> deleteFlight(destinationOrFlight as Flight, position)
+                    }
+                }
+                else {
+                    InternetConnection.alertNoInternet(this)
                 }
                 return true
             }
