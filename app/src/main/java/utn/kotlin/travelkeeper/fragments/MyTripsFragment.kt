@@ -94,6 +94,10 @@ class MyTripsFragment : androidx.fragment.app.Fragment() {
                 FirebaseAuth.getInstance().currentUser!!.email!!,
                 object : UsuariosService.GOCUsuarioServiceListener {
                     override fun onSuccess(trips: ArrayList<Trip>) {
+                        if(loading == null){
+                            return
+                        }
+
                         loading.visibility = View.GONE
                         if (trips.isNotEmpty()) {
                             val viewManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
