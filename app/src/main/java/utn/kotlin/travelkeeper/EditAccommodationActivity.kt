@@ -17,6 +17,7 @@ import com.google.android.libraries.places.compat.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_accommodation.*
 import utn.kotlin.travelkeeper.DBServices.AccommodationService
 import utn.kotlin.travelkeeper.models.Accommodation
+import utn.kotlin.travelkeeper.utils.parserWithFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -134,7 +135,7 @@ class EditAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
 
     private fun getDate(date: Date): String {
         val myFormat = "dd/MM/yyyy" // mention the format you need
-        val sdf = SimpleDateFormat(myFormat, Locale("es", "ES"))
+        val sdf = parserWithFormat(myFormat).format(date)
 
         return sdf.format(date)
     }

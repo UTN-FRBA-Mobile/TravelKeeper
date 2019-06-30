@@ -3,6 +3,7 @@ package utn.kotlin.travelkeeper.DBServices
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.models.Accommodation
+import utn.kotlin.travelkeeper.utils.parserWithFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,7 +42,7 @@ class AccommodationService {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val accommodationList = mutableListOf<Accommodation>()
-                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                val dateParser = parserWithFormat(DATE_ONLY)
                 querySnapshot.documents.forEach {
                     val accommodation = Accommodation.createObjectFromSnapshot(it, dateParser, it.id)
                     accommodationList.add(accommodation)
@@ -61,7 +62,7 @@ class AccommodationService {
             .document(accommodationId)
             .get()
             .addOnSuccessListener { documentSnapshot->
-                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                val dateParser = parserWithFormat(DATE_ONLY)
                 val accommodation  = Accommodation.createObjectFromSnapshot(documentSnapshot, dateParser, documentSnapshot.id)
                 listener.onSuccess(accommodation)
             }
@@ -71,7 +72,7 @@ class AccommodationService {
     }
 
     fun addAccommodationToDestination(tripId: String, destId: String, accommodation: Accommodation, listener: CreateAccommodationServiceListener) {
-        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+        val dateFormatter = parserWithFormat(DATE_ONLY)
 
         val newAccommodationToAdd = accommodation.createMapFromObject(dateFormatter)
 
@@ -88,7 +89,7 @@ class AccommodationService {
     }
 
     fun editAccommodation(tripId: String, destId: String, accomodation: Accommodation, listener: CreateAccommodationServiceListener) {
-        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+        val dateFormatter = parserWithFormat(DATE_ONLY)
 
         val accommodationToEdit = accomodation.createMapFromObject(dateFormatter)
 

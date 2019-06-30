@@ -20,6 +20,7 @@ import utn.kotlin.travelkeeper.MainActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.TripTimeLineActivity
 import utn.kotlin.travelkeeper.models.Trip
+import utn.kotlin.travelkeeper.utils.parserWithFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -96,10 +97,7 @@ class MyTripsAdapter(private val myDataset: List<Trip>) :
 
         holder.view.findViewById<TextView>(R.id.trip_title).text = myDataset[position].title
 
-        val dateFormatter = SimpleDateFormat(
-            holder.view.context.getString(R.string.my_trips_date_format),
-            Locale.getDefault()
-        )
+        val dateFormatter = parserWithFormat(holder.view.context.getString(R.string.my_trips_date_format))
 
         val datesString = dateFormatter.format(myDataset[position].startDate) + " - " +
                 dateFormatter.format(myDataset[position].endDate)

@@ -7,6 +7,7 @@ import utn.kotlin.travelkeeper.models.Destination
 import utn.kotlin.travelkeeper.models.DocumentationInfo
 import utn.kotlin.travelkeeper.models.Trip
 import utn.kotlin.travelkeeper.storage.FileStorageService
+import utn.kotlin.travelkeeper.utils.parserWithFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -25,7 +26,7 @@ class ViajesService {
     }
 
     fun createTrip(tripName: String, dateStart: Date, dateEnd: Date, listener: CreateTripServiceListener) {
-        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+        val dateFormatter = parserWithFormat(DATE_ONLY)
 
         val newTripToAdd = HashMap<String, String>()
         newTripToAdd["name"] = tripName
@@ -53,7 +54,7 @@ class ViajesService {
         db.collection(TABLA_VIAJES).document(tripId)
             .get()
             .addOnSuccessListener {
-                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                val dateParser = parserWithFormat(DATE_ONLY)
 
                 val trip = Trip(
                     it.id,
@@ -133,7 +134,7 @@ class ViajesService {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val destsList = mutableListOf<Destination>()
-                val dateParser = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+                val dateParser = parserWithFormat(DATE_ONLY)
                 querySnapshot.documents.forEach {
                     val destInfo = Destination.createObjectFromSnapshot(it, dateParser, it.id)
 
@@ -148,7 +149,7 @@ class ViajesService {
     }
 
     fun addDestinationToTrip(tripId: String, dest: Destination, listener: CreateTripServiceListener) {
-        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+        val dateFormatter = parserWithFormat(DATE_ONLY)
 
         val newDestToAdd = dest.createMapFromObject(dateFormatter)
 
@@ -164,7 +165,7 @@ class ViajesService {
     }
 
     fun editDestinationInTrip(tripId: String, dest: Destination, listener: CreateTripServiceListener) {
-        val dateFormatter = SimpleDateFormat(DATE_ONLY, Locale.getDefault())
+        val dateFormatter = parserWithFormat(DATE_ONLY)
 
         val destToEdit = dest.createMapFromObject(dateFormatter)
 

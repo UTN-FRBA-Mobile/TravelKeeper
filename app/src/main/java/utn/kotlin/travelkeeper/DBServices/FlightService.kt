@@ -5,6 +5,7 @@ import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.models.Flight
 import utn.kotlin.travelkeeper.utils.DATE_AND_HOUR_PATTERN
 import utn.kotlin.travelkeeper.utils.dateAndHourFormat
+import utn.kotlin.travelkeeper.utils.parserWithFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +29,7 @@ class FlightService {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val flights = mutableListOf<Flight>()
-                val dateParser = SimpleDateFormat(DATE_AND_HOUR_PATTERN, Locale.getDefault())
+                val dateParser = dateAndHourFormat()
                 querySnapshot.documents.forEach {
                     val flight = Flight.createObjectFromSnapshot(it, dateParser, it.id)
                     flights.add(flight)
