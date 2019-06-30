@@ -31,29 +31,25 @@ class AccommodationMapsActivity : AppCompatActivity(), OnMapReadyCallback, Googl
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var map: GoogleMap
     private lateinit var lastLocation: Location
+    private lateinit var accommodationName: String
+    private var accommodationLatitude: Double = 0.0
+    private var accommodationLongitude: Double = 0.0
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val PLACE_PICKER_REQUEST = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accommodation_maps)
 
+        accommodationName = intent.extras["ACCOMMODATION_LOCATION_NAME"] as String
+        accommodationLatitude = intent.extras["ACCOMMODATION_LOCATION_LATITUDE"] as Double
+        accommodationLongitude = intent.extras["ACCOMMODATION_LOCATION_LONGITUDE"] as Double
+
         setBackArrow()
 
-        // Initialize Places.
-//        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
-//
-//        // Create a new Places client instance.
-//        PlacesClient placesClient = Places.createClient(this);
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-//        search_fab.setOnClickListener {
-//            loadPlacePicker()
-//        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -67,6 +63,13 @@ class AccommodationMapsActivity : AppCompatActivity(), OnMapReadyCallback, Googl
         map.setOnMarkerClickListener(this)
 
         setUpMap()
+        placeAccommodationMarker()
+    }
+
+    private fun placeAccommodationMarker() {
+        val accommodationLocation = LatLng(accommodationLatitude, accommodationLongitude)
+        map.addMarker(MarkerOptions().position(accommodationLocation).title(accommodationName))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(accommodationLocation, 15f))
     }
 
     override fun onMarkerClick(p0: Marker?) = false
@@ -86,72 +89,10 @@ class AccommodationMapsActivity : AppCompatActivity(), OnMapReadyCallback, Googl
             // 3
             if (location != null) {
                 lastLocation = location
-                val currentLatLng = LatLng(location.latitude, location.longitude)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
             }
         }
 
     }
-
-    private fun loadPlacePicker() {
-        val builder = PlacePicker.IntentBuilder()
-
-        try {
-            startActivityForResult(builder.build(this@AccommodationMapsActivity), PLACE_PICKER_REQUEST)
-        } catch (e: GooglePlayServicesRepairableException) {
-            e.printStackTrace()
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            e.printStackTrace()
-        }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                val place = PlacePicker.getPlace(this, data)
-                var addressText = place.name.toString()
-                addressText += "\n" + place.address.toString()
-
-                placeMarkerOnMap(place.latLng)
-            }
-        }
-
-    }
-
-    private fun placeMarkerOnMap(location: LatLng) {
-        val markerOptions = MarkerOptions().position(location)
-
-        val titleStr = getAddress(location)
-        markerOptions.title(titleStr)
-
-        map.addMarker(markerOptions)
-    }
-
-    private fun getAddress(latLng: LatLng): String {
-        val geocoder = Geocoder(this)
-        val addresses: List<Address>?
-        val address: Address?
-        var addressText = ""
-
-        try {
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-
-            if (null != addresses && !addresses.isEmpty()) {
-                address = addresses[0]
-                for (i in 0 until address.maxAddressLineIndex) {
-                    addressText += if (i == 0) address.getAddressLine(i) else "\n" + address.getAddressLine(i)
-                }
-            }
-        } catch (e: IOException) {
-            Log.e("MapsActivity", e.localizedMessage)
-        }
-
-        return addressText
-    }
-
 
     private fun setBackArrow() {
         this.supportActionBar!!.setTitle(R.string.title_activity_accommodation_maps)

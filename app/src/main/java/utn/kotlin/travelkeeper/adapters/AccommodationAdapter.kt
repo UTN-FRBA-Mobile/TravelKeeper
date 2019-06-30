@@ -2,11 +2,14 @@ package utn.kotlin.travelkeeper.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.accommodation_item_view.view.*
+import utn.kotlin.travelkeeper.AccommodationMapsActivity
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.models.Accommodation
 import java.text.SimpleDateFormat
@@ -16,7 +19,6 @@ class AccommodationAdapter (
     private val accommodationList: MutableList<Accommodation>,
     private val tripId: String,
     private val destinationId: String) :RecyclerView.Adapter<AccommodationViewHolder>() {
-
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccommodationViewHolder {
@@ -34,6 +36,14 @@ class AccommodationAdapter (
         holder.view.accommodation_desc_text.text = accommodation.name
         holder.view.accommodation_date_text.text = getDate(accommodation.startDate) + " - " + getDate(accommodation.endDate)
         holder.view.accommodation_address.text = accommodation.address
+
+        holder.view.accommodation_location.setOnClickListener {
+            var intent = Intent(context, AccommodationMapsActivity::class.java)
+            intent.putExtra("ACCOMMODATION_LOCATION_NAME",accommodation.name)
+            intent.putExtra("ACCOMMODATION_LOCATION_LATITUDE",accommodation.latitude)
+            intent.putExtra("ACCOMMODATION_LOCATION_LONGITUDE",accommodation.longitude)
+            context.startActivity(intent)
+        }
 
         holder.view.tag = position
 

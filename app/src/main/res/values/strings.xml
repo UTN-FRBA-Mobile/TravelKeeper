@@ -92,7 +92,7 @@
     <string name="accommodation_not_removed">No se pudo eliminar el alojamiento. Intente nuevamente más tarde</string>
 
     <!--MAP-->
-    <string name="title_activity_accommodation_maps">Ingrese la dirección</string>
+    <string name="title_activity_accommodation_maps">Ubicación del alojamiento</string>
 
     <string name="fab_label_new_destination">Agregar destino</string>
     <string name="fab_label_new_flight">Agregar vuelo</string>

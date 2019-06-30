@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_baseline_place_24px"
-                android:id="@+id/imageView2"
+                android:id="@+id/accommodation_location"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
