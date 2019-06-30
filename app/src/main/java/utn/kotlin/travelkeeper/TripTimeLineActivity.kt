@@ -160,7 +160,6 @@ class TripTimeLineActivity : AppCompatActivity() {
         builder.setPositiveButton(R.string.yes) { _, _ -> deleteFlightFromFirebase(flight, position) }
         builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
         builder.create().show()
-
     }
 
     private fun deleteFlightFromFirebase(flight: Flight, position: Int) {

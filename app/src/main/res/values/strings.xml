@@ -60,11 +60,15 @@
     <string name="pick_a_date">"Seleccione una fecha"</string>
 
 
+    <!--NEW TRIP-->
+    <string name="trip_name">Nombre del viaje</string>
+    <string name="ready">Listo</string>
+    <string name="add_new_destination">Agregar nuevo destino</string>
+
     <string name="edit_flight_title">Editar vuelo</string>
     <string name="remove_flight">¿Está seguro que desea eliminar el vuelo?</string>
     <string name="flight_removed">Vuelo removido exitosamente</string>
     <string name="flight_not_removed">No se pudo eliminar el vuelo. Intente nuevamente</string>
-
 
     <!--DOCUMENTS-->
     <string name="documents_title">"Documentos"</string>
