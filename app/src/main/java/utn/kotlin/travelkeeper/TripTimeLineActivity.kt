@@ -107,7 +107,7 @@ class TripTimeLineActivity : AppCompatActivity(), TripTimeLineInterface {
 
     private fun configureRecyclerView() {
         viewManager = LinearLayoutManager(this@TripTimeLineActivity)
-        viewAdapter = TripTimeLineAdapter(tripElements, trip, this)
+        viewAdapter = TripTimeLineAdapter(this, tripElements, trip)
 
         recyclerView = trip_timeline_recycler_view.apply {
             layoutManager = viewManager

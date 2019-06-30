@@ -16,7 +16,10 @@ import utn.kotlin.travelkeeper.interfaces.TripTimeLineInterface
 import utn.kotlin.travelkeeper.models.*
 import utn.kotlin.travelkeeper.utils.toStringDateOnly
 
-class TripTimeLineAdapter(private val tripElements: MutableList<TripElement>, private val trip: Trip, private val tripTimeLine: TripTimeLineInterface) :
+class TripTimeLineAdapter(
+    private val tripTimeLine: TripTimeLineInterface,
+    private val tripElements: MutableList<TripElement>,
+    private val trip: Trip) :
     androidx.recyclerview.widget.RecyclerView.Adapter<TripTimeLineAdapter.TripTimeLineViewHolder>() {
 
     private lateinit var context: Context
