@@ -164,7 +164,11 @@ class DocumentationShareActivity : AppCompatActivity() {
                 DocumentationInfo(fileName, FileStorageService().getFileExtension(fileName)!!, ""),
                 object : ViajesService.AddDocumentationListener {
                     override fun onSuccess(id: String) {
-                        Toast.makeText(this@DocumentationShareActivity, "Guardado Ok", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@DocumentationShareActivity,
+                            "El documento se guardó correctamente",
+                            Toast.LENGTH_LONG
+                        ).show()
                         finish()
                     }
 

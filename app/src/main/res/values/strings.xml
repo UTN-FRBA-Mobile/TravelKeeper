@@ -24,7 +24,7 @@
     <!--MY TRIPS-->
     <string name="current">Actual</string>
     <string name="next_trips">Próximos</string>
-    <string name="no_data_available">No hay viajes todavía!</string>
+    <string name="no_data_available">No hay viajes. ¡Agregá uno!</string>
     <string name="my_trips_date_format">dd \'de\' MMMM \'de\' yyyy</string>
     <string name="my_trips_intent_filter_label">Agregar viaje a TravelKeeper</string>
     <string name="add_trip_to_library">¿Está seguro de querer agregar este viaje a sus viajes?</string>
@@ -53,7 +53,7 @@
     <string name="new_destination_title">"Nuevo destino"</string>
     <string name="title_activity_trip_time_line">Viaje</string>
     <string name="edit_destination_title">"Editar destino"</string>
-    <string name="no_dest_available">¡No hay destinos todavia!</string>
+    <string name="no_dest_available">No hay destinos. ¡Agregá uno!</string>
     <string name="dest_start_date">Fecha Inicio</string>
     <string name="dest_end_date">Fecha Fin</string>
     <string name="btn_new_dest">Listo</string>
@@ -76,6 +76,7 @@
 
     <!--DOCUMENTS-->
     <string name="documents_title">"Documentos"</string>
+    <string name="no_documents">No hay documentos. ¡Agregá uno!</string>
 
     <!--DOCUMENTS SHARE-->
     <string name="add_file_to_trip">"Adjuntar archivo al viaje"</string>
@@ -84,11 +85,10 @@
     <!--VALIDATION-->
     <string name="error_message">Este campo es requerido</string>
     <string name="end_date_before_start_date">La fecha fin no puede ser menor a la fecha de inicio</string>
-    <string name="title_activity_documentation">DocumentationActivity</string>
 
     <!--ACCOMMODATIONS-->
     <string name="accommodations_list">"Alojamientos"</string>
-    <string name="no_accommodations_yet">"Todavía no hay alojamientos!"</string>
+    <string name="no_accommodations_yet">No hay alojamientos. ¡Agregá uno!</string>
     <string name="new_accommodation">"Nuevo alojamiento"</string>
     <string name="accommodation_place">"Buscá tu alojamiento"</string>
     <string name="accommodation_name">"Nombre"</string>
@@ -96,12 +96,12 @@
     <string name="accommodation_checkin">"Fecha de entrada"</string>
     <string name="accommodation_checkout">"Fecha de salida"</string>
     <string name="accommodation_reservation_number">"Nro de reserva (opcional)"</string>
-    <string name="accommodation_telephone_number">"Nro de telefono (opcional)</string>
+    <string name="accommodation_telephone_number">"Nro de teléfono (opcional)</string>
     <string name="btn_new_accommodation">"Agregar nuevo alojamiento"</string>
     <string name="btn_edit_accommodation">"Editar alojamiento"</string>
     <string name="remove_accommodation">¿Está seguro de eliminar el alojamiento?</string>
     <string name="accommodation_removed">El alojamiento fue removido exitosamente</string>
-    <string name="accommodation_not_removed">No se pudo eliminar el alojamiento. Intente nuevamente más tarde</string>
+    <string name="accommodation_not_removed">No se pudo eliminar el alojamiento. Intente nuevamente</string>
 
     <!--MAP-->
     <string name="title_activity_accommodation_maps">Ubicación del alojamiento</string>

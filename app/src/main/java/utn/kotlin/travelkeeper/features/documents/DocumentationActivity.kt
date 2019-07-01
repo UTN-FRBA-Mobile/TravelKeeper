@@ -99,13 +99,13 @@ class DocumentationActivity : AppCompatActivity() {
 
 
     private fun setBackArrow() {
-        this.supportActionBar!!.setTitle("Documentos")
+        this.supportActionBar!!.setTitle(R.string.documents_title)
         this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         this.supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -159,7 +159,8 @@ class DocumentationActivity : AppCompatActivity() {
                 if (viewAdapter.documentationList.isEmpty()) {
                     empty_document_textview.visibility = View.VISIBLE
                 } else empty_document_textview.visibility = View.GONE
-                Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@DocumentationActivity, "El documento se guardó correctamente", Toast.LENGTH_LONG)
+                    .show()
                 loading_documentation.visibility = View.GONE
 
             }
@@ -193,7 +194,11 @@ class DocumentationActivity : AppCompatActivity() {
                             if (viewAdapter.documentationList.isEmpty()) {
                                 empty_document_textview.visibility = View.VISIBLE
                             } else empty_document_textview.visibility = View.GONE
-                            Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG)
+                            Toast.makeText(
+                                this@DocumentationActivity,
+                                "El documento se guardó correctamente",
+                                Toast.LENGTH_LONG
+                            )
                                 .show()
                             loading_documentation.visibility = View.GONE
                         }
