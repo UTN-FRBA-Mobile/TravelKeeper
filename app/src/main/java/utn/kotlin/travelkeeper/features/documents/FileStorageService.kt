@@ -1,7 +1,10 @@
 package utn.kotlin.travelkeeper.features.documents
 
+import android.content.Context
+import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
@@ -41,6 +44,25 @@ class FileStorageService {
     fun deleteFileFromLocalStorage(tripId: String, fileName: String){
         val fileDelete = File(getFileUri(tripId, fileName).path)
         if(fileDelete.exists()) fileDelete.delete()
+    }
+
+    fun getPathFromContentUri(context: Context, uri: Uri): String {
+            var path: String?
+        val projection = Array(10) { MediaStore.Files.FileColumns.DATA }
+            val cursor = context.getContentResolver().query(uri, projection, null, null, null)
+
+            if(cursor == null){
+                path = uri.getPath()
+            }
+            else{
+                cursor.moveToFirst()
+                val column_index = cursor.getColumnIndexOrThrow(projection[0])
+                path = cursor.getString(column_index)
+                cursor.close();
+            }
+
+        if(path == null || path.isEmpty()) return uri.path else return path
+
     }
 
     fun getFileExtension(fileUrl: String): String? {

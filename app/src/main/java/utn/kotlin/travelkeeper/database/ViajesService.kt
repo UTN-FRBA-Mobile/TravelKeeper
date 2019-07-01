@@ -1,6 +1,7 @@
 package utn.kotlin.travelkeeper.database
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import utn.kotlin.travelkeeper.domain.Destination
@@ -98,12 +99,12 @@ class ViajesService {
         fun onError(exception: Exception)
     }
 
-    fun addDocumentToTrip(tripId: String, documentationInfo: DocumentationInfo, listener: AddDocumentationListener) {
+    fun addDocumentToTrip(tripId: String, documentationInfo: DocumentationInfo, listener: AddDocumentationListener): Task<DocumentReference> {
         val db = FirebaseFirestore.getInstance()
         val newDocument = HashMap<String, String>()
         newDocument.put("fileName", documentationInfo.fileName)
         newDocument.put("type", documentationInfo.type)
-        db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS)
+        return db.collection(TABLA_VIAJES).document(tripId).collection(SUBTABLA_DOCUMENTOS_ASCOCIADOS)
             .add(documentationInfo)
             .addOnSuccessListener {
                 listener.onSuccess(it.id)

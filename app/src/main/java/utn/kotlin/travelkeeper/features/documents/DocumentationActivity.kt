@@ -1,6 +1,7 @@
 package utn.kotlin.travelkeeper.features.documents
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -9,18 +10,22 @@ import android.os.StrictMode
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_documentation.*
+import utn.kotlin.travelkeeper.InputFileNameDialog
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.database.ViajesService
 import utn.kotlin.travelkeeper.domain.DocumentationInfo
+import utn.kotlin.travelkeeper.utils.FileCopyHelper
 import utn.kotlin.travelkeeper.utils.Permissions
 import utn.kotlin.travelkeeper.utils.Permissions.checkForPermissions
+import java.io.File
+import java.net.URI
 
-
-class DocumentationActivity : AppCompatActivity(), InputFileNameDialog.InputFileNameListener {
+class DocumentationActivity : AppCompatActivity() {
 
     lateinit var tripId: String
     val PICK_FILE = 1
@@ -112,73 +117,96 @@ class DocumentationActivity : AppCompatActivity(), InputFileNameDialog.InputFile
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PICK_FILE) {
             if (resultCode == Activity.RESULT_OK) {
-                val fileName = getFileName(data!!.data!!)
+                val fileName = getFileName(data!!.data!!).replace(" ", "_")
                 val uri = data.data!!
+                loading_documentation.visibility = View.VISIBLE
                 FileStorageService().uploadFile(
                     uri,
                     tripId,
                     fileName
-                ).addOnSuccessListener {
-                    FileStorageService().getFile(tripId, fileName)
-                    ViajesService().addDocumentToTrip(
-                        tripId,
-                        DocumentationInfo(fileName, FileStorageService().getFileExtension(fileName)!!, ""),
-                        object : ViajesService.AddDocumentationListener {
-                            override fun onSuccess(id: String) {
-                                viewAdapter.documentationList.add(
-                                    DocumentationInfo(
-                                        fileName,
-                                        FileStorageService().getFileExtension(fileName)!!,
-                                        id
-                                    )
-                                )
-                                viewAdapter.notifyDataSetChanged()
-                                Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG).show()
+                )
+                copyFileToDirectory(uri, fileName, tripId, this@DocumentationActivity)
+                //FileStorageService().getFile(tripId, fileName)
+                ViajesService().addDocumentToTrip(
+                    tripId,
+                    DocumentationInfo(fileName, FileStorageService().getFileExtension(fileName)!!, ""),
+                    object : ViajesService.AddDocumentationListener {
+                        override fun onSuccess(id: String) {
+                            val newDocument = DocumentationInfo(
+                                fileName,
+                                FileStorageService().getFileExtension(fileName)!!,
+                                id
+                            )
+                            viewAdapter.documentationList.replaceAll {
+                                if (it.fileName == fileName) newDocument else it
                             }
+                        }
 
-                            override fun onError(exception: Exception) {
-                                Toast.makeText(this@DocumentationActivity, exception.message, Toast.LENGTH_LONG).show()
-                            }
-                        })
-                }
+                        override fun onError(exception: Exception) {
+                            Toast.makeText(this@DocumentationActivity, exception.message, Toast.LENGTH_LONG).show()
+                            loading_documentation.visibility = View.GONE
+                        }
+                    }
+                )
+                viewAdapter.documentationList.add(
+                    DocumentationInfo(
+                        fileName,
+                        FileStorageService().getFileExtension(fileName)!!,
+                        ""
+                    )
+                )
+                viewAdapter.notifyDataSetChanged()
+                if (viewAdapter.documentationList.isEmpty()) {
+                    empty_document_textview.visibility = View.VISIBLE
+                } else empty_document_textview.visibility = View.GONE
+                Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG).show()
+                loading_documentation.visibility = View.GONE
+
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this@DocumentationActivity, cameraNewDocumentFilename, Toast.LENGTH_SHORT)
+                loading_documentation.visibility = View.VISIBLE
                 FileStorageService().uploadFile(
                     cameraPhotoPath!!,
                     tripId,
                     cameraNewDocumentFilename
-                ).addOnProgressListener {
-                    FileStorageService()
-                        .getFile(tripId, cameraNewDocumentFilename)
-                    ViajesService().addDocumentToTrip(
-                        tripId,
-                        DocumentationInfo(cameraNewDocumentFilename, FileStorageService().getFileExtension(cameraNewDocumentFilename)!!, ""),
-                        object : ViajesService.AddDocumentationListener {
-                            override fun onSuccess(id: String) {
-                                viewAdapter.documentationList.add(
-                                    DocumentationInfo(
-                                        cameraNewDocumentFilename,
-                                        FileStorageService().getFileExtension(cameraNewDocumentFilename)!!,
-                                        id
-                                    )
+                )
+                ViajesService().addDocumentToTrip(
+                    tripId,
+                    DocumentationInfo(
+                        cameraNewDocumentFilename,
+                        FileStorageService().getFileExtension(cameraNewDocumentFilename)!!,
+                        ""
+                    ),
+                    object : ViajesService.AddDocumentationListener {
+                        override fun onSuccess(id: String) {
+                            viewAdapter.documentationList.add(
+                                DocumentationInfo(
+                                    cameraNewDocumentFilename,
+                                    FileStorageService().getFileExtension(cameraNewDocumentFilename)!!,
+                                    id
                                 )
-                                viewAdapter.notifyDataSetChanged()
-                                Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG)
-                                    .show()
-                            }
-
-                            override fun onError(exception: Exception) {
-                                Toast.makeText(this@DocumentationActivity, exception.message, Toast.LENGTH_LONG)
-                                    .show()
-                            }
+                            )
+                            viewAdapter.notifyDataSetChanged()
+                            if (viewAdapter.documentationList.isEmpty()) {
+                                empty_document_textview.visibility = View.VISIBLE
+                            } else empty_document_textview.visibility = View.GONE
+                            Toast.makeText(this@DocumentationActivity, "Guardado Ok", Toast.LENGTH_LONG)
+                                .show()
+                            loading_documentation.visibility = View.GONE
                         }
-                    )
+
+                        override fun onError(exception: Exception) {
+                            Toast.makeText(this@DocumentationActivity, exception.message, Toast.LENGTH_LONG)
+                                .show()
+                            loading_documentation.visibility = View.GONE
+                        }
+                    }
+                ).addOnCompleteListener {
+                    loading_documentation.visibility = View.GONE
                 }
-
-
             }
         }
     }
@@ -208,8 +236,7 @@ class DocumentationActivity : AppCompatActivity(), InputFileNameDialog.InputFile
     }
 
     private fun startCameraIntent() {
-        val dialog = InputFileNameDialog(object :
-            InputFileNameDialog.InputFileNameListener {
+        val dialog = InputFileNameDialog(object : InputFileNameDialog.InputFileNameListener {
             override fun onDialogPositiveClick(fileName: String) {
                 cameraNewDocumentFilename = fileName.replace(" ", "_")
                 if (FileStorageService().getFileExtension(cameraNewDocumentFilename) == null) cameraNewDocumentFilename =
@@ -218,8 +245,7 @@ class DocumentationActivity : AppCompatActivity(), InputFileNameDialog.InputFile
                     takePictureIntent.resolveActivity(packageManager)?.also {
                         val builder = StrictMode.VmPolicy.Builder()
                         StrictMode.setVmPolicy(builder.build())
-                        cameraPhotoPath = FileStorageService()
-                            .getFileUri(tripId, cameraNewDocumentFilename)
+                        cameraPhotoPath = FileStorageService().getFileUri(tripId, cameraNewDocumentFilename)
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraPhotoPath)
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                     }
@@ -233,29 +259,32 @@ class DocumentationActivity : AppCompatActivity(), InputFileNameDialog.InputFile
         dialog.show(supportFragmentManager, "Nuevo documento")
     }
 
-    override fun onDialogPositiveClick(fileName: String) {
-
-    }
-
-    override fun onDialogNegativeClick() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     private fun showRecyclerDocuments() {
+        loading_documentation.visibility = View.VISIBLE
         ViajesService().getDocumentsFromTrip(tripId, object : ViajesService.GetDocumentationListener {
             override fun onSuccess(fileList: MutableList<DocumentationInfo>) {
-
+                if (fileList.isEmpty()) {
+                    empty_document_textview.visibility = View.VISIBLE
+                } else empty_document_textview.visibility = View.GONE
                 viewAdapter = DocumentationAdapter(fileList, tripId)
                 recyclerView = findViewById<RecyclerView>(R.id.recycler_documentation).apply {
                     adapter = viewAdapter
                     //setHasFixedSize(true)
                 }
+                loading_documentation.visibility = View.GONE
             }
 
             override fun onError(exception: Exception) {
                 Toast.makeText(this@DocumentationActivity, exception.message, Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun copyFileToDirectory(uri: Uri, fileName: String, tripId: String, context: Context) {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val outputStream = File(URI(FileStorageService().getFileUri(tripId, fileName).toString())).outputStream()
+        FileCopyHelper.copyFile(inputStream, outputStream)
     }
 
     private fun getFileName(uri: Uri): String {

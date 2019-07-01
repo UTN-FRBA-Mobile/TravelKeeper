@@ -34,6 +34,34 @@
             android:layout_marginBottom="24dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"
     />
+    <TextView
+            android:text="No hay documentos en este viaje"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/empty_document_textview"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_documentation"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
+
+
+    <RelativeLayout
+            android:id="@+id/loading_documentation"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/transparent_dark"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

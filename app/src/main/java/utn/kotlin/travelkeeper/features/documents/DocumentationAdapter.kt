@@ -1,4 +1,4 @@
-package utn.kotlin.travelkeeper.features.documents;
+package utn.kotlin.travelkeeper.features.documents
 
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -23,8 +23,7 @@ class DocumentationAdapter(
 ) :
     RecyclerView.Adapter<DocumentationViewHolder>() {
     private lateinit var context: Context
-    private var fileStorageService: FileStorageService =
-        FileStorageService()
+    private var fileStorageService: FileStorageService = FileStorageService()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocumentationViewHolder {
@@ -55,14 +54,21 @@ class DocumentationAdapter(
             }
         }
         holder.view.findViewById<ImageView>(R.id.delete_document_btn).setOnClickListener {
-            fileStorageService.deleteFile(tripId, documentInfo.fileName).addOnCompleteListener {
+            try {
                 ViajesService().deleteDocumentFromTrip(tripId, documentInfo).addOnSuccessListener {
-                    fileStorageService.deleteFileFromLocalStorage(tripId, documentInfo.fileName)
-                    documentationList.removeAt(position)
-                    this.notifyDataSetChanged()
-                    Toast.makeText(context, "Archivo borrado", Toast.LENGTH_LONG).show();
+                    fileStorageService.deleteFile(tripId, documentInfo.fileName).addOnCompleteListener {
+                        documentationList.removeAt(position)
+                        this.notifyDataSetChanged()
+                        fileStorageService.deleteFileFromLocalStorage(tripId, documentInfo.fileName)
+                        Toast.makeText(context, "Archivo borrado", Toast.LENGTH_LONG).show()
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Sincronice datos para borrar documentos", Toast.LENGTH_LONG).show()
                 }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Sincronice datos para borrar documentos", Toast.LENGTH_LONG).show()
             }
+
         }
 
     }
