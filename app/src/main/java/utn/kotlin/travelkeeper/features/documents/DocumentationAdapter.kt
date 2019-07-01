@@ -57,14 +57,15 @@ class DocumentationAdapter(
             try {
                 ViajesService().deleteDocumentFromTrip(tripId, documentInfo).addOnSuccessListener {
                     fileStorageService.deleteFile(tripId, documentInfo.fileName).addOnCompleteListener {
-                        documentationList.removeAt(position)
-                        this.notifyDataSetChanged()
-                        fileStorageService.deleteFileFromLocalStorage(tripId, documentInfo.fileName)
-                        Toast.makeText(context, "Archivo borrado", Toast.LENGTH_LONG).show()
+
                     }
                 }.addOnFailureListener {
                     Toast.makeText(context, "Sincronice datos para borrar documentos", Toast.LENGTH_LONG).show()
                 }
+                documentationList.removeAt(position)
+                this.notifyDataSetChanged()
+                fileStorageService.deleteFileFromLocalStorage(tripId, documentInfo.fileName)
+                Toast.makeText(context, "Archivo borrado", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Toast.makeText(context, "Sincronice datos para borrar documentos", Toast.LENGTH_LONG).show()
             }
