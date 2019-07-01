@@ -11,7 +11,7 @@ import java.io.File
 
 class FileStorageService {
     private val storageReference = FirebaseStorage.getInstance().reference
-    private val basePath = "${Environment.getExternalStorageDirectory().absolutePath}/TravelKeeper"
+    val basePath = "${Environment.getExternalStorageDirectory().absolutePath}/TravelKeeper"
 
     fun uploadFile(uri: Uri, tripId: String, fileName: String): UploadTask {
         val fileReference = storageReference.child("$tripId/$fileName")

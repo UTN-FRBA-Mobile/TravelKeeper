@@ -282,6 +282,8 @@ class DocumentationActivity : AppCompatActivity() {
     }
 
     private fun copyFileToDirectory(uri: Uri, fileName: String, tripId: String, context: Context) {
+        val destinationFolder = File("${FileStorageService().basePath}/$tripId")
+        if (!destinationFolder.exists()) destinationFolder.mkdir()
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = File(URI(FileStorageService().getFileUri(tripId, fileName).toString())).outputStream()
         FileCopyHelper.copyFile(inputStream, outputStream)
