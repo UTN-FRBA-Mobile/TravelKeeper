@@ -60,7 +60,7 @@
                     android:id="@+id/documentation_btn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_insert_drive_file_black_24dp"
+                    app:srcCompat="@drawable/ic_insert_drive_file_black_24dp"
                     android:scaleType="centerInside"
                     android:layout_marginEnd="20dp"
                     android:background="@android:color/transparent"/>

@@ -97,7 +97,7 @@
     <string name="accommodation_checkout">"Fecha de salida"</string>
     <string name="accommodation_reservation_number">"Nro de reserva (opcional)"</string>
     <string name="accommodation_telephone_number">"Nro de teléfono (opcional)</string>
-    <string name="btn_new_accommodation">"Agregar nuevo alojamiento"</string>
+    <string name="btn_new_accommodation">Listo</string>
     <string name="btn_edit_accommodation">"Editar alojamiento"</string>
     <string name="remove_accommodation">¿Está seguro de eliminar el alojamiento?</string>
     <string name="accommodation_removed">El alojamiento fue removido exitosamente</string>

@@ -36,7 +36,7 @@ class DocumentationAdapter(
     override fun onBindViewHolder(holder: DocumentationViewHolder, position: Int) {
         val documentInfo = documentationList[position]
         holder.view.documentation_file_name.text = documentInfo.fileName
-        holder.view.documentation_file_type.text = documentInfo.type
+        holder.view.documentation_file_type.text = "Tipo: " + documentInfo.type
 
         holder.view.findViewById<TextView>(R.id.documentation_file_name).setOnClickListener {
             val builder = StrictMode.VmPolicy.Builder()
