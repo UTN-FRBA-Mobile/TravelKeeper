@@ -17,11 +17,11 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import utn.kotlin.travelkeeper.DBServices.UsuariosService
-import utn.kotlin.travelkeeper.DBServices.ViajesService
-import utn.kotlin.travelkeeper.fragments.MyTripsFragment
-import utn.kotlin.travelkeeper.models.Trip
-import utn.kotlin.travelkeeper.ui.login.LoginActivity
+import utn.kotlin.travelkeeper.database.UsuariosService
+import utn.kotlin.travelkeeper.database.ViajesService
+import utn.kotlin.travelkeeper.domain.Trip
+import utn.kotlin.travelkeeper.features.login.LoginActivity
+import utn.kotlin.travelkeeper.features.trips.MyTripsFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

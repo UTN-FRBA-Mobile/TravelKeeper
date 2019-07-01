@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        tools:context=".fragments.MyTripsFragment" android:id="@+id/frameLayout">
+        tools:context=".features.trips.MyTripsFragment" android:id="@+id/frameLayout">
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/my_trips_recycler"

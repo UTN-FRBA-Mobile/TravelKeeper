@@ -19,7 +19,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".EditAccommodationActivity">
+        <activity android:name=".features.accomodations.EditAccommodationActivity">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -34,22 +34,22 @@
                 android:value="@string/google_maps_key"/>
 
         <activity
-                android:name=".AccommodationMapsActivity"
+                android:name=".features.accomodations.AccommodationMapsActivity"
                 android:label="@string/title_activity_accommodation_maps">
         </activity>
-        <activity android:name=".NewAccommodationActivity">
+        <activity android:name=".features.accomodations.NewAccommodationActivity">
         </activity>
-        <activity android:name=".DocumentationActivity">
+        <activity android:name="utn.kotlin.travelkeeper.features.documents.DocumentationActivity">
         </activity>
-        <activity android:name=".EditDestinationActivity">
+        <activity android:name=".features.destinations.EditDestinationActivity">
         </activity>
         <activity
-                android:name=".TripTimeLineActivity"
+                android:name=".features.trips.TripTimeLineActivity"
                 android:label="@string/title_activity_trip_time_line"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".ui.login.LoginActivity"
+                android:name="utn.kotlin.travelkeeper.features.login.LoginActivity"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -77,17 +77,15 @@
                 <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
         </activity>
-        <activity android:name=".NewTripActivity"/>
-        <activity android:name=".NewDestinationActivity"/>
-        <activity android:name=".AccommodationsListActivity"/>
-        <activity android:name=".EditFlightActivity"/>
-
-        <activity android:name=".NewFlightActivity"/>
-
-        <activity android:name=".AirlineSearchActivity"
+        <activity android:name=".features.trips.NewTripActivity"/>
+        <activity android:name=".features.destinations.NewDestinationActivity"/>
+        <activity android:name=".features.accomodations.AccommodationsListActivity"/>
+        <activity android:name=".features.flights.EditFlightActivity"/>
+        <activity android:name=".features.flights.NewFlightActivity"/>
+        <activity android:name="utn.kotlin.travelkeeper.features.flights.airlines.AirlineSearchActivity"
                   android:theme="@style/SearchAirline"/>
         <activity
-                android:name=".DocumentationShareActivity">
+                android:name="utn.kotlin.travelkeeper.features.documents.DocumentationShareActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
