@@ -69,10 +69,9 @@ class NewTripActivity : AppCompatActivity() {
         val doneButton = findViewById<Button>(R.id.done_button)
         doneButton.setOnClickListener {
             if (isDataComplete()) {
-                if(InternetConnection.verifyAvailableNetwork(this)) {
+                if (InternetConnection.verifyAvailableNetwork(this)) {
                     saveNewTrip()
-                }
-                else {
+                } else {
                     InternetConnection.alertNoInternet(this)
                 }
             }
@@ -98,6 +97,8 @@ class NewTripActivity : AppCompatActivity() {
     }
 
     private fun saveNewTrip() {
+        add_destination_button.isEnabled = false
+        done_button.isEnabled = false
         loading.visibility = View.VISIBLE
         viajesService.createTrip(
             tripName.text.toString(),
@@ -114,11 +115,15 @@ class NewTripActivity : AppCompatActivity() {
                         object : UsuariosService.SimpleServiceListener {
                             override fun onSuccess() {
                                 loading.visibility = View.GONE
+                                add_destination_button.isEnabled = true
+                                done_button.isEnabled = true
                                 destinationsAdapter.data.forEach { addDestination(idCreated, it) }
                             }
 
                             override fun onError(exception: Exception) {
                                 loading.visibility = View.GONE
+                                add_destination_button.isEnabled = true
+                                done_button.isEnabled = true
                                 Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
                             }
                         }
@@ -127,6 +132,8 @@ class NewTripActivity : AppCompatActivity() {
 
                 override fun onError(exception: Exception) {
                     loading.visibility = View.GONE
+                    add_destination_button.isEnabled = true
+                    done_button.isEnabled = true
                     Toast.makeText(this@NewTripActivity, exception.message, Toast.LENGTH_LONG).show()
                 }
             }

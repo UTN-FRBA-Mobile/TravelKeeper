@@ -2,11 +2,11 @@ package utn.kotlin.travelkeeper.features.destinations
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.view.KeyEvent
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -67,21 +67,33 @@ class DestinationsAdapter : RecyclerView.Adapter<NewDestinationViewHolder>() {
             }
         }
 
-        destinationText.setOnEditorActionListener { v, actionId, event ->
-            /* https://stackoverflow.com/questions/8063439/android-edittext-finished-typing-event */
-            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                actionId == EditorInfo.IME_ACTION_DONE ||
-                event != null &&
-                event.action == KeyEvent.ACTION_DOWN &&
-                event.keyCode == KeyEvent.KEYCODE_ENTER
-            ) {
-                if (event == null || !event.isShiftPressed) {
-                    saveDestinationText(v.text.toString(), position)
-                    true
-                }
+        destinationText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                saveDestinationText(s.toString(), position)
             }
-            false
-        }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+
+//        destinationText.setOnEditorActionListener { v, actionId, event ->
+//            /* https://stackoverflow.com/questions/8063439/android-edittext-finished-typing-event */
+//            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+//                actionId == EditorInfo.IME_ACTION_DONE ||
+//                event != null &&
+//                event.action == KeyEvent.ACTION_DOWN &&
+//                event.keyCode == KeyEvent.KEYCODE_ENTER
+//            ) {
+//                if (event == null || !event.isShiftPressed) {
+//
+//                    true
+//                }
+//            }
+//            false
+//        }
     }
 
     private fun saveDestinationText(destinationText: String, position: Int) {

@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_documentation.*
-import utn.kotlin.travelkeeper.InputFileNameDialog
 import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.database.ViajesService
 import utn.kotlin.travelkeeper.domain.DocumentationInfo

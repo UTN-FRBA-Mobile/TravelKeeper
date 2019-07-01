@@ -1,9 +1,10 @@
-package utn.kotlin.travelkeeper
+package utn.kotlin.travelkeeper.features.documents
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import kotlinx.android.synthetic.main.input_photo_title_dialog.*
+import utn.kotlin.travelkeeper.R
 
 class InputFileNameDialog(var listener: InputFileNameListener) : androidx.fragment.app.DialogFragment() {
 
