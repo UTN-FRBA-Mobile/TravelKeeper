@@ -15,6 +15,7 @@ import utn.kotlin.travelkeeper.R
 import utn.kotlin.travelkeeper.database.FlightService
 import utn.kotlin.travelkeeper.domain.Flight
 import utn.kotlin.travelkeeper.domain.Trip
+import utn.kotlin.travelkeeper.features.flights.airlines.EditAirlineSearchActivity
 import utn.kotlin.travelkeeper.features.trips.TripTimeLineActivity
 import utn.kotlin.travelkeeper.utils.*
 import java.util.*
@@ -36,6 +37,8 @@ class EditFlightActivity : AppCompatActivity() {
     private lateinit var trip: Trip
     private var position: Int = 0
 
+    private val AIRLINE_SELECTED: Int = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_flight)
@@ -48,7 +51,37 @@ class EditFlightActivity : AppCompatActivity() {
         setPreviousData()
         setFlightData()
         setEditButton()
+        setAirlineSearch()
     }
+
+    private fun setAirlineSearch() {
+        flight_airline_edit.setOnClickListener {
+            showSearch()
+        }
+    }
+
+    private fun showSearch() {
+        val intent = Intent(this@EditFlightActivity, EditAirlineSearchActivity::class.java)
+        startActivityForResult(intent, AIRLINE_SELECTED)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            AIRLINE_SELECTED -> {
+                setAirline(resultCode, data)
+            }
+        }
+    }
+
+    private fun setAirline(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (data!!.extras != null && data!!.extras.size() > 0) {
+                val airline = data!!.extras["FLIGHT_AIRLINE"] as String
+                flight_airline_edit.setText(airline)
+            }
+        }
+    }
+
 
     private fun setPreviousData() {
         previousAirline = flight.airline

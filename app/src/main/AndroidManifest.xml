@@ -84,6 +84,8 @@
         <activity android:name=".features.flights.NewFlightActivity"/>
         <activity android:name="utn.kotlin.travelkeeper.features.flights.airlines.AirlineSearchActivity"
                   android:theme="@style/SearchAirline"/>
+        <activity android:name="utn.kotlin.travelkeeper.features.flights.airlines.EditAirlineSearchActivity"
+                  android:theme="@style/SearchAirline"/>
         <activity
                 android:name="utn.kotlin.travelkeeper.features.documents.DocumentationShareActivity">
             <intent-filter>
