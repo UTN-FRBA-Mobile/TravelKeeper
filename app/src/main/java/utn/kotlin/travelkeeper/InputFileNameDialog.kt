@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.EditText
+import android.widget.Toast
 import kotlinx.android.synthetic.main.input_photo_title_dialog.*
 
 class InputFileNameDialog(var listener: InputFileNameListener) : androidx.fragment.app.DialogFragment() {
@@ -23,6 +24,7 @@ class InputFileNameDialog(var listener: InputFileNameListener) : androidx.fragme
                 .setPositiveButton("OK")
                 { dialog, id ->
                     val text = getDialog().editText.text.toString()
+                    //if(text.isEmpty() || text.isBlank()) Toast.makeText(context, "Por favor ingrese un nombre de archivo", Toast.LENGTH_SHORT).show()
                     listener.onDialogPositiveClick(text)
                 }
                 .setNegativeButton("Cancelar")
