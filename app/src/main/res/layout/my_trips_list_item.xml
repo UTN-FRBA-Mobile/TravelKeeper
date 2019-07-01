@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_margin="10dp"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -33,11 +33,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
+                android:textSize="18sp"
                 android:paddingEnd="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:textColor="@android:color/white"
-                android:background="@drawable/rounded_trips_header_piece"/>
+                android:background="@drawable/rounded_trips_header_piece" android:textAlignment="textStart"
+                android:layout_gravity="top|start"
+                tools:text="Holi"/>
         <TextView
                 android:id="@+id/trip_dates"
                 android:layout_width="match_parent"
@@ -69,7 +72,7 @@
                     android:id="@+id/share_btn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/sharethis"
+                    app:srcCompat="@drawable/baseline_share_24"
                     android:scaleType="centerInside"
                     android:layout_marginEnd="20dp"
                     android:background="@android:color/transparent"/>
@@ -78,7 +81,7 @@
                     android:id="@+id/delete_btn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/delete"
+                    app:srcCompat="@drawable/baseline_delete_outline_24"
                     android:scaleType="centerInside"
                     android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"/>

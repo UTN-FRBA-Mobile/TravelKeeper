@@ -6,7 +6,7 @@
     <dimen name="nav_header_height">200dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="subtitle_size">18dp</dimen>
+    <dimen name="subtitle_size">14sp</dimen>
 
     <item name="guide_horizontal_cards" type="dimen">20%</item>
 </resources>
