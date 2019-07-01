@@ -28,7 +28,7 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
     private var endDate: Date? = null
     private lateinit var destinationId: String
     private lateinit var tripId: String
-    private lateinit var latLngSelected: LatLng
+    private var latLngSelected: LatLng = LatLng(0.0,0.0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,9 +153,6 @@ class NewAccommodationActivity : AppCompatActivity(), PlaceSelectionListener {
 
         if(p0 != null && p0.latLng != null) {
             latLngSelected = p0!!.latLng
-        }
-        else {
-            latLngSelected = LatLng(0.0,0.0)
         }
     }
 
