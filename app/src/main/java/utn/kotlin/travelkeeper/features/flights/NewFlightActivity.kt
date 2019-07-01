@@ -98,7 +98,7 @@ class NewFlightActivity : AppCompatActivity() {
 
     private fun setDatePickerForTakeoffDate() {
         flight_takeoff_date.setOnClickListener {
-            val calendar = Calendar.getInstance() //todo: ver el tema de Locale-Instance al pedir la instancia
+            val calendar = Calendar.getInstance()
 
             val datePickerDialog = DatePickerDialog.newInstance(
                 { view, year, monthOfYear, dayOfMonth ->

@@ -198,20 +198,34 @@ class NewTripActivity : AppCompatActivity() {
             return false
         }
 
+        if (datesAreInvalid()) {
+            Toast.makeText(
+                this,
+                "Fechas no son válidas",
+                Toast.LENGTH_LONG
+            ).show()
+            return false
+        }
+
         return true
+    }
+
+    private fun datesAreInvalid(): Boolean {
+        return destinationsAdapter.data.any { it.startDate == null }
+                || destinationsAdapter.data.any { it.endDate == null }
+                || destinationsAdapter.data.any { it.endDate != null && it.startDate != null && it.endDate!! < it.startDate }
+
     }
 
     private fun hasAtLeastOneDestination(): Boolean {
         if (destinationsAdapter.data.isEmpty()) return false
         val firstDestination = destinationsAdapter.data[0]
-        return !firstDestination.name.isNullOrBlank() && firstDestination.endDate != null && firstDestination.startDate != null
+        return !firstDestination.name.isNullOrBlank()
     }
 
     private fun isTripNameComplete() = !tripName.text.isNullOrBlank()
 
-    //TODO: falta validar las fechas de inicio y fin de los destinos
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean { //para back button
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
