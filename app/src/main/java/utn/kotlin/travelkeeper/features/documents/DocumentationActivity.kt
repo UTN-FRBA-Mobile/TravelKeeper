@@ -61,6 +61,7 @@ class DocumentationActivity : AppCompatActivity() {
         )
 
         attach_fab.setOnClickListener { view ->
+            doc_floating_actions_menu.collapse()
             checkForPermissions(
                 this,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -79,6 +80,7 @@ class DocumentationActivity : AppCompatActivity() {
         }
 
         camera_fab.setOnClickListener {
+            doc_floating_actions_menu.collapse()
             checkForPermissions(
                 this,
                 android.Manifest.permission.CAMERA,

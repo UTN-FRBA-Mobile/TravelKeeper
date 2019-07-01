@@ -77,6 +77,8 @@
     <!--DOCUMENTS-->
     <string name="documents_title">"Documentos"</string>
     <string name="no_documents">No hay documentos. ¡Agregá uno!</string>
+    <string name="fab_add_file">Agregar archivo</string>
+    <string name="fab_add_photo">Tomar foto</string>
 
     <!--DOCUMENTS SHARE-->
     <string name="add_file_to_trip">"Adjuntar archivo al viaje"</string>
